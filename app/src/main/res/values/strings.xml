@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Read Track</string>
+    <string name="copertina">Copertina</string>
+    <string name="todo">TODO</string>
 </resources>
