@@ -2,4 +2,18 @@
     <string name="app_name">Read Track</string>
     <string name="copertina">Copertina</string>
     <string name="todo">TODO</string>
+    <string name="logo">logo</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="password">Password</string>
+    <string name="or">OR</string>
+    <string name="google_login">Log in with Google</string>
+    <string name="new_account">New to Read Track? </string>
+    <string name="register">Register now!</string>
+    <string name="immagine_login">Immagine login</string>
+    <string name="error_password">La password inserita è errata</string>
+    <string name="error_email">L\'email inerita è errata</string>
+    <string name="check_login_data_message">Email o password errate</string>
+    <string name="searchbar_hint">cerca</string>
 </resources>
