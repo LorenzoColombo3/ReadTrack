@@ -18,23 +18,14 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/pink">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                app:title="@string/app_name"
-                app:titleCentered="true"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
+            android:background="@color/pink"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
     <!--layout di ricerca-->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
 
         <!-- NestedScrollingChild goes here (NestedScrollView, RecyclerView, etc.). -->
         <androidx.core.widget.NestedScrollView
@@ -46,15 +37,15 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="27dp">
 
             <com.google.android.material.search.SearchBar
                 android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/searchbar_hint"
                 android:backgroundTint="@color/white"
-                />
+                android:hint="@string/searchbar_hint" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -67,37 +58,15 @@
         </com.google.android.material.search.SearchView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-    <!--barra sotto-->
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout2"
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/coordinatorLayout"
+        app:menu="@menu/navigation_menu"
         android:background="@color/pink"
-        android:padding="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:backgroundTint="@color/pink"
-            app:srcCompat="@drawable/baseline_book_24"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/pink"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/search_image" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/pink"
-            android:layout_gravity="right"
-            app:srcCompat="@drawable/profile_image" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+        app:itemIconSize="30dp"
+        app:itemTextAppearanceActiveBoldEnabled="true"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>
