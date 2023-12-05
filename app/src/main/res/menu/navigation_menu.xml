@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/books"
+        android:id="@+id/books_fragment"
         android:enabled="true"
         android:icon="@drawable/baseline_book_24"
         android:title="@string/books"/>
     <item
-        android:id="@+id/search"
+        android:id="@+id/search_fragment"
         android:enabled="true"
         android:icon="@drawable/search_image"
         android:title="@string/search"/>
     <item
-        android:id="@+id/profile"
+        android:id="@+id/profile_fragment"
         android:enabled="true"
         android:icon="@drawable/profile_image"
         android:title="@string/profile"/>

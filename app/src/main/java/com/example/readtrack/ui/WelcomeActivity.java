@@ -7,6 +7,7 @@ import static com.example.readtrack.util.Constants.PASSWORD;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -63,6 +64,9 @@ public class WelcomeActivity extends AppCompatActivity {
             String email = textInputLayoutEmail.getEditText().getText().toString();
             String password = textInputLayoutPassword.getEditText().getText().toString();
 
+            Intent intent=new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
             // Start login if email and password are ok
             if (isEmailOk(email) & isPasswordOk(password)) {
                 Log.d(TAG, "Email and password are ok");

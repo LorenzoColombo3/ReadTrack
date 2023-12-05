@@ -7,4 +7,5 @@
     <color name="google_login_text">#616161</color>
     <color name="lilla">#99CCFF</color>
     <color name="blue">#0000ff</color>
+    <color name="primaryColor">#000000</color>
 </resources>

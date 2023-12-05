@@ -1,0 +1,936 @@
+{
+  "kind": "books#volumes",
+  "totalItems": 245,
+  "items": [
+    {
+      "kind": "books#volume",
+      "id": "YxcjEAAAQBAJ",
+      "etag": "BaM+HPiP/UY",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/YxcjEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Il meglio dei racconti di Agatha Christie",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2021-04-06",
+        "description": "«Non è un caso che Agatha Christie abbia lasciato ben ventidue raccolte di racconti gialli: una mole di testi che, anche sul piano meramente quantitativo, costituisce una porzione rilevante della sua opera di giallista. E poi, non sarà senza motivo se lei, Agatha, ha a più riprese manifestato particolare affetto per i suoi racconti. Dati i limiti di estensione imposti dalla forma del racconto, in essa la scrittrice risulta in certo qual modo \"costretta\" a concentrare avvenimenti, azioni e deduzioni nello spazio di poche pagine, con risultati che talora hanno del sorprendente: l'intreccio diviene teso, i dialoghi si fanno serrati e rivelatori, i personaggi vengono presentati e quasi \"evocati\" con poche, abilissime pennellate di colore. Del resto, a chi una volta le parlò dei suoi racconti migliori come di romanzi in miniatura, opportunamente e significativamente Agatha Christie fece osservare che, a suo giudizio, si trattava di opere letterarie a sé stanti, dotate di loro precise caratteristiche.» dall'Introduzione di Federico Roncoroni Trentadue piccoli capolavori che sorprendono per l'originalità delle situazioni narrative e le fulminanti soluzioni. Protagonisti gli indimenticabili personaggi di Agatha Christie: Hercule Poirot, l'infallibile detective belga, Miss Jane Marple, l'anziana zitella appassionata di delitti, gli avventurieri Tommy e Tuppence, il misterioso Parker Pyne.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788835709015"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8835709016"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 613,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=YxcjEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=YxcjEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=YxcjEAAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=1&source=gbs_api",
+        "infoLink": "http://books.google.it/books?id=YxcjEAAAQBAJ&dq=inauthor:Agatha+Christie&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/Il_meglio_dei_racconti_di_Agatha_Christi.html?hl=&id=YxcjEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Il_meglio_dei_racconti_di_Agatha_Christi-sample-epub.acsm?id=YxcjEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Il_meglio_dei_racconti_di_Agatha_Christi-sample-pdf.acsm?id=YxcjEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=YxcjEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "«Non è un caso che Agatha Christie abbia lasciato ben ventidue raccolte di racconti gialli: una mole di testi che, anche sul piano meramente quantitativo, costituisce una porzione rilevante della sua opera di giallista."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "PSAMAQAAQBAJ",
+      "etag": "xWpae1d5oKU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/PSAMAQAAQBAJ",
+      "volumeInfo": {
+        "title": "La mia vita",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2013-10-15",
+        "description": "Agatha Christie, ancora oggi la scrittrice di gialli più letta, fu una donna appassionata e piena di interessi, molto diversa, per carattere ed esperienze, dal suo «alter ego», l'anziana investigatrice Miss Marple. Come rivela questa autobiografia, l'autrice inglese ebbe infatti una vita indipendente e ricca di avventure, rievocate attraverso una narrazione sincera e avvincente. Dall'infanzia spensierata ai due romanzeschi matrimoni (il primo dei quali, con un giovane aviatore, destinato a finire con un drammatico divorzio) l'esistenza di Agatha Christie si snoda scandita dai lunghi viaggi e dai numerosi libri di successo. Una storia affascinante, che mette a nudo la complessa personalità e la vicenda umana della regina del giallo.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788852035777"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "885203577X"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 610,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "2.27.24.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=PSAMAQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=PSAMAQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=PSAMAQAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=2&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=PSAMAQAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=PSAMAQAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 6.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 6.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=PSAMAQAAQBAJ&rdid=book-PSAMAQAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 6990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 6990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/La_mia_vita-sample-epub.acsm?id=PSAMAQAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/La_mia_vita-sample-pdf.acsm?id=PSAMAQAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=PSAMAQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Agatha Christie, ancora oggi la scrittrice di gialli più letta, fu una donna appassionata e piena di interessi, molto diversa, per carattere ed esperienze, dal suo «alter ego», l&#39;anziana investigatrice Miss Marple."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "v19-hg7lM8wC",
+      "etag": "E5J8kXvXmrI",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/v19-hg7lM8wC",
+      "volumeInfo": {
+        "title": "I capolavori di Agatha Christie",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2010-10-07",
+        "description": "Un elegante volume che racchiude quattro capolavori assoluti del giallo, quattro opere con cui la raffinata \"signora del crimine\" ha scritto la storia del genere, entrato a buon diritto nella grande letteratura. Una raccolta che rende il doveroso omaggio alla più grande giallista di tutti i tempi.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788852014789"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8852014780"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 933,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "averageRating": 4.5,
+        "ratingsCount": 3,
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.12.11.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=v19-hg7lM8wC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=v19-hg7lM8wC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=v19-hg7lM8wC&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=3&source=gbs_api",
+        "infoLink": "http://books.google.it/books?id=v19-hg7lM8wC&dq=inauthor:Agatha+Christie&hl=&source=gbs_api",
+        "canonicalVolumeLink": "https://books.google.com/books/about/I_capolavori_di_Agatha_Christie.html?hl=&id=v19-hg7lM8wC"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "NOT_FOR_SALE",
+        "isEbook": false
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/I_capolavori_di_Agatha_Christie-sample-epub.acsm?id=v19-hg7lM8wC&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/I_capolavori_di_Agatha_Christie-sample-pdf.acsm?id=v19-hg7lM8wC&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=v19-hg7lM8wC&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Un elegante volume che racchiude quattro capolavori assoluti del giallo, quattro opere con cui la raffinata &quot;signora del crimine&quot; ha scritto la storia del genere, entrato a buon diritto nella grande letteratura."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "mlvyDwAAQBAJ",
+      "etag": "ZB5wQsefW5k",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/mlvyDwAAQBAJ",
+      "volumeInfo": {
+        "title": "POIROT. TUTTI I RACCONTI",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2020-09-01",
+        "description": "Tutte le avvincenti indagini di Hercule Poirot, il piccolo detective belga dalle infallibili \"celluline grigie\", nato dalla fantasia di Agatha Christie sono qui raccolte in un unico volume nel quale la vocaizone narrativa della Regina del Giallo si esprime al suo meglio: storie che coinvolgono il pubblico in un raffinatissimo gioco di intelligenza accompagnate da raffinate illustraizoni d'epoca in bianco e nero.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788835704010"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8835704014"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 972,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.4.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=mlvyDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=mlvyDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=mlvyDwAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=4&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=mlvyDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=mlvyDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 12.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 12.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=mlvyDwAAQBAJ&rdid=book-mlvyDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 12990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 12990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/POIROT_TUTTI_I_RACCONTI-sample-epub.acsm?id=mlvyDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/POIROT_TUTTI_I_RACCONTI-sample-pdf.acsm?id=mlvyDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=mlvyDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Tutte le avvincenti indagini di Hercule Poirot, il piccolo detective belga dalle infallibili &quot;celluline grigie&quot;, nato dalla fantasia di Agatha Christie sono qui raccolte in un unico volume nel quale la vocaizone narrativa della Regina del ..."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "60KrCQAAQBAJ",
+      "etag": "gNHRNKnrXt0",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/60KrCQAAQBAJ",
+      "volumeInfo": {
+        "title": "Le indagini di Miss Marple",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2015-06-01",
+        "description": "La prima esperienza con Miss Marple non partì sotto i migliori auspici. Avevo la febbre e, quando mia madre era uscita, le avevo chiesto di portarmi un Asterix; quindi mi aspettavo un fumetto. Appena lo vidi, con sospetto, chiesi che libro fosse. «Un giallo di Agatha Christie» rispose lei «di quelli che piacciono tanto a tuo fratello.» Di bene in meglio. «Sai, il protagonista non è un poliziotto, e nemmeno un investigatore privato. È una vecchietta che risolve i casi mentre lavora a maglia.» E mi lasciò il libro sul comodino. Dalla prefazione di Marco Malvaldi Una selezione di racconti di Agatha Christie scelti da Marco Malvadi.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788852065392"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8852065393"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 240,
+        "printType": "BOOK",
+        "categories": [
+          "Juvenile Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.20.21.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=60KrCQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=60KrCQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=60KrCQAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=5&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=60KrCQAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=60KrCQAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 4.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 4.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=60KrCQAAQBAJ&rdid=book-60KrCQAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 4990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 4990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Le_indagini_di_Miss_Marple-sample-epub.acsm?id=60KrCQAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Le_indagini_di_Miss_Marple-sample-pdf.acsm?id=60KrCQAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=60KrCQAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Dalla prefazione di Marco Malvaldi Una selezione di racconti di Agatha Christie scelti da Marco Malvadi."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "4d8YLPb7oQ4C",
+      "etag": "u+AM+3YK8BU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/4d8YLPb7oQ4C",
+      "volumeInfo": {
+        "title": "Il caso del dolce di Natale",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2013-02-12",
+        "description": "«Questo libro è come un pranzo di Natale preparato da un vero chef. E lo chef sono io!» Così Agatha Christie presenta la sua raccolta in sei gustosissime portate: dall'antipasto al dessert, sei indagini dell'inossidabile Poirot e della solo apparentemente innocua Miss Marple...",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788852033322"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8852033327"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 266,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.7.7.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=4d8YLPb7oQ4C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=4d8YLPb7oQ4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=4d8YLPb7oQ4C&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=6&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=4d8YLPb7oQ4C&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=4d8YLPb7oQ4C"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=4d8YLPb7oQ4C&rdid=book-4d8YLPb7oQ4C&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Il_caso_del_dolce_di_Natale-sample-epub.acsm?id=4d8YLPb7oQ4C&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Il_caso_del_dolce_di_Natale-sample-pdf.acsm?id=4d8YLPb7oQ4C&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=4d8YLPb7oQ4C&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "E lo chef sono io!» Così Agatha Christie presenta la sua raccolta in sei gustosissime portate: dall&#39;antipasto al dessert, sei indagini dell&#39;inossidabile Poirot e della solo apparentemente innocua Miss Marple."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "jSwEEAAAQBAJ",
+      "etag": "m6w0X4zH+jM",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/jSwEEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Assassinio sul Nilo",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2020-11-17",
+        "description": "Un eterogeneo gruppo di viaggiatori è in navigazione sul Nilo sul lussuoso battello Karnak. Tra di loro l'affascinante Linnet Ridgeway, la ragazza più ricca d'Inghilterra, in luna di miele. Ciascuno dei personaggi ha però una sua storia e un suo segreto, accuratamente nascosto sotto un'inappuntabile facciata. Fra i turisti c'è anche Hercule Poirot, e per fortuna. Perché nel giro di poche ore a bordo del Karnak si consumano ben due delitti, e la tranquilla crociera si trasforma in una disperata caccia a un assassino diabolicamente astuto. *********************** Questo eBook è ottimizzato per la fruizione su tablet; se ne sconsiglia pertanto la lettura sui dispositivi eReader.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788835705673"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8835705673"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 69,
+        "printType": "BOOK",
+        "categories": [
+          "Comics & Graphic Novels"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "1.1.1.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": true,
+          "containsImageBubbles": true,
+          "epubBubbleVersion": "4aac59c3dc3d53bb_A",
+          "imageBubbleVersion": "4aac59c3dc3d53bb_A"
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=jSwEEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=jSwEEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=jSwEEAAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=7&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=jSwEEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=jSwEEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 9.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 9.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=jSwEEAAAQBAJ&rdid=book-jSwEEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 9990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 9990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Assassinio_sul_Nilo-sample-epub.acsm?id=jSwEEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Assassinio_sul_Nilo-sample-pdf.acsm?id=jSwEEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=jSwEEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Un eterogeneo gruppo di viaggiatori è in navigazione sul Nilo sul lussuoso battello Karnak."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "9OioEAAAQBAJ",
+      "etag": "F6Uifh8PgAA",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/9OioEAAAQBAJ",
+      "volumeInfo": {
+        "title": "Questione di vita e di cuore",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2023-02-14",
+        "description": "\ufeffL'amore può far compiere le imprese più grandiose... o i delitti più efferati. In questa raccolta di racconti Dame Agatha esplora il lato oscuro del sentimento: crimini passionali, cuori spezzati, relazioni decisamente pericolose. Ad affrontare le indagini e a sciogliere gli enigmi, i detective più amati, da Hercule Poirot a Miss Marple, da Harley Quin a Parker Pyne, fino all'inossidabile coppia Tommy e Tuppence, che ha fatto del binomio amore/indagine uno stile di vita. Una raccolta di racconti per tutti gli innamorati... del giallo d'autore.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788835723813"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8835723817"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 215,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "preview-1.0.0",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=9OioEAAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=9OioEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=9OioEAAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=8&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=9OioEAAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=9OioEAAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=9OioEAAAQBAJ&rdid=book-9OioEAAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Questione_di_vita_e_di_cuore-sample-epub.acsm?id=9OioEAAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Questione_di_vita_e_di_cuore-sample-pdf.acsm?id=9OioEAAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=9OioEAAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "\ufeffL&#39;amore può far compiere le imprese più grandiose... o i delitti più efferati. In questa raccolta di racconti Dame Agatha esplora il lato oscuro del sentimento: crimini passionali, cuori spezzati, relazioni decisamente pericolose."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "8bbwDwAAQBAJ",
+      "etag": "25P5cYsQtYU",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/8bbwDwAAQBAJ",
+      "volumeInfo": {
+        "title": "Testa d'uovo",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2020-08-25",
+        "description": "L'elegante piccolo belga con i baffi, la testa a forma di uovo sempre inclinata da un lato, curiose manie e una spropositata considerazione per le proprie \"celluline grigie\" ha risolto alcuni dei casi più intricati e misteriosi del Ventesimo secolo. Disseminato negli oltre cinquanta romanzi e racconti che lo vedono protagonista, l'autoritratto di Poirot viene qui ricomposto come un puzzle. Lo accompagna e lo commenta un saggio di Agatha Christie sul rapporto di amore/odio che la lega alla sua creatura più famosa.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788835703457"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "883570345X"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 51,
+        "printType": "BOOK",
+        "categories": [
+          "Literary Collections"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": false,
+        "contentVersion": "0.4.4.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=8bbwDwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=8bbwDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=8bbwDwAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=9&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=8bbwDwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=8bbwDwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 7.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=8bbwDwAAQBAJ&rdid=book-8bbwDwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 7990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Testa_d_uovo-sample-epub.acsm?id=8bbwDwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/Testa_d_uovo-sample-pdf.acsm?id=8bbwDwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=8bbwDwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Lo accompagna e lo commenta un saggio di Agatha Christie sul rapporto di amore/odio che la lega alla sua creatura più famosa."
+      }
+    },
+    {
+      "kind": "books#volume",
+      "id": "x7i0DwAAQBAJ",
+      "etag": "F2CcpGEbD/w",
+      "selfLink": "https://www.googleapis.com/books/v1/volumes/x7i0DwAAQBAJ",
+      "volumeInfo": {
+        "title": "In tre contro il delitto",
+        "authors": [
+          "Agatha Christie"
+        ],
+        "publisher": "Edizioni Mondadori",
+        "publishedDate": "2019-10-08",
+        "description": "Un grosso diamante rubato «per scommessa» da una strana bambina; un cadavere nascosto in una preziosa cassapanca spagnola; un giovane marito accusato di aver accoltellato la moglie; un eccentrico anziano miliardario che assume un investigatore per risolvere l'enigma di un sogno; uno specchio misterioso che riflette il futuro; uno sconvolgente invito a una festa nella quale si deve scoprire un assassino rimasto impunito... Queste storie e altre ancora, scaturite dalla fantasia di Agatha Christie, compongono gli scenari nei quali si muovono alcuni tra i più famosi investigatori della letteratura: Hercule Poirot, Miss Marple e Parker Pyne.",
+        "industryIdentifiers": [
+          {
+            "type": "ISBN_13",
+            "identifier": "9788852098000"
+          },
+          {
+            "type": "ISBN_10",
+            "identifier": "8852098003"
+          }
+        ],
+        "readingModes": {
+          "text": true,
+          "image": true
+        },
+        "pageCount": 208,
+        "printType": "BOOK",
+        "categories": [
+          "Fiction"
+        ],
+        "maturityRating": "NOT_MATURE",
+        "allowAnonLogging": true,
+        "contentVersion": "1.3.3.0.preview.3",
+        "panelizationSummary": {
+          "containsEpubBubbles": false,
+          "containsImageBubbles": false
+        },
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=x7i0DwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=x7i0DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "language": "it",
+        "previewLink": "http://books.google.it/books?id=x7i0DwAAQBAJ&printsec=frontcover&dq=inauthor:Agatha+Christie&hl=&cd=10&source=gbs_api",
+        "infoLink": "https://play.google.com/store/books/details?id=x7i0DwAAQBAJ&source=gbs_api",
+        "canonicalVolumeLink": "https://play.google.com/store/books/details?id=x7i0DwAAQBAJ"
+      },
+      "saleInfo": {
+        "country": "IT",
+        "saleability": "FOR_SALE",
+        "isEbook": true,
+        "listPrice": {
+          "amount": 6.99,
+          "currencyCode": "EUR"
+        },
+        "retailPrice": {
+          "amount": 6.99,
+          "currencyCode": "EUR"
+        },
+        "buyLink": "https://play.google.com/store/books/details?id=x7i0DwAAQBAJ&rdid=book-x7i0DwAAQBAJ&rdot=1&source=gbs_api",
+        "offers": [
+          {
+            "finskyOfferType": 1,
+            "listPrice": {
+              "amountInMicros": 6990000,
+              "currencyCode": "EUR"
+            },
+            "retailPrice": {
+              "amountInMicros": 6990000,
+              "currencyCode": "EUR"
+            }
+          }
+        ]
+      },
+      "accessInfo": {
+        "country": "IT",
+        "viewability": "PARTIAL",
+        "embeddable": true,
+        "publicDomain": false,
+        "textToSpeechPermission": "ALLOWED",
+        "epub": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/In_tre_contro_il_delitto-sample-epub.acsm?id=x7i0DwAAQBAJ&format=epub&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "pdf": {
+          "isAvailable": true,
+          "acsTokenLink": "http://books.google.it/books/download/In_tre_contro_il_delitto-sample-pdf.acsm?id=x7i0DwAAQBAJ&format=pdf&output=acs4_fulfillment_token&dl_type=sample&source=gbs_api"
+        },
+        "webReaderLink": "http://play.google.com/books/reader?id=x7i0DwAAQBAJ&hl=&source=gbs_api",
+        "accessViewStatus": "SAMPLE",
+        "quoteSharingAllowed": false
+      },
+      "searchInfo": {
+        "textSnippet": "Queste storie e altre ancora, scaturite dalla fantasia di Agatha Christie, compongono gli scenari nei quali si muovono alcuni tra i più famosi investigatori della letteratura: Hercule Poirot, Miss Marple e Parker Pyne."
+      }
+    }
+  ]
+}
