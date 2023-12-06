@@ -40,8 +40,8 @@
           "containsImageBubbles": false
         },
         "imageLinks": {
-          "smallThumbnail": "http://books.google.com/books/content?id=5A4n0AEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
-          "thumbnail": "http://books.google.com/books/content?id=5A4n0AEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+          "smallThumbnail": "https://books.google.com/books/content?id=5A4n0AEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "https://books.google.com/books/content?id=5A4n0AEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
         },
         "language": "it",
         "previewLink": "http://books.google.it/books?id=5A4n0AEACAAJ&dq=isbn:9788804778400&hl=&cd=1&source=gbs_api",
