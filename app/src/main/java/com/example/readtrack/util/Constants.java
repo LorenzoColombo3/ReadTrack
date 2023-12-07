@@ -7,5 +7,5 @@ public class Constants {
     public static final String PASSWORD = "password";
     // Constants for encrypted files
     public static final String ENCRYPTED_DATA_FILE_NAME = "com.example.readtrack.encrypted_file.txt";
-    public static final String NEWS_API_TEST_JSON_FILE = "testBook.json";
+    public static final String BOOKS_API_TEST_JSON_FILE = "testBooks.json";
 }

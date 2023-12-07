@@ -5,89 +5,525 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class Book implements Parcelable {
-    private String title;
-    private String author;
-    private String smallThumbnailURL;
-    private String thumbnailURL;
+import java.util.List;
 
-    // Costruttore vuoto necessario per la deserializzazione
-    public Book() {}
+public class Book {
+    private String kind;
+    private String id;
+    private String etag;
+    private String selfLink;
+    private VolumeInfo volumeInfo;
+    private SaleInfo saleInfo;
+    private AccessInfo accessInfo;
+    private SearchInfo searchInfo;
 
-    // Getter e setter per i campi
-    public String getTitle() {
-        return title;
+    // Metodi getter e setter per BookVolumeItem
+    public String getKind() {
+        return kind;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getId() {
+        return id;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getSmallThumbnailURL() {
-        return smallThumbnailURL;
+    public String getEtag() {
+        return etag;
     }
 
-    public void setSmallThumbnailURL(String smallThumbnailURL) {
-        this.smallThumbnailURL = smallThumbnailURL;
+    public void setEtag(String etag) {
+        this.etag = etag;
     }
 
-    public String getThumbnailURL() {
-        return thumbnailURL;
+    public String getSelfLink() {
+        return selfLink;
     }
 
-    public void setThumbnailURL(String thumbnailURL) {
-        this.thumbnailURL = thumbnailURL;
+    public void setSelfLink(String selfLink) {
+        this.selfLink = selfLink;
     }
 
-    @Override
-    public String toString() {
-        return "Book{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", smallThumbnailURL='" + smallThumbnailURL + '\'' +
-                ", thumbnailURL='" + thumbnailURL + '\'' +
-                '}';
+    public VolumeInfo getVolumeInfo() {
+        return volumeInfo;
     }
 
-    @Override
-    public int describeContents() {return 0;}
+    public void setVolumeInfo(VolumeInfo volumeInfo) {
+        this.volumeInfo = volumeInfo;
+    }
 
-    @Override
-    public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(this.author);
-        dest.writeString(this.title);
-        dest.writeString(this.smallThumbnailURL);
-        dest.writeString(this.thumbnailURL);
+    public SaleInfo getSaleInfo() {
+        return saleInfo;
     }
-    public void readFromParcel(Parcel source) {
-        this.author=source.readString();
-        this.title=source.readString();
-        this.smallThumbnailURL=source.readString();
-        this.thumbnailURL=source.readString();
+
+    public void setSaleInfo(SaleInfo saleInfo) {
+        this.saleInfo = saleInfo;
     }
-    protected Book(Parcel in){
-        this.author=in.readString();
-        this.title=in.readString();
-        this.smallThumbnailURL=in.readString();
-        this.thumbnailURL=in.readString();
+
+    public AccessInfo getAccessInfo() {
+        return accessInfo;
     }
-    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
-        @Override
-        public Book createFromParcel(Parcel source) {
-            return new Book(source);
+
+    public void setAccessInfo(AccessInfo accessInfo) {
+        this.accessInfo = accessInfo;
+    }
+
+    public SearchInfo getSearchInfo() {
+        return searchInfo;
+    }
+
+    public void setSearchInfo(SearchInfo searchInfo) {
+        this.searchInfo = searchInfo;
+    }
+
+    public static class VolumeInfo {
+        private String title;
+        private List<String> authors;
+        private String publisher;
+        private String publishedDate;
+        private String description;
+        private List<IndustryIdentifier> industryIdentifiers;
+        private ReadingModes readingModes;
+        private int pageCount;
+        private String printType;
+        private List<String> categories;
+        private String maturityRating;
+        private boolean allowAnonLogging;
+        private String contentVersion;
+        private PanelizationSummary panelizationSummary;
+        private ImageLinks imageLinks;
+        private String language;
+        private String previewLink;
+        private String infoLink;
+        private String canonicalVolumeLink;
+
+        // Metodi getter e setter per VolumeInfo
+        public String getTitle() {
+            return title;
         }
 
-        @Override
-        public Book[] newArray(int size) {
-            return new Book[size];
+        public void setTitle(String title) {
+            this.title = title;
         }
-    };
+
+        public List<String> getAuthors() {
+            return authors;
+        }
+
+        public void setAuthors(List<String> authors) {
+            this.authors = authors;
+        }
+
+        public String getPublisher() {
+            return publisher;
+        }
+
+        public void setPublisher(String publisher) {
+            this.publisher = publisher;
+        }
+
+        public String getPublishedDate() {
+            return publishedDate;
+        }
+
+        public void setPublishedDate(String publishedDate) {
+            this.publishedDate = publishedDate;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<IndustryIdentifier> getIndustryIdentifiers() {
+            return industryIdentifiers;
+        }
+
+        public void setIndustryIdentifiers(List<IndustryIdentifier> industryIdentifiers) {
+            this.industryIdentifiers = industryIdentifiers;
+        }
+
+        public ReadingModes getReadingModes() {
+            return readingModes;
+        }
+
+        public void setReadingModes(ReadingModes readingModes) {
+            this.readingModes = readingModes;
+        }
+
+        public int getPageCount() {
+            return pageCount;
+        }
+
+        public void setPageCount(int pageCount) {
+            this.pageCount = pageCount;
+        }
+
+        public String getPrintType() {
+            return printType;
+        }
+
+        public void setPrintType(String printType) {
+            this.printType = printType;
+        }
+
+        public List<String> getCategories() {
+            return categories;
+        }
+
+        public void setCategories(List<String> categories) {
+            this.categories = categories;
+        }
+
+        public String getMaturityRating() {
+            return maturityRating;
+        }
+
+        public void setMaturityRating(String maturityRating) {
+            this.maturityRating = maturityRating;
+        }
+
+        public boolean isAllowAnonLogging() {
+            return allowAnonLogging;
+        }
+
+        public void setAllowAnonLogging(boolean allowAnonLogging) {
+            this.allowAnonLogging = allowAnonLogging;
+        }
+
+        public String getContentVersion() {
+            return contentVersion;
+        }
+
+        public void setContentVersion(String contentVersion) {
+            this.contentVersion = contentVersion;
+        }
+
+        public PanelizationSummary getPanelizationSummary() {
+            return panelizationSummary;
+        }
+
+        public void setPanelizationSummary(PanelizationSummary panelizationSummary) {
+            this.panelizationSummary = panelizationSummary;
+        }
+
+        public ImageLinks getImageLinks() {
+            return imageLinks;
+        }
+
+        public void setImageLinks(ImageLinks imageLinks) {
+            this.imageLinks = imageLinks;
+        }
+
+        public String getLanguage() {
+            return language;
+        }
+
+        public void setLanguage(String language) {
+            this.language = language;
+        }
+
+        public String getPreviewLink() {
+            return previewLink;
+        }
+
+        public void setPreviewLink(String previewLink) {
+            this.previewLink = previewLink;
+        }
+
+        public String getInfoLink() {
+            return infoLink;
+        }
+
+        public void setInfoLink(String infoLink) {
+            this.infoLink = infoLink;
+        }
+
+        public String getCanonicalVolumeLink() {
+            return canonicalVolumeLink;
+        }
+
+        public void setCanonicalVolumeLink(String canonicalVolumeLink) {
+            this.canonicalVolumeLink = canonicalVolumeLink;
+        }
+    }
+
+    public static class IndustryIdentifier {
+        private String type;
+        private String identifier;
+
+        // Metodi getter e setter per IndustryIdentifier
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(String identifier) {
+            this.identifier = identifier;
+        }
+    }
+
+    public static class ReadingModes {
+        private boolean text;
+        private boolean image;
+
+        // Metodi getter e setter per ReadingModes
+        public boolean isText() {
+            return text;
+        }
+
+        public void setText(boolean text) {
+            this.text = text;
+        }
+
+        public boolean isImage() {
+            return image;
+        }
+
+        public void setImage(boolean image) {
+            this.image = image;
+        }
+    }
+
+    public static class PanelizationSummary {
+        private boolean containsEpubBubbles;
+        private boolean containsImageBubbles;
+
+        // Metodi getter e setter per PanelizationSummary
+        public boolean isContainsEpubBubbles() {
+            return containsEpubBubbles;
+        }
+
+        public void setContainsEpubBubbles(boolean containsEpubBubbles) {
+            this.containsEpubBubbles = containsEpubBubbles;
+        }
+
+        public boolean isContainsImageBubbles() {
+            return containsImageBubbles;
+        }
+
+        public void setContainsImageBubbles(boolean containsImageBubbles) {
+            this.containsImageBubbles = containsImageBubbles;
+        }
+    }
+
+    public static class ImageLinks {
+        private String smallThumbnail;
+        private String thumbnail;
+
+        // Metodi getter e setter per ImageLinks
+        public String getSmallThumbnail() {
+            return smallThumbnail;
+        }
+
+        public void setSmallThumbnail(String smallThumbnail) {
+            this.smallThumbnail = smallThumbnail;
+        }
+
+        public String getThumbnail() {
+            return thumbnail;
+        }
+
+        public void setThumbnail(String thumbnail) {
+            this.thumbnail = thumbnail;
+        }
+    }
+
+    public static class SaleInfo {
+        private String country;
+        private String saleability;
+        private boolean isEbook;
+
+        // Metodi getter e setter per SaleInfo
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String getSaleability() {
+            return saleability;
+        }
+
+        public void setSaleability(String saleability) {
+            this.saleability = saleability;
+        }
+
+        public boolean isEbook() {
+            return isEbook;
+        }
+
+        public void setEbook(boolean ebook) {
+            isEbook = ebook;
+        }
+    }
+
+    public static class AccessInfo {
+        private String country;
+        private String viewability;
+        private boolean embeddable;
+        private boolean publicDomain;
+        private String textToSpeechPermission;
+        private Epub epub;
+        private Pdf pdf;
+        private String webReaderLink;
+        private String accessViewStatus;
+        private boolean quoteSharingAllowed;
+
+        // Metodi getter e setter per AccessInfo
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String getViewability() {
+            return viewability;
+        }
+
+        public void setViewability(String viewability) {
+            this.viewability = viewability;
+        }
+
+        public boolean isEmbeddable() {
+            return embeddable;
+        }
+
+        public void setEmbeddable(boolean embeddable) {
+            this.embeddable = embeddable;
+        }
+
+        public boolean isPublicDomain() {
+            return publicDomain;
+        }
+
+        public void setPublicDomain(boolean publicDomain) {
+            this.publicDomain = publicDomain;
+        }
+
+        public String getTextToSpeechPermission() {
+            return textToSpeechPermission;
+        }
+
+        public void setTextToSpeechPermission(String textToSpeechPermission) {
+            this.textToSpeechPermission = textToSpeechPermission;
+        }
+
+        public Epub getEpub() {
+            return epub;
+        }
+
+        public void setEpub(Epub epub) {
+            this.epub = epub;
+        }
+
+        public Pdf getPdf() {
+            return pdf;
+        }
+
+        public void setPdf(Pdf pdf) {
+            this.pdf = pdf;
+        }
+
+        public String getWebReaderLink() {
+            return webReaderLink;
+        }
+
+        public void setWebReaderLink(String webReaderLink) {
+            this.webReaderLink = webReaderLink;
+        }
+
+        public String getAccessViewStatus() {
+            return accessViewStatus;
+        }
+
+        public void setAccessViewStatus(String accessViewStatus) {
+            this.accessViewStatus = accessViewStatus;
+        }
+
+        public boolean isQuoteSharingAllowed() {
+            return quoteSharingAllowed;
+        }
+
+        public void setQuoteSharingAllowed(boolean quoteSharingAllowed) {
+            this.quoteSharingAllowed = quoteSharingAllowed;
+        }
+
+        public static class Epub {
+            private boolean isAvailable;
+            private String acsTokenLink;
+
+            // Metodi getter e setter per Epub
+            public boolean isAvailable() {
+                return isAvailable;
+            }
+
+            public void setAvailable(boolean available) {
+                isAvailable = available;
+            }
+
+            public String getAcsTokenLink() {
+                return acsTokenLink;
+            }
+
+            public void setAcsTokenLink(String acsTokenLink) {
+                this.acsTokenLink = acsTokenLink;
+            }
+        }
+
+        public static class Pdf {
+            private boolean isAvailable;
+            private String acsTokenLink;
+
+            // Metodi getter e setter per Pdf
+            public boolean isAvailable() {
+                return isAvailable;
+            }
+
+            public void setAvailable(boolean available) {
+                isAvailable = available;
+            }
+
+            public String getAcsTokenLink() {
+                return acsTokenLink;
+            }
+
+            public void setAcsTokenLink(String acsTokenLink) {
+                this.acsTokenLink = acsTokenLink;
+            }
+        }
+    }
+
+    public static class SearchInfo {
+        private String textSnippet;
+
+        // Metodi getter e setter per SearchInfo
+        public String getTextSnippet() {
+            return textSnippet;
+        }
+
+        public void setTextSnippet(String textSnippet) {
+            this.textSnippet = textSnippet;
+        }
+    }
 }
