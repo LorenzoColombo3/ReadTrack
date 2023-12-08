@@ -15,7 +15,7 @@
     <string name="error_password">La password inserita è errata</string>
     <string name="error_email">L\'email inerita è errata</string>
     <string name="check_login_data_message">Email o password errate</string>
-    <string name="searchbar_hint">cerca</string>
+    <string name="searchbar_hint">Inserisci il titolo di un libro</string>
     <string name="books">books</string>
     <string name="search">search</string>
     <string name="profile">profile</string>

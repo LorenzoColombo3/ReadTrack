@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Book;
+import com.example.readtrack.model.BookViewModel;
 import com.example.readtrack.util.JSONparser;
 import com.example.readtrack.util.ResponseCallback;
 import com.google.android.material.snackbar.Snackbar;
@@ -105,7 +106,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
 
     private List<Book> getBooksListWithWithGSon() {
         JSONparser jsonParserUtil = new JSONparser(requireActivity().getApplication());
-        return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie").getItems();
+        return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie&startIndex=0&maxResults=40").getItems();
     }
 
 }
