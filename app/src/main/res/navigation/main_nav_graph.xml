@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/books_fragment">
+    <fragment
+        android:id="@+id/books_fragment"
+        android:name="com.example.readtrack.ui.BooksFragment"
+        tools:layout="@layout/fragment_books" />
+    <fragment
+        android:id="@+id/profile_fragment"
+        android:name="com.example.readtrack.ui.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/search_fragment"
+        android:name="com.example.readtrack.ui.SearchFragment"
+        tools:layout="@layout/fragment_search" />
+</navigation>
