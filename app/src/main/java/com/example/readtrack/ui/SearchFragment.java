@@ -5,48 +5,31 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.readtrack.R;
-import com.google.android.material.searchbar.SearchBar;
+import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
+import com.example.readtrack.model.Book;
+import com.google.android.material.search.SearchBar;
+import com.google.android.material.search.SearchView;
+import com.example.readtrack.model.BookViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class SearchFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    SearchView searchView;
+    SearchBar searchBar;
+    private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
 
     public SearchFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchFragment newInstance(String param1, String param2) {
-        SearchFragment fragment = new SearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -57,8 +40,45 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+        searchView = view.findViewById(R.id.search_view);
+        searchBar = view.findViewById(R.id.search_bar);
+        searchView
+                .getEditText()
+                .setOnEditorActionListener(
+                        (v, actionId, event) -> {
+                            searchBar.setText(searchView.getText());
+                            searchView.hide();
+
+                            RecyclerView recyclerViewFavBooks = view.findViewById(R.id.search_results);
+                            RecyclerView.LayoutManager layoutManager =
+                                    new LinearLayoutManager(requireContext(),
+                                            LinearLayoutManager.VERTICAL, false);
+                            Log.d("inserimentoBar",searchBar.getText().toString());
+                            BookViewModel bookViewModel=new BookViewModel();
+                            bookViewModel.searchBooks(searchBar.getText().toString(), "inhautor");
+                            // Osserva i risultati della ricerca
+                            bookViewModel.getSearchResults().observe(getViewLifecycleOwner(), books -> {
+                                if (books != null && !books.isEmpty()) {
+                                    Log.d("search result", books.get(0).getVolumeInfo().getTitle());
+                                    Log.d("search result", String.valueOf(books.size()));
+                                    booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(books,
+                                            new BooksRecyclerViewAdapter.OnItemClickListener() {
+                                                @Override
+                                                public void onBooksItemClick(Book book) {
+                                                    Snackbar.make(view, book.getVolumeInfo().getTitle(), Snackbar.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                    recyclerViewFavBooks.setLayoutManager(layoutManager);
+                                    recyclerViewFavBooks.setAdapter(booksRecyclerViewAdapter);
+                                } else {
+                                    // Gestisci il caso in cui non ci sono risultati
+                                    Log.d("search result", "Nessun risultato trovato");
+                                }
+                            });
+                            return false;
+                        });
+        return view;
     }
 
     @Override

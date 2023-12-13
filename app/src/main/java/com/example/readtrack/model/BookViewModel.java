@@ -35,13 +35,12 @@ public class BookViewModel extends ViewModel {
 
     // Metodo per eseguire la ricerca dei libri tramite le API di Google Books
     public void searchBooks(String query, String searchField) {
-        Call<BooksApiResponse> call = bookApiService.searchBooks(query, 10, searchField);
+        Call<BooksApiResponse> call = bookApiService.searchBooks(query, 40, searchField);
         call.enqueue(new Callback<BooksApiResponse>() {
             @Override
             public void onResponse(Call<BooksApiResponse> call, Response<BooksApiResponse> response) {
                 if (response.isSuccessful()) {
                     List<Book> books = response.body().getItems();
-                    Log.d("Books", books.get(0).getVolumeInfo().getTitle());
                     // Aggiorna i risultati della ricerca nel LiveData
                     searchResults.setValue(books);
                 } else {

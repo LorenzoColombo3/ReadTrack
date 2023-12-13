@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.SearchFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -52,18 +50,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
-                    android:hint="@string/searchbar_hint" />
-
+                    android:hint="@string/searchbar_hint"/>
             </com.google.android.material.appbar.AppBarLayout>
 
             <com.google.android.material.search.SearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="150dp"
                 android:hint="@string/searchbar_hint"
-                app:layout_anchor="@id/search_bar">
-                <!-- Search suggestions/results go here (ScrollView, RecyclerView, etc.). -->
-            </com.google.android.material.search.SearchView>
+                app:layout_anchor="@id/search_bar"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/search_results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintTop_toBottomOf="@+id/search_bar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8dp" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

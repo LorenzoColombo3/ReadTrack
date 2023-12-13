@@ -15,7 +15,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/image_cover"
         android:focusable="true"
-        android:src="@color/blue"
+        android:src="@drawable/image_not_found"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
