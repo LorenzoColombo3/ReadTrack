@@ -20,7 +20,7 @@ public class BooksRecyclerViewAdapter extends
         RecyclerView.Adapter<BooksRecyclerViewAdapter.BooksViewHolder>{
 
     public interface OnItemClickListener {
-        void onBooksItemClick(Book news);
+        void onBooksItemClick(Book book);
     }
 
     private final List<Book> booksList;

@@ -1,8 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="?android:selectableItemBackground"
+    android:descendantFocusability="blocksDescendants">
 
-    <!--TODO Fare il layout del elemento della lista nella ricerca-->
+    <ImageView
+        android:id="@+id/image_cover"
+        android:padding="10dp"
+        android:layout_width="105dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/image_cover"
+        android:focusable="true"
+        android:src="@drawable/image_not_found"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/book_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/book_title" />
+
+    <TextView
+        android:id="@+id/book_author"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="45dp"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintTop_toTopOf="@id/book_title"
+        tools:text="@string/book_author" />
+
+
+    <ImageView
+        android:id="@+id/imageview_favorite_book"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:focusable="true"
+        android:contentDescription="@string/fav_content_description"
+        android:src="@drawable/ic_baseline_favorite_border_24"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

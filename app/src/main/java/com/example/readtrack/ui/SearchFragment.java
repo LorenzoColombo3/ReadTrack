@@ -14,19 +14,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.readtrack.R;
-import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Book;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.example.readtrack.model.BookViewModel;
 import com.google.android.material.snackbar.Snackbar;
+import com.example.readtrack.adapter.BooksSearchRecyclerAdapter;
 
 
 public class SearchFragment extends Fragment {
 
     SearchView searchView;
     SearchBar searchBar;
-    private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
+    private BooksSearchRecyclerAdapter booksSearchRecyclerViewAdapter;
 
     public SearchFragment() {
 
@@ -57,20 +57,22 @@ public class SearchFragment extends Fragment {
                             Log.d("inserimentoBar",searchBar.getText().toString());
                             BookViewModel bookViewModel=new BookViewModel();
                             bookViewModel.searchBooks(searchBar.getText().toString(), "inhautor");
+                            searchBar.setText("");
                             // Osserva i risultati della ricerca
                             bookViewModel.getSearchResults().observe(getViewLifecycleOwner(), books -> {
                                 if (books != null && !books.isEmpty()) {
                                     Log.d("search result", books.get(0).getVolumeInfo().getTitle());
                                     Log.d("search result", String.valueOf(books.size()));
-                                    booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(books,
-                                            new BooksRecyclerViewAdapter.OnItemClickListener() {
+                                    booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(books,
+                                            requireActivity().getApplication(),
+                                            new BooksSearchRecyclerAdapter.OnItemClickListener() {
                                                 @Override
                                                 public void onBooksItemClick(Book book) {
                                                     Snackbar.make(view, book.getVolumeInfo().getTitle(), Snackbar.LENGTH_SHORT).show();
                                                 }
                                             });
                                     recyclerViewFavBooks.setLayoutManager(layoutManager);
-                                    recyclerViewFavBooks.setAdapter(booksRecyclerViewAdapter);
+                                    recyclerViewFavBooks.setAdapter(booksSearchRecyclerViewAdapter);
                                 } else {
                                     // Gestisci il caso in cui non ci sono risultati
                                     Log.d("search result", "Nessun risultato trovato");
@@ -84,7 +86,6 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
     }
 }
 

@@ -27,4 +27,11 @@
     <string name="cover">cover</string>
     <string name="favourite">favourite</string>
     <string name="image_cover">cover image</string>
+    <string name="fav_content_description">fav_book</string>
+    <string name="book_author">author</string>
+    <string name="book_year">year</string>
+    <string name="book_genre">genre</string>
+    <string name="book_publisher">publisher</string>
+    <string name="book_isbn">isbn</string>
+    <string name="book_description">description</string>
 </resources>

@@ -43,5 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
         // For the BottomNavigationView
         NavigationUI.setupWithNavController(bottomNav, navController);
+
+
+
     }
 }

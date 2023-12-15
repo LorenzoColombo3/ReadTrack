@@ -8,4 +8,6 @@
     <color name="lilla">#99CCFF</color>
     <color name="blue">#0000ff</color>
     <color name="primaryColor">#000000</color>
+    <color name="red_500">#ff0000</color>
+    <color name="grey">#808080</color>
 </resources>

@@ -16,6 +16,16 @@ public class Book {
     private SaleInfo saleInfo;
     private AccessInfo accessInfo;
     private SearchInfo searchInfo;
+    private boolean favorite=false;
+    public boolean isFavorite(){return favorite;}
+
+    public void setFavorite(){
+        if(!favorite){
+            favorite=true;
+        }else{
+            favorite=false;
+        }
+    }
 
     // Metodi getter e setter per BookVolumeItem
     public String getKind() {
