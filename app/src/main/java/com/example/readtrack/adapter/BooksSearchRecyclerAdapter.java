@@ -1,6 +1,7 @@
 package com.example.readtrack.adapter;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
 import com.example.readtrack.model.Book;
+import com.example.readtrack.ui.BookFragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -62,14 +64,12 @@ public class BooksSearchRecyclerAdapter extends
         private final ImageView imageViewThumbnail;
         private final TextView title;
         private final TextView author;
-        private final ImageView like;
 
         public BooksSearchViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewThumbnail = itemView.findViewById(R.id.image_cover);
             title = itemView.findViewById(R.id.book_title);
             author = itemView.findViewById(R.id.book_author);
-            like = itemView.findViewById(R.id.imageview_favorite_book);
             itemView.setOnClickListener(this);
         }
         public void bind(Book book) {
@@ -79,7 +79,6 @@ public class BooksSearchRecyclerAdapter extends
                         .into(imageViewThumbnail);
                 title.setText(setContent(book.getVolumeInfo().getTitle()));
                 author.setText(setContent(book.getVolumeInfo().getAuthors().get(0)));
-                setImageViewFavoriteBooks(book.isFavorite());
             }catch(NullPointerException pointerException){
                 Log.d("pointer exception", pointerException.toString());
             }
@@ -97,8 +96,9 @@ public class BooksSearchRecyclerAdapter extends
         }
         @Override
         public void onClick(View v) {
-            Log.d("uriCover","uriCover");
+            onItemClickListener.onBooksItemClick(booksList.get(getAdapterPosition()));
         }
+/*
         private void setImageViewFavoriteBooks(boolean isFavorite) {
             if (isFavorite) {
                 like.setImageDrawable(
@@ -119,6 +119,6 @@ public class BooksSearchRecyclerAdapter extends
                                 R.color.black)
                 );
             }
-        }
+        }*/
     }
 }

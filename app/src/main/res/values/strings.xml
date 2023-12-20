@@ -34,4 +34,5 @@
     <string name="book_publisher">publisher</string>
     <string name="book_isbn">isbn</string>
     <string name="book_description">description</string>
+    <string name="bookargument">BookArgument</string>
 </resources>

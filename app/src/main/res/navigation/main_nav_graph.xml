@@ -15,5 +15,14 @@
     <fragment
         android:id="@+id/search_fragment"
         android:name="com.example.readtrack.ui.SearchFragment"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_search_fragment_to_bookFragment"
+            app:destination="@id/bookFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookFragment"
+        android:name="com.example.readtrack.ui.BookFragment"
+        tools:layout="@layout/fragment_book">
+    </fragment>
 </navigation>

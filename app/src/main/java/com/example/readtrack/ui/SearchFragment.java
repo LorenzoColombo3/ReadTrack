@@ -1,10 +1,12 @@
 package com.example.readtrack.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -68,7 +70,11 @@ public class SearchFragment extends Fragment {
                                             new BooksSearchRecyclerAdapter.OnItemClickListener() {
                                                 @Override
                                                 public void onBooksItemClick(Book book) {
-                                                    Snackbar.make(view, book.getVolumeInfo().getTitle(), Snackbar.LENGTH_SHORT).show();
+                                                    Log.d("onBookItemClick","book");
+                                                    //Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment);
+                                                    Bundle bundle = new Bundle();
+                                                    bundle.putSerializable("bookArgument", book);
+                                                    Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
                                                 }
                                             });
                                     recyclerViewFavBooks.setLayoutManager(layoutManager);

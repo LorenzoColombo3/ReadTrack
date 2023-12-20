@@ -41,21 +41,6 @@
         app:layout_constraintTop_toTopOf="@id/book_title"
         tools:text="@string/book_author" />
 
-
-    <ImageView
-        android:id="@+id/imageview_favorite_book"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:focusable="true"
-        android:contentDescription="@string/fav_content_description"
-        android:src="@drawable/ic_baseline_favorite_border_24"
-        android:padding="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

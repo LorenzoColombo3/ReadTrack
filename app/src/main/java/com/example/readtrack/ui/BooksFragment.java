@@ -49,7 +49,6 @@ public class BooksFragment extends Fragment implements ResponseCallback{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("aaa","aaa");
         requireActivity().addMenuProvider(new MenuProvider() {
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
@@ -68,8 +67,6 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                         LinearLayoutManager.HORIZONTAL, false);
 
         booksList= getBooksListWithWithGSon();
-
-        Log.d("bookList",booksList.toString());
 
         booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(booksList,
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
