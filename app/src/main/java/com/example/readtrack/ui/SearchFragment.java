@@ -73,7 +73,7 @@ public class SearchFragment extends Fragment {
                                                     Log.d("onBookItemClick","book");
                                                     //Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment);
                                                     Bundle bundle = new Bundle();
-                                                    bundle.putSerializable("bookArgument", book);
+                                                    bundle.putParcelable("bookArgument", book);
                                                     Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
                                                 }
                                             });

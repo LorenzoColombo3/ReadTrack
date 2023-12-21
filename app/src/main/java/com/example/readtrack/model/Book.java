@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.List;
 
-public class Book implements Serializable {
+public class Book implements Parcelable {
     private String kind;
     private String id;
     private String etag;
@@ -18,6 +18,27 @@ public class Book implements Serializable {
     private AccessInfo accessInfo;
     private SearchInfo searchInfo;
     private boolean favorite=false;
+
+    protected Book(Parcel in) {
+        kind = in.readString();
+        id = in.readString();
+        etag = in.readString();
+        selfLink = in.readString();
+        favorite = in.readByte() != 0;
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
+
     public boolean isFavorite(){return favorite;}
 
     public void setFavorite(){
@@ -91,6 +112,20 @@ public class Book implements Serializable {
 
     public void setSearchInfo(SearchInfo searchInfo) {
         this.searchInfo = searchInfo;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(kind);
+        dest.writeString(id);
+        dest.writeString(etag);
+        dest.writeString(selfLink);
+        dest.writeByte((byte) (favorite ? 1 : 0));
     }
 
     public static class VolumeInfo {
