@@ -72,7 +72,6 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onBooksItemClick(Book book) {
-                        Snackbar.make(view, book.getVolumeInfo().getTitle(), Snackbar.LENGTH_SHORT).show();
                     }
                  });
         recyclerViewFavBooks.setLayoutManager(layoutManager);

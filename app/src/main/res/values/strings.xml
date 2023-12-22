@@ -19,7 +19,6 @@
     <string name="books">books</string>
     <string name="search">search</string>
     <string name="profile">profile</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="book_item">book_item</string>
     <string name="book_title">title</string>
@@ -35,4 +34,5 @@
     <string name="book_isbn">isbn</string>
     <string name="book_description">description</string>
     <string name="bookargument">BookArgument</string>
+    <string name="isbn_search_button">isbn_search_button</string>
 </resources>

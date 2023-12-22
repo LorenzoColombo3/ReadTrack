@@ -72,7 +72,7 @@ public class BooksRecyclerViewAdapter extends
         }
         @Override
         public void onClick(View v) {
-            Log.d("uriCover","uriCover");
+            onItemClickListener.onBooksItemClick(booksList.get(getAdapterPosition()));
         }
     }
 }

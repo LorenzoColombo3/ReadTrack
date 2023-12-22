@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.example.readtrack.R;
 import com.example.readtrack.model.Book;
@@ -22,13 +24,17 @@ import com.google.android.material.search.SearchView;
 import com.example.readtrack.model.BookViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.example.readtrack.adapter.BooksSearchRecyclerAdapter;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureActivity;
 
 
 public class SearchFragment extends Fragment {
 
-    SearchView searchView;
-    SearchBar searchBar;
+    private SearchView searchView;
+    private SearchBar searchBar;
     private BooksSearchRecyclerAdapter booksSearchRecyclerViewAdapter;
+    private BookViewModel bookViewModel;
 
     public SearchFragment() {
 
@@ -37,6 +43,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -57,7 +64,7 @@ public class SearchFragment extends Fragment {
                                     new LinearLayoutManager(requireContext(),
                                             LinearLayoutManager.VERTICAL, false);
                             Log.d("inserimentoBar",searchBar.getText().toString());
-                            BookViewModel bookViewModel=new BookViewModel();
+                            bookViewModel=new BookViewModel();
                             bookViewModel.searchBooks(searchBar.getText().toString(), "inhautor");
                             searchBar.setText("");
                             // Osserva i risultati della ricerca
@@ -89,24 +96,9 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 }
-
-/*
-TODO da implementare con la barra di ricerca
-BookViewModel bookViewModel=new BookViewModel();
-bookViewModel.searchBooks("Il mistero del cadavere scomparso", "title");
-// Osserva i risultati della ricerca
-bookViewModel.getSearchResults().observe(this, books -> {
-    if (books != null && !books.isEmpty()) {
-        // I risultati della ricerca sono disponibili, accedi ai dati
-        Log.d("search result", books.get(0).getVolumeInfo().getTitle());
-    } else {
-        // Gestisci il caso in cui non ci sono risultati
-        Log.d("search result", "Nessun risultato trovato");
-    }
-});
- */

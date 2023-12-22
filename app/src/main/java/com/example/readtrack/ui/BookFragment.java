@@ -78,8 +78,12 @@ public class BookFragment extends Fragment {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Book) {
                 // Puoi essere sicuro che l'oggetto sia di tipo Book
                 book = (Book) args.get("bookArgument");
-                bookViewModel.searchBooks(book.getVolumeInfo().getAuthors().get(0), "inhautor");
-                this.titleOthBooks.setText("Altri libri di "+book.getVolumeInfo().getAuthors().get(0));
+                if(book.getVolumeInfo().getAuthors()!=null) {
+                    bookViewModel.searchBooks(book.getVolumeInfo().getAuthors().get(0), "inhautor");
+                    this.titleOthBooks.setText("Altri libri di " + book.getVolumeInfo().getAuthors().get(0));
+                }else {
+                    this.titleOthBooks.setText("Altri libri di Sconosciuto");
+                }
             }
             setBook(book);
         }
@@ -96,7 +100,9 @@ public class BookFragment extends Fragment {
                         new BooksRecyclerViewAdapter.OnItemClickListener() {
                             @Override
                             public void onBooksItemClick(Book book) {
-                                Snackbar.make(view, book.getVolumeInfo().getTitle(), Snackbar.LENGTH_SHORT).show();
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("bookArgument", book);
+                                Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
                             }
                         });
                 recyclerViewOthBooks.setLayoutManager(layoutManager);
@@ -107,17 +113,31 @@ public class BookFragment extends Fragment {
             }
         });
     }
-
+    //TODO controllare i casi null che potrebbero crashare
     private void setBook(Book book){
         this.title.setText(book.getVolumeInfo().getTitle());
         Picasso.get()
                 .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
                 .into(this.cover);
-        this.author.setText(book.getVolumeInfo().getAuthors().get(0));
-        this.year.setText(book.getVolumeInfo().getPublishedDate());
-        this.genre.setText(book.getVolumeInfo().getCategories().get(0));
+        if(book.getVolumeInfo().getAuthors()!=null){
+            this.author.setText(book.getVolumeInfo().getAuthors().get(0));
+        }else{
+            this.author.setText("Sconosciuto");
+        }
+        this.year.setText(book.getVolumeInfo().getPublishedDate().substring(0,4));
+        if(book.getVolumeInfo().getCategories()!=null) {
+            this.genre.setText(book.getVolumeInfo().getCategories().get(0));
+        }else{
+            this.genre.setText("Sconosciuto");
+        }
         this.publisher.setText(book.getVolumeInfo().getPublisher());
-        this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(1).getIdentifier());
+        if(book.getVolumeInfo().getIndustryIdentifiers()!=null) {
+            if (book.getVolumeInfo().getIndustryIdentifiers().size() == 2) {
+                this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(1).getIdentifier());
+            } else {
+                this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
+            }
+        }
         this.description.setText(book.getVolumeInfo().getDescription());
     }
 }
