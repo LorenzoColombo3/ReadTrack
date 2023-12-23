@@ -27,5 +27,9 @@
         <action
             android:id="@+id/action_bookFragment_self"
             app:destination="@id/bookFragment" />
+        <action
+            android:id="@+id/action_pop_back"
+            app:destination="@id/search_fragment"
+            app:popUpTo="@+id/search_fragment"/>
     </fragment>
 </navigation>
