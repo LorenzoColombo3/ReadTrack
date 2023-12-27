@@ -35,4 +35,8 @@
     <string name="book_description">description</string>
     <string name="bookargument">BookArgument</string>
     <string name="isbn_search_button">isbn_search_button</string>
+    <string name="add_favourite">add_favourite</string>
+    <string name="continua_a_leggere">... Continua a leggere</string>
+    <string name="restringi">Restringi</string>
+    <string name="actual_page">actual_page</string>
 </resources>

@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         // For the BottomNavigationView
         NavigationUI.setupWithNavController(bottomNav, navController);
         FragmentManager fragmentManager = getSupportFragmentManager();
-        //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA FUNZIONA
+
         bottomNav.setOnItemReselectedListener(item -> {
             if(item.getItemId()!=navController.getCurrentDestination().getId())
                 navController.navigate(R.id.action_pop_back);

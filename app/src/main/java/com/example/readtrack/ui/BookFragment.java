@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,8 +43,11 @@ public class BookFragment extends Fragment {
     private TextView genre;
     private TextView publisher;
     private TextView isbn;
+    private TextView numPages;
     private TextView description;
     private TextView titleOthBooks;
+    private TextView readMoreButton;
+    private TextView readLessButton;
     public BookFragment(){}
 
     @Override
@@ -62,9 +66,12 @@ public class BookFragment extends Fragment {
         genre=view.findViewById(R.id.genre);
         publisher=view.findViewById(R.id.publisher);
         isbn=view.findViewById(R.id.isbn);
+        numPages=view.findViewById(R.id.num_pages);
         description=view.findViewById(R.id.description);
         recyclerViewOthBooks=view.findViewById(R.id.recyclerview_other_books);
         titleOthBooks=view.findViewById(R.id.title_oth_books);
+        readMoreButton=view.findViewById(R.id.read_more_button);
+        readLessButton=view.findViewById(R.id.read_less_button);
         return view;
     }
 
@@ -78,9 +85,9 @@ public class BookFragment extends Fragment {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Book) {
                 // Puoi essere sicuro che l'oggetto sia di tipo Book
                 book = (Book) args.get("bookArgument");
+                Log.d("Numero Pagine", Integer.toString(book.getVolumeInfo().getPageCount()));
                 if(book.getVolumeInfo().getAuthors()!=null) {
                     bookViewModel.searchBooks(book.getVolumeInfo().getAuthors().get(0), "inhautor");
-                    this.titleOthBooks.setText("Altri libri di " + book.getVolumeInfo().getAuthors().get(0));
                 }else {
                     this.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
@@ -138,6 +145,36 @@ public class BookFragment extends Fragment {
                 this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
             }
         }
-        this.description.setText(book.getVolumeInfo().getDescription());
+        this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+        this.description.setText(book.getVolumeInfo().getDescription());// Aggiungi un listener per ascoltare i cambiamenti nel layout del TextView
+        description.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                description.getViewTreeObserver().removeOnPreDrawListener(this);
+                int lineCount = description.getLineCount();
+                checkReadMoreButtonVisibility();
+                return true;
+            }
+        });
+        readMoreButton.setOnClickListener(view -> {
+            description.setMaxLines(Integer.MAX_VALUE);
+            description.setEllipsize(null);
+            readMoreButton.setVisibility(View.INVISIBLE);
+            readLessButton.setVisibility(View.VISIBLE);
+        });
+        readLessButton.setOnClickListener(view -> {
+            description.setMaxLines(10);
+            description.setEllipsize(null);
+            readMoreButton.setVisibility(View.VISIBLE);
+            readLessButton.setVisibility(View.INVISIBLE);
+        });
+    }
+    private void checkReadMoreButtonVisibility() {
+        // Verifica se il testo è troncato
+        if (description.getLineCount() > description.getMaxLines()) {
+            readMoreButton.setVisibility(View.VISIBLE);
+        } else {
+            readMoreButton.setVisibility(View.INVISIBLE);
+        }
     }
 }

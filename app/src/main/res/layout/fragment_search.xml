@@ -45,9 +45,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="27dp">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
                     <com.google.android.material.search.SearchBar
                         android:id="@+id/search_bar"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/searchbar_hint"
@@ -55,6 +59,22 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/isbn_search_button"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:elevation="100dp"
+                        android:layout_marginRight="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/search_bar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_camera"
+                        android:contentDescription="@string/isbn_search_button"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
             </com.google.android.material.appbar.AppBarLayout>
 
