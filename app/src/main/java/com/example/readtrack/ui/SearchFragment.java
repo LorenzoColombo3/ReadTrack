@@ -1,8 +1,8 @@
 package com.example.readtrack.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -12,30 +12,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.readtrack.R;
 import com.example.readtrack.model.Book;
+import com.example.readtrack.util.ResponseCallback;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
-import com.example.readtrack.model.BookViewModel;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.readtrack.repository.BookRepository;
 import com.example.readtrack.adapter.BooksSearchRecyclerAdapter;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.List;
 
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements ResponseCallback {
 
     private SearchView searchView;
     private SearchBar searchBar;
     private BooksSearchRecyclerAdapter booksSearchRecyclerViewAdapter;
-    private BookViewModel bookViewModel;
-
+    private BookRepository bookRepository;
+    private ImageButton isbnSearch;
     public SearchFragment() {
 
     }
@@ -52,6 +53,11 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchView = view.findViewById(R.id.search_view);
         searchBar = view.findViewById(R.id.search_bar);
+        isbnSearch = view.findViewById(R.id.isbn_search_button);
+        bookRepository = new BookRepository(requireActivity().getApplication(), this);
+        isbnSearch.setOnClickListener(v -> {
+            scanCode();
+        });
         searchView
                 .getEditText()
                 .setOnEditorActionListener(
@@ -64,11 +70,10 @@ public class SearchFragment extends Fragment {
                                     new LinearLayoutManager(requireContext(),
                                             LinearLayoutManager.VERTICAL, false);
                             Log.d("inserimentoBar",searchBar.getText().toString());
-                            bookViewModel=new BookViewModel();
-                            bookViewModel.searchBooks(searchBar.getText().toString(), "inhautor");
+                            bookRepository.searchBooks(searchBar.getText().toString());
                             searchBar.setText("");
                             // Osserva i risultati della ricerca
-                            bookViewModel.getSearchResults().observe(getViewLifecycleOwner(), books -> {
+                            bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
                                 if (books != null && !books.isEmpty()) {
                                     Log.d("search result", books.get(0).getVolumeInfo().getTitle());
                                     Log.d("search result", String.valueOf(books.size()));
@@ -82,6 +87,7 @@ public class SearchFragment extends Fragment {
                                                     Bundle bundle = new Bundle();
                                                     bundle.putParcelable("bookArgument", book);
                                                     Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
+                                                    //bookRepository.saveDataInDatabase(book);
                                                 }
                                             });
                                     recyclerViewFavBooks.setLayoutManager(layoutManager);
@@ -96,9 +102,56 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
+    private void scanCode() {
+        ScanOptions options= new ScanOptions();
+        options.setPrompt("scannerizza codice");
+        options.setBeepEnabled(true);
+        options.setOrientationLocked(true);
+        options.setCaptureActivity(CaptureActivity.class);
+        barLauncher.launch(options);
+    }
 
+    ActivityResultLauncher<ScanOptions> barLauncher= registerForActivityResult(new ScanContract(), result ->{
+        if(result.getContents()!=null){
+            Log.d("isbn:",result.getContents());
+            bookRepository.searchBooks("isbn"+result.getContents());
+            bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
+                if (books != null && !books.isEmpty()) {
+                    Log.d("search result", books.get(0).getVolumeInfo().getTitle());
+                    booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(books,
+                            requireActivity().getApplication(),
+                            new BooksSearchRecyclerAdapter.OnItemClickListener() {
+                                @Override
+                                public void onBooksItemClick(Book book) {
+                                    Log.d("onBookItemClick", "book");
+                                    //Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putParcelable("bookArgument", book);
+                                    Log.d("book", book.getVolumeInfo().getTitle());
+                                    Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
+                                }
+                            });
+                } else {
+                    // Gestisci il caso in cui non ci sono risultati
+                    Log.d("search result", "Nessun risultato trovato");
+                }
+            });
+        }
+    });
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+    @Override
+    public void onSuccess(List<Book> newsList, long lastUpdate) {
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+
+    }
+
+
 }

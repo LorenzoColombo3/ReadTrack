@@ -4,21 +4,38 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 public class Book implements Parcelable {
     private String kind;
+
+    @PrimaryKey(autoGenerate = true)
+
     private String id;
     private String etag;
     private String selfLink;
+    @Ignore
     private VolumeInfo volumeInfo;
+    @Ignore
     private SaleInfo saleInfo;
+    @Ignore
     private AccessInfo accessInfo;
+    @Ignore
     private SearchInfo searchInfo;
+
+    @ColumnInfo(name = "is_favorite")
     private boolean favorite=false;
 
+    public Book(){
+
+    }
     protected Book(Parcel in) {
         kind = in.readString();
         id = in.readString();
@@ -40,6 +57,7 @@ public class Book implements Parcelable {
     };
 
     public boolean isFavorite(){return favorite;}
+
 
     public void setFavorite(){
         if(!favorite){

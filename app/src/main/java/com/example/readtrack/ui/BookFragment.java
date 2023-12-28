@@ -1,6 +1,5 @@
 package com.example.readtrack.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,19 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
-import com.example.readtrack.adapter.BooksSearchRecyclerAdapter;
 import com.example.readtrack.model.Book;
-import com.example.readtrack.model.BookViewModel;
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.readtrack.repository.BookRepository;
+import com.example.readtrack.util.ResponseCallback;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class BookFragment extends Fragment {
+public class BookFragment extends Fragment implements ResponseCallback {
 
     private List<Book> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
@@ -79,7 +73,7 @@ public class BookFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle args = getArguments();
-        BookViewModel bookViewModel=new BookViewModel();
+        BookRepository bookRepository =new BookRepository(requireActivity().getApplication(), this);
         if (args != null) {
             Book book = null;
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Book) {
@@ -87,7 +81,7 @@ public class BookFragment extends Fragment {
                 book = (Book) args.get("bookArgument");
                 Log.d("Numero Pagine", Integer.toString(book.getVolumeInfo().getPageCount()));
                 if(book.getVolumeInfo().getAuthors()!=null) {
-                    bookViewModel.searchBooks(book.getVolumeInfo().getAuthors().get(0), "inhautor");
+                    bookRepository.searchBooks("autor:"+ book.getVolumeInfo().getAuthors().get(0));
                 }else {
                     this.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
@@ -95,7 +89,7 @@ public class BookFragment extends Fragment {
             setBook(book);
         }
 
-        bookViewModel.getSearchResults().observe(getViewLifecycleOwner(), books -> {
+        bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
             if (books != null && !books.isEmpty()) {
                 Log.d("search result", books.get(0).getVolumeInfo().getTitle());
                 Log.d("search result", String.valueOf(books.size()));
@@ -119,6 +113,16 @@ public class BookFragment extends Fragment {
                 Log.d("search result", "Nessun risultato trovato");
             }
         });
+    }
+
+    @Override
+    public void onSuccess(List<Book> newsList, long lastUpdate) {
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+
     }
     //TODO controllare i casi null che potrebbero crashare
     private void setBook(Book book){

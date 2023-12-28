@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,12 +20,10 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Book;
-import com.example.readtrack.model.BookViewModel;
 import com.example.readtrack.util.JSONparser;
 import com.example.readtrack.util.ResponseCallback;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

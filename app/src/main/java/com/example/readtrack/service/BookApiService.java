@@ -10,7 +10,6 @@ public interface BookApiService {
     @GET("v1/volumes")
     Call<BooksApiResponse> searchBooks(
             @Query("q") String query,
-            @Query("maxResults") int maxResults,
-            @Query("searchField") String searchField
+            @Query("maxResults") int maxResults
     );
 }
