@@ -1,6 +1,5 @@
 package com.example.readtrack.adapter;
 
-import android.app.Application;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Book;
+import com.example.readtrack.model.Books;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,13 +19,13 @@ public class BooksRecyclerViewAdapter extends
         RecyclerView.Adapter<BooksRecyclerViewAdapter.BooksViewHolder>{
 
     public interface OnItemClickListener {
-        void onBooksItemClick(Book book);
+        void onBooksItemClick(Books book);
     }
 
-    private final List<Book> booksList;
+    private final List<Books> booksList;
     private final OnItemClickListener onItemClickListener;
 
-    public BooksRecyclerViewAdapter(List<Book> booksList, OnItemClickListener onItemClickListener) {
+    public BooksRecyclerViewAdapter(List<Books> booksList, OnItemClickListener onItemClickListener) {
         this.booksList = booksList;
         this.onItemClickListener = onItemClickListener;
     }
@@ -60,7 +59,7 @@ public class BooksRecyclerViewAdapter extends
             imageViewThumbnail = itemView.findViewById(R.id.image_cover);
             itemView.setOnClickListener(this);
         }
-        public void bind(Book book) {
+        public void bind(Books book) {
             try{
                 Picasso.get()
                         .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))

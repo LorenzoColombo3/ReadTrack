@@ -1,7 +1,6 @@
 package com.example.readtrack.adapter;
 
 import android.app.Application;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Book;
-import com.example.readtrack.ui.BookFragment;
+import com.example.readtrack.model.Books;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -25,15 +21,15 @@ public class BooksSearchRecyclerAdapter extends
         RecyclerView.Adapter<BooksSearchRecyclerAdapter.BooksSearchViewHolder>{
 
     public interface OnItemClickListener {
-        void onBooksItemClick(Book book);
+        void onBooksItemClick(Books book);
     }
 
-    private final List<Book> booksList;
+    private final List<Books> booksList;
 
     private final Application application;
     private final OnItemClickListener onItemClickListener;
 
-    public BooksSearchRecyclerAdapter(List<Book> booksList, Application application, OnItemClickListener onItemClickListener) {
+    public BooksSearchRecyclerAdapter(List<Books> booksList, Application application, OnItemClickListener onItemClickListener) {
         this.application=application;
         this.booksList = booksList;
         this.onItemClickListener = onItemClickListener;
@@ -72,7 +68,7 @@ public class BooksSearchRecyclerAdapter extends
             author = itemView.findViewById(R.id.book_author);
             itemView.setOnClickListener(this);
         }
-        public void bind(Book book) {
+        public void bind(Books book) {
             try{
                 Picasso.get()
                         .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))

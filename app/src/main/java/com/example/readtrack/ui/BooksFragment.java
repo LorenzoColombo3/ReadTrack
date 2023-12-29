@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
-import com.example.readtrack.model.Book;
+import com.example.readtrack.model.Books;
 import com.example.readtrack.util.JSONparser;
 import com.example.readtrack.util.ResponseCallback;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,7 +29,7 @@ import java.util.List;
 
 public class BooksFragment extends Fragment implements ResponseCallback{
 
-    private List<Book> booksList;
+    private List<Books> booksList;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
 
     public BooksFragment() {}
@@ -68,7 +68,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
         booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(booksList,
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
                     @Override
-                    public void onBooksItemClick(Book book) {
+                    public void onBooksItemClick(Books book) {
                     }
                  });
         recyclerViewFavBooks.setLayoutManager(layoutManager);
@@ -77,7 +77,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
     }
 
     @Override
-    public void onSuccess(List<Book> newsList, long lastUpdate) {
+    public void onSuccess(List<Books> newsList, long lastUpdate) {
         if (booksList != null) {
             this.booksList.clear();
             this.booksList.addAll(booksList);
@@ -97,7 +97,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
-    private List<Book> getBooksListWithWithGSon() {
+    private List<Books> getBooksListWithWithGSon() {
         JSONparser jsonParserUtil = new JSONparser(requireActivity().getApplication());
         return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie&startIndex=0&maxResults=40").getItems();
     }

@@ -1,14 +1,11 @@
 package com.example.readtrack.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.List;
 
 public class BooksApiResponse{
     private String kind;
     private int totalItems;
-    private List<Book> items;
+    private List<Books> items;
 
 
     public String getKind() {
@@ -27,11 +24,11 @@ public class BooksApiResponse{
         this.totalItems = totalItems;
     }
 
-    public List<Book> getItems() {
+    public List<Books> getItems() {
         return items;
     }
 
-    public void setItems(List<Book> items) {
+    public void setItems(List<Books> items) {
         this.items = items;
     }
 

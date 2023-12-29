@@ -1,10 +1,13 @@
 package com.example.readtrack.util;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.readtrack.database.BookRoomDatabase;
 import com.example.readtrack.service.BookApiService;
 
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -26,10 +29,13 @@ public class ServiceLocator {
 
 
     public BookApiService getBookApiService() {
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(Constants.BOOKS_API_BASE_URL).
-                addConverterFactory(GsonConverterFactory.create()).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.BOOKS_API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
         return retrofit.create(BookApiService.class);
     }
+
 
     public BookRoomDatabase getNewsDao(Application application) {
         return BookRoomDatabase.getDatabase(application);

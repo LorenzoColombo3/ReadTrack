@@ -1,20 +1,16 @@
 package com.example.readtrack.database;
 
 import static com.example.readtrack.util.Constants.BOOK_DATABASE_NAME;
-import static com.example.readtrack.util.Constants.DATABASE_VERSION;
 
 import android.content.Context;
 
-import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
-import com.example.readtrack.model.Book;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-//@Database(entities = {Book.class}, version = DATABASE_VERSION)
+//@Database(entities = {Books.class}, version = DATABASE_VERSION)
 public abstract class BookRoomDatabase extends RoomDatabase {
 
     public abstract BookDao bookDao();

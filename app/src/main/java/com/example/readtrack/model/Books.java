@@ -9,11 +9,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Book implements Parcelable {
+public class Books implements Parcelable {
     private String kind;
 
     @PrimaryKey(autoGenerate = true)
@@ -33,10 +32,10 @@ public class Book implements Parcelable {
     @ColumnInfo(name = "is_favorite")
     private boolean favorite=false;
 
-    public Book(){
+    public Books(){
 
     }
-    protected Book(Parcel in) {
+    protected Books(Parcel in) {
         kind = in.readString();
         id = in.readString();
         etag = in.readString();
@@ -44,15 +43,17 @@ public class Book implements Parcelable {
         favorite = in.readByte() != 0;
     }
 
-    public static final Creator<Book> CREATOR = new Creator<Book>() {
+
+
+    public static final Creator<Books> CREATOR = new Creator<Books>() {
         @Override
-        public Book createFromParcel(Parcel in) {
-            return new Book(in);
+        public Books createFromParcel(Parcel in) {
+            return new Books(in);
         }
 
         @Override
-        public Book[] newArray(int size) {
-            return new Book[size];
+        public Books[] newArray(int size) {
+            return new Books[size];
         }
     };
 

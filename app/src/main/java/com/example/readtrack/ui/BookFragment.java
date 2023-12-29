@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
-import com.example.readtrack.model.Book;
+import com.example.readtrack.model.Books;
 import com.example.readtrack.repository.BookRepository;
 import com.example.readtrack.util.ResponseCallback;
 import com.squareup.picasso.Picasso;
@@ -27,7 +27,7 @@ import java.util.List;
 
 public class BookFragment extends Fragment implements ResponseCallback {
 
-    private List<Book> otherBooks;
+    private List<Books> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
     private RecyclerView recyclerViewOthBooks;
     private TextView title;
@@ -75,10 +75,10 @@ public class BookFragment extends Fragment implements ResponseCallback {
         Bundle args = getArguments();
         BookRepository bookRepository =new BookRepository(requireActivity().getApplication(), this);
         if (args != null) {
-            Book book = null;
-            if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Book) {
-                // Puoi essere sicuro che l'oggetto sia di tipo Book
-                book = (Book) args.get("bookArgument");
+            Books book = null;
+            if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
+                // Puoi essere sicuro che l'oggetto sia di tipo Books
+                book = (Books) args.get("bookArgument");
                 Log.d("Numero Pagine", Integer.toString(book.getVolumeInfo().getPageCount()));
                 if(book.getVolumeInfo().getAuthors()!=null) {
                     bookRepository.searchBooks("autor:"+ book.getVolumeInfo().getAuthors().get(0));
@@ -100,7 +100,7 @@ public class BookFragment extends Fragment implements ResponseCallback {
                 booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(books,
                         new BooksRecyclerViewAdapter.OnItemClickListener() {
                             @Override
-                            public void onBooksItemClick(Book book) {
+                            public void onBooksItemClick(Books book) {
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelable("bookArgument", book);
                                 Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
@@ -116,7 +116,7 @@ public class BookFragment extends Fragment implements ResponseCallback {
     }
 
     @Override
-    public void onSuccess(List<Book> newsList, long lastUpdate) {
+    public void onSuccess(List<Books> newsList, long lastUpdate) {
 
     }
 
@@ -125,7 +125,7 @@ public class BookFragment extends Fragment implements ResponseCallback {
 
     }
     //TODO controllare i casi null che potrebbero crashare
-    private void setBook(Book book){
+    private void setBook(Books book){
         this.title.setText(book.getVolumeInfo().getTitle());
         Picasso.get()
                 .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
