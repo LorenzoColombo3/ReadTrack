@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.readtrack.database.BookDao;
+import com.example.readtrack.database.BookRoomDatabase;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.service.BookApiService;
@@ -22,7 +24,7 @@ import retrofit2.Response;
 public class BookRepository extends ViewModel {
     private MutableLiveData<List<Books>> searchResults = new MutableLiveData<>();
     private final Application application;
-    //private final BookDao bookDao;
+    private final BookDao bookDao;
     private final ResponseCallback responseCallback;
     private BookApiService bookApiService;
 
@@ -31,8 +33,8 @@ public class BookRepository extends ViewModel {
         this.bookApiService = ServiceLocator.getInstance().getBookApiService();
         this.application = application;
         this.responseCallback = responseCallback;
-       /* BookRoomDatabase newsRoomDatabase = ServiceLocator.getInstance().getNewsDao(application);
-        this.bookDao = newsRoomDatabase.bookDao();*/
+        BookRoomDatabase newsRoomDatabase = ServiceLocator.getInstance().getNewsDao(application);
+        this.bookDao = newsRoomDatabase.bookDao();
     }
 
     // Metodo per eseguire la ricerca dei libri tramite le API di Google Books
@@ -82,7 +84,7 @@ public class BookRepository extends ViewModel {
         });
     }
 
-   /* public void saveDataInDatabase(Books book){
+    public void saveDataInDatabase(Books book){
         BookRoomDatabase.databaseWriteExecutor.execute(() -> {
             List<Books> allBooks = bookDao.getAll();
             if (!allBooks.contains(book)) {
@@ -97,7 +99,7 @@ public class BookRepository extends ViewModel {
         BookRoomDatabase.databaseWriteExecutor.execute(() -> {
             responseCallback.onSuccess(bookDao.getAll(), lastUpdate);
         });
-    }*/
+    }
 
 
 

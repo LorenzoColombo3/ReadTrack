@@ -84,7 +84,6 @@ public class SearchFragment extends Fragment implements ResponseCallback {
                                                 @Override
                                                 public void onBooksItemClick(Books book) {
                                                     Log.d("onBookItemClick","book");
-                                                    //Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment);
                                                     Bundle bundle = new Bundle();
                                                     bundle.putParcelable("bookArgument", book);
                                                     Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);

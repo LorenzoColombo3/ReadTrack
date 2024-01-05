@@ -15,8 +15,8 @@ import java.util.List;
 public class Books implements Parcelable {
     private String kind;
 
-    @PrimaryKey(autoGenerate = true)
-
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
     private String id;
     private String etag;
     private String selfLink;
@@ -60,12 +60,16 @@ public class Books implements Parcelable {
     public boolean isFavorite(){return favorite;}
 
 
-    public void setFavorite(){
+   /* public void setFavorite(){
         if(!favorite){
             favorite=true;
         }else{
             favorite=false;
         }
+    }*/
+
+    public void setFavorite(Boolean favorite){
+        this.favorite=favorite;
     }
 
     // Metodi getter e setter per BookVolumeItem
