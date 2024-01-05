@@ -51,10 +51,30 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         bottomNav.setOnItemReselectedListener(item -> {
-            if(item.getItemId()!=navController.getCurrentDestination().getId())
+            if(item.getItemId()==navController.getCurrentDestination().getId()) {
                 navController.navigate(R.id.action_pop_back);
+            }
+        });
+
+        /*if(navController.getCurrentDestination().getId()==R.id.bookFragment) {
+            bottomNav.setOnItemSelectedListener(item -> {
+                navController.navigate(R.id.action_pop_back);
+                return true;
             });
-            //TODO implementare uno switch sulla base dei tre bottoni della bottom bar e gestire di conseguenza il ritorno alla home
-        }
+            Log.d("dentro", "");
+        }*/
     }
+
+    public void onBookDisplayed(Fragment fragment){
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().
+                findFragmentById(R.id.nav_host_fragment);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        NavController navController = navHostFragment.getNavController();
+        bottomNav.setOnItemSelectedListener(item -> {
+            navController.navigate(R.id.action_pop_back);
+            return true;
+        });
+    }
+}
+
 
