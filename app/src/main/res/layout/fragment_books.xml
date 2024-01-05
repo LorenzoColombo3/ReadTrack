@@ -13,7 +13,7 @@
         android:background="@android:color/transparent"
         android:orientation="vertical">
 
-
+        <!--TODO modificare le recicler wiew in modo da visualizzare i libri che si stanno leggendo con un segnalibro aggiornabile e i libri che si vogliono leggere-->
 
         <ScrollView
             android:id="@+id/scroll"

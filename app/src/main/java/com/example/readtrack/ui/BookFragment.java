@@ -73,6 +73,7 @@ public class BookFragment extends Fragment implements ResponseCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle args = getArguments();
+        BookRepository bookRepositoryVolume=new BookRepository(requireActivity().getApplication(),this);
         BookRepository bookRepository =new BookRepository(requireActivity().getApplication(), this);
         if (args != null) {
             Books book = null;
@@ -89,21 +90,34 @@ public class BookFragment extends Fragment implements ResponseCallback {
             setBook(book);
         }
 
-        bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
-            if (books != null && !books.isEmpty()) {
-                Log.d("search result", books.get(0).getVolumeInfo().getTitle());
-                Log.d("search result", String.valueOf(books.size()));
+        bookRepository.getSearchResults().observe(getViewLifecycleOwner(), res -> {
+            if (res != null && !res.isEmpty()) {
+                Log.d("search result", res.get(0).getVolumeInfo().getTitle());
+                Log.d("search result", String.valueOf(res.size()));
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(requireContext(),
                                 LinearLayoutManager.HORIZONTAL, false);
 
-                booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(books,
+                booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(res,
                         new BooksRecyclerViewAdapter.OnItemClickListener() {
                             @Override
-                            public void onBooksItemClick(Books book) {
-                                Bundle bundle = new Bundle();
-                                bundle.putParcelable("bookArgument", book);
-                                Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
+                            public void onBooksItemClick(Books books) {
+                                String id=books.getId();
+                                bookRepositoryVolume.searchBooksById(id);
+                                Log.d("id",id);
+                                bookRepositoryVolume.getSearchResults().observe(getViewLifecycleOwner(), res -> {
+                                    if (res != null && !res.isEmpty()) {
+                                        Log.d("search result", res.get(0).getVolumeInfo().getTitle());
+                                        Bundle bundle = new Bundle();
+                                        bundle.putParcelable("bookArgument", res.get(0));
+                                        Log.d("books number", String.valueOf(res.size()));
+                                        Log.d("book", res.get(0).getVolumeInfo().getTitle());
+                                        Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
+                                    } else {
+                                        // Gestisci il caso in cui non ci sono risultati
+                                        Log.d("search result", "Nessun risultato trovato");
+                                    }
+                                });
                             }
                         });
                 recyclerViewOthBooks.setLayoutManager(layoutManager);
