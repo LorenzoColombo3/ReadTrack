@@ -130,12 +130,6 @@ public class BookFragment extends Fragment implements ResponseCallback {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        ((MainActivity)getActivity()).onBookDisplayed(this);
-
-    }
-    @Override
     public void onSuccess(List<Books> newsList, long lastUpdate) {
 
     }

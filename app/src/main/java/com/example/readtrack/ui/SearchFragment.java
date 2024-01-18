@@ -75,9 +75,8 @@ public class SearchFragment extends Fragment implements ResponseCallback {
                             searchBar.setText("");
                             // Osserva i risultati della ricerca
                             bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
+                                ((MainActivity) requireActivity()).hideBottomNavigation();
                                 if (books != null && !books.isEmpty()) {
-                                    Log.d("search result", books.get(0).getVolumeInfo().getTitle());
-                                    Log.d("search result", String.valueOf(books.size()));
                                     booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(books,
                                             requireActivity().getApplication(),
                                             new BooksSearchRecyclerAdapter.OnItemClickListener() {
@@ -102,6 +101,7 @@ public class SearchFragment extends Fragment implements ResponseCallback {
         return view;
     }
 
+
     private void scanCode() {
         ScanOptions options= new ScanOptions();
         options.setPrompt("scannerizza codice");
@@ -123,11 +123,8 @@ public class SearchFragment extends Fragment implements ResponseCallback {
                     Log.d("id",id);
                     bookRepositoryIsbn.getSearchResults().observe(getViewLifecycleOwner(), books -> {
                         if (books != null && !books.isEmpty()) {
-                            Log.d("search result", books.get(0).getVolumeInfo().getTitle());
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("bookArgument", books.get(0));
-                            Log.d("books number", String.valueOf(books.size()));
-                            Log.d("book", books.get(0).getVolumeInfo().getTitle());
                             Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
                         } else {
                             // Gestisci il caso in cui non ci sono risultati

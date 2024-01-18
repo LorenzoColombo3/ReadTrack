@@ -3,9 +3,14 @@ package com.example.readtrack.ui;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.service.voice.VoiceInteractionSession;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
@@ -22,23 +27,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
+
+    private NavController navController;
+    private BottomNavigationView bottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getDecorView().setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+        }*/
 
         Toolbar toolbar = findViewById(R.id.top_appbar);
         setSupportActionBar(toolbar);
 
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().
                 findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        navController = navHostFragment.getNavController();
+        bottomNav = findViewById(R.id.bottom_navigation);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.books_fragment, R.id.search_fragment,
                 R.id.profile_fragment).build();
@@ -51,30 +59,43 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         bottomNav.setOnItemReselectedListener(item -> {
-            if(item.getItemId()==navController.getCurrentDestination().getId()) {
+            if(item.getItemId()!=navController.getCurrentDestination().getId()) {
                 navController.navigate(R.id.action_pop_back);
             }
         });
 
-        /*if(navController.getCurrentDestination().getId()==R.id.bookFragment) {
+        if(navController.getCurrentDestination().getId()==R.id.bookFragment) {
             bottomNav.setOnItemSelectedListener(item -> {
                 navController.navigate(R.id.action_pop_back);
                 return true;
             });
-            Log.d("dentro", "");
-        }*/
+        }
+      /*OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
+        onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                showBottomNavigation();
+            }
+        });*/
     }
 
-    public void onBookDisplayed(Fragment fragment){
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().
-                findFragmentById(R.id.nav_host_fragment);
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        NavController navController = navHostFragment.getNavController();
-        bottomNav.setOnItemSelectedListener(item -> {
-            navController.navigate(R.id.action_pop_back);
-            return true;
-        });
+    @Override
+    public boolean onSupportNavigateUp() {
+        //TODO Gestire il caso della freccia per tornare indietro dopo aver guardato due book fragment di fila
+         showBottomNavigation();
+        return navController.navigateUp() || super.onSupportNavigateUp();
     }
-}
+
+    public void showBottomNavigation() {
+        bottomNav.setVisibility(View.VISIBLE);
+    }
+
+    public void hideBottomNavigation() {
+        Animation fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out);
+        bottomNav.startAnimation(fadeOut);
+        bottomNav.setVisibility(View.GONE);
+    }
+
+    }
 
 
