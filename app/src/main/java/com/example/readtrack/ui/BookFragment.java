@@ -92,8 +92,6 @@ public class BookFragment extends Fragment implements ResponseCallback {
 
         bookRepository.getSearchResults().observe(getViewLifecycleOwner(), res -> {
             if (res != null && !res.isEmpty()) {
-                Log.d("search result", res.get(0).getVolumeInfo().getTitle());
-                Log.d("search result", String.valueOf(res.size()));
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(requireContext(),
                                 LinearLayoutManager.HORIZONTAL, false);
@@ -104,14 +102,10 @@ public class BookFragment extends Fragment implements ResponseCallback {
                             public void onBooksItemClick(Books books) {
                                 String id=books.getId();
                                 bookRepositoryVolume.searchBooksById(id);
-                                Log.d("id",id);
                                 bookRepositoryVolume.getSearchResults().observe(getViewLifecycleOwner(), res -> {
                                     if (res != null && !res.isEmpty()) {
-                                        Log.d("search result", res.get(0).getVolumeInfo().getTitle());
                                         Bundle bundle = new Bundle();
                                         bundle.putParcelable("bookArgument", res.get(0));
-                                        Log.d("books number", String.valueOf(res.size()));
-                                        Log.d("book", res.get(0).getVolumeInfo().getTitle());
                                         Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
                                     } else {
                                         // Gestisci il caso in cui non ci sono risultati

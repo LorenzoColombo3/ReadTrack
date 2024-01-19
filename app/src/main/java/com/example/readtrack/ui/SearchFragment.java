@@ -75,14 +75,13 @@ public class SearchFragment extends Fragment implements ResponseCallback {
                             searchBar.setText("");
                             // Osserva i risultati della ricerca
                             bookRepository.getSearchResults().observe(getViewLifecycleOwner(), books -> {
-                                ((MainActivity) requireActivity()).hideBottomNavigation();
                                 if (books != null && !books.isEmpty()) {
                                     booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(books,
                                             requireActivity().getApplication(),
                                             new BooksSearchRecyclerAdapter.OnItemClickListener() {
                                                 @Override
                                                 public void onBooksItemClick(Books book) {
-                                                    Log.d("onBookItemClick","book");
+                                                    ((MainActivity) requireActivity()).hideBottomNavigation();
                                                     Bundle bundle = new Bundle();
                                                     bundle.putParcelable("bookArgument", book);
                                                     Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);

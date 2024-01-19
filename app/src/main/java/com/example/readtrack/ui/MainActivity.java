@@ -29,6 +29,8 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MainActivity extends AppCompatActivity {
 
     private NavController navController;
+    private NavHostFragment navHostFragment;
+    private FragmentManager fragmentManager;
     private BottomNavigationView bottomNav;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.top_appbar);
         setSupportActionBar(toolbar);
 
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().
+        navHostFragment = (NavHostFragment) getSupportFragmentManager().
                 findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
         bottomNav = findViewById(R.id.bottom_navigation);
@@ -56,37 +58,34 @@ public class MainActivity extends AppCompatActivity {
 
         // For the BottomNavigationView
         NavigationUI.setupWithNavController(bottomNav, navController);
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
 
-        bottomNav.setOnItemReselectedListener(item -> {
-            if(item.getItemId()!=navController.getCurrentDestination().getId()) {
-                navController.navigate(R.id.action_pop_back);
-            }
-        });
-
-        if(navController.getCurrentDestination().getId()==R.id.bookFragment) {
-            bottomNav.setOnItemSelectedListener(item -> {
-                navController.navigate(R.id.action_pop_back);
-                return true;
-            });
-        }
-      /*OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
+      OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
         onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
+
             @Override
             public void handleOnBackPressed() {
-                showBottomNavigation();
+               if(navController.getCurrentDestination().getId()==R.id.bookFragment){
+                   onSupportNavigateUp();
+               }else{
+                   navController.navigate(R.id.books_fragment);
+               }
             }
-        });*/
+        });
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        //TODO Gestire il caso della freccia per tornare indietro dopo aver guardato due book fragment di fila
-         showBottomNavigation();
+        //TODO sistemare la animazione o rimuoverla
+        Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
+        navHostFragment.getView().startAnimation(slideOut);
+        if(navHostFragment.getChildFragmentManager().getBackStackEntryCount()==2)
+            showBottomNavigation();
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
-
     public void showBottomNavigation() {
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
+        bottomNav.startAnimation(fadeIn);
         bottomNav.setVisibility(View.VISIBLE);
     }
 
