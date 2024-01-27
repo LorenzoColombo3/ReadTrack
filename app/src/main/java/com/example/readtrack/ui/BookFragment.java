@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,13 +21,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
-import com.example.readtrack.repository.BookRepository;
+import com.example.readtrack.model.Result;
+import com.example.readtrack.repository.BooksRepositoryWithLiveData;
 import com.example.readtrack.util.ResponseCallback;
+import com.example.readtrack.util.ServiceLocator;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class BookFragment extends Fragment implements ResponseCallback {
+public class BookFragment extends Fragment  {
 
     private List<Books> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
@@ -42,11 +47,18 @@ public class BookFragment extends Fragment implements ResponseCallback {
     private TextView titleOthBooks;
     private TextView readMoreButton;
     private TextView readLessButton;
+    private BooksViewModel booksViewModel;
+
+    private String query;
     public BookFragment(){}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
+        otherBooks=new ArrayList<>();
+        query="";
+
     }
 
     @Override
@@ -72,17 +84,16 @@ public class BookFragment extends Fragment implements ResponseCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.d("inizio", "");
         Bundle args = getArguments();
-        BookRepository bookRepositoryVolume=new BookRepository(requireActivity().getApplication(),this);
-        BookRepository bookRepository =new BookRepository(requireActivity().getApplication(), this);
         if (args != null) {
             Books book = null;
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
                 // Puoi essere sicuro che l'oggetto sia di tipo Books
                 book = (Books) args.get("bookArgument");
-                Log.d("Numero Pagine", Integer.toString(book.getVolumeInfo().getPageCount()));
                 if(book.getVolumeInfo().getAuthors()!=null) {
-                    bookRepository.searchBooks("autor:"+ book.getVolumeInfo().getAuthors().get(0));
+                    query="autor:"+ book.getVolumeInfo().getAuthors().get(0);
+                    Log.d("autore", query);
                 }else {
                     this.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
@@ -90,26 +101,26 @@ public class BookFragment extends Fragment implements ResponseCallback {
             setBook(book);
         }
 
-        bookRepository.getSearchResults().observe(getViewLifecycleOwner(), res -> {
-            if (res != null && !res.isEmpty()) {
+        booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
+            if (result.isSuccess()) {
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(requireContext(),
                                 LinearLayoutManager.HORIZONTAL, false);
-
-                booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(res,
+                this.otherBooks.addAll(((Result.Success) result).getData().getItems());
+                booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(otherBooks,
                         new BooksRecyclerViewAdapter.OnItemClickListener() {
                             @Override
                             public void onBooksItemClick(Books books) {
                                 String id=books.getId();
-                                bookRepositoryVolume.searchBooksById(id);
-                                bookRepositoryVolume.getSearchResults().observe(getViewLifecycleOwner(), res -> {
-                                    if (res != null && !res.isEmpty()) {
+                                booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                                    if (res.isSuccess()) {
                                         Bundle bundle = new Bundle();
-                                        bundle.putParcelable("bookArgument", res.get(0));
+                                        bundle.putParcelable("bookArgument", ((Result.Success) res).getData().getItems().get(0));
+                                        Log.d("libro cliccato", ((Result.Success) res).getData().getItems().get(0).getVolumeInfo().getTitle());  //return errato
                                         Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
                                     } else {
                                         // Gestisci il caso in cui non ci sono risultati
-                                        Log.d("search result", "Nessun risultato trovato");
+                                        Log.d("search", "Nessun risultato trovato");
                                     }
                                 });
                             }
@@ -123,15 +134,6 @@ public class BookFragment extends Fragment implements ResponseCallback {
         });
     }
 
-    @Override
-    public void onSuccess(List<Books> newsList, long lastUpdate) {
-
-    }
-
-    @Override
-    public void onFailure(String errorMessage) {
-
-    }
     //TODO controllare i casi null che potrebbero crashare
     private void setBook(Books book){
         this.title.setText(book.getVolumeInfo().getTitle());

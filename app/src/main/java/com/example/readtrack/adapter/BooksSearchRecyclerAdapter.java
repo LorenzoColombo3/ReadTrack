@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,9 +18,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class BooksSearchRecyclerAdapter extends
-        RecyclerView.Adapter<BooksSearchRecyclerAdapter.BooksSearchViewHolder>{
+public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
+    private static final int BOOKS_VIEW_TYPE = 0;
+    private static final int LOADING_VIEW_TYPE = 1;
     public interface OnItemClickListener {
         void onBooksItemClick(Books book);
     }
@@ -35,18 +37,40 @@ public class BooksSearchRecyclerAdapter extends
         this.onItemClickListener = onItemClickListener;
     }
 
-    @NonNull
     @Override
-    public BooksSearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.book_search_list_item, parent, false);
-
-        return new BooksSearchViewHolder(view);
+    public int getItemViewType(int position) {
+        if (booksList.get(position) == null) {
+            return LOADING_VIEW_TYPE;
+        } else {
+            return BOOKS_VIEW_TYPE;
+        }
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull BooksSearchViewHolder holder, int position) {
-        holder.bind(booksList.get(position));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Create a new view, which defines the UI of the list item
+        View view = null;
+
+        if (viewType == BOOKS_VIEW_TYPE) {
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.book_search_list_item, parent, false);
+            return new BooksSearchViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.book_loading_item, parent, false);
+            return new LoadingBooksViewHolder(view);
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof BooksSearchRecyclerAdapter.BooksSearchViewHolder) {
+            ((BooksSearchRecyclerAdapter.BooksSearchViewHolder) holder).bind(booksList.get(position));
+        } else if (holder instanceof BooksSearchRecyclerAdapter.LoadingBooksViewHolder) {
+            ((BooksSearchRecyclerAdapter.LoadingBooksViewHolder) holder).activate();
+        }
     }
 
     @Override
@@ -55,6 +79,12 @@ public class BooksSearchRecyclerAdapter extends
             return booksList.size();
         }
         return 0;
+    }
+
+    public void clear(){
+
+        this.booksList.clear();
+
     }
     public class BooksSearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private final ImageView imageViewThumbnail;
@@ -78,7 +108,6 @@ public class BooksSearchRecyclerAdapter extends
             }catch(NullPointerException pointerException){
                 Log.d("pointer exception", pointerException.toString());
             }
-            //Log.d("uri",uri);
         }
         public String setContent(String content){
             String contentRidotto="";
@@ -94,27 +123,18 @@ public class BooksSearchRecyclerAdapter extends
         public void onClick(View v) {
             onItemClickListener.onBooksItemClick(booksList.get(getAdapterPosition()));
         }
-/*
-        private void setImageViewFavoriteBooks(boolean isFavorite) {
-            if (isFavorite) {
-                like.setImageDrawable(
-                        AppCompatResources.getDrawable(application,
-                                R.drawable.ic_baseline_favorite_24));
-                like.setColorFilter(
-                        ContextCompat.getColor(
-                                like.getContext(),
-                                R.color.red_500)
-                );
-            } else {
-                like.setImageDrawable(
-                        AppCompatResources.getDrawable(application,
-                                R.drawable.ic_baseline_favorite_border_24));
-                like.setColorFilter(
-                        ContextCompat.getColor(
-                                like.getContext(),
-                                R.color.black)
-                );
-            }
-        }*/
+    }
+
+    public static class LoadingBooksViewHolder extends RecyclerView.ViewHolder {
+        private final ProgressBar progressBar;
+
+        LoadingBooksViewHolder(View view) {
+            super(view);
+            progressBar = view.findViewById(R.id.progressbar_loading_books);
+        }
+
+        public void activate() {
+            progressBar.setIndeterminate(true);
+        }
     }
 }

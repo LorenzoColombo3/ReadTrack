@@ -11,5 +11,13 @@ public class Constants {
     public static final String BOOKS_API_BASE_URL = "https://www.googleapis.com/books/";
     public static final int DATABASE_VERSION = 1;
 
+    public static final String RETROFIT_ERROR = "retrofit_error";
+    public static final String API_KEY_ERROR = "api_key_error";
+    public static final String UNEXPECTED_ERROR = "unexpected_error";
+
+    public static final String TOP_HEADLINES_QUERY_PARAMETER = "q";
+    public static final String TOP_HEADLINES_PAGE_SIZE_PARAMETER = "pageSize";
+    public static final String TOP_HEADLINES_PAGE_PARAMETER = "page";
+    public static final int TOP_HEADLINES_PAGE_SIZE_VALUE = 10;
     public static final String BOOK_DATABASE_NAME = "book_db";
 }

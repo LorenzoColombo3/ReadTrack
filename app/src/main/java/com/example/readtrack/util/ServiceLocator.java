@@ -1,13 +1,13 @@
 package com.example.readtrack.util;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.example.readtrack.database.BookRoomDatabase;
+import com.example.readtrack.repository.BooksRepositoryWithLiveData;
 import com.example.readtrack.service.BookApiService;
+import com.example.readtrack.source.BaseBooksSource;
+import com.example.readtrack.source.BooksDataSource;
 
-import okhttp3.Cache;
-import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -39,5 +39,12 @@ public class ServiceLocator {
 
     public BookRoomDatabase getNewsDao(Application application) {
         return BookRoomDatabase.getDatabase(application);
+    }
+
+    public BooksRepositoryWithLiveData getBookRepository(Application application) {
+        BaseBooksSource booksDataSource;
+        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
+        booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
+        return new BooksRepositoryWithLiveData(booksDataSource);
     }
 }

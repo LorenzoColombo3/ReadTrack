@@ -43,7 +43,7 @@ public class Books implements Parcelable {
         favorite = in.readByte() != 0;
     }
 
-
+    public boolean isFavorite(){return favorite;}
 
     public static final Creator<Books> CREATOR = new Creator<Books>() {
         @Override
@@ -56,23 +56,10 @@ public class Books implements Parcelable {
             return new Books[size];
         }
     };
-
-    public boolean isFavorite(){return favorite;}
-
-
-   /* public void setFavorite(){
-        if(!favorite){
-            favorite=true;
-        }else{
-            favorite=false;
-        }
-    }*/
-
     public void setFavorite(Boolean favorite){
         this.favorite=favorite;
     }
 
-    // Metodi getter e setter per BookVolumeItem
     public String getKind() {
         return kind;
     }
@@ -150,6 +137,7 @@ public class Books implements Parcelable {
         dest.writeString(selfLink);
         dest.writeByte((byte) (favorite ? 1 : 0));
     }
+
 
     public static class VolumeInfo {
         private String title;
