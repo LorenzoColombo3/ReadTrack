@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.User;
+import com.example.readtrack.util.OnSaveUserFavBooksListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -72,10 +73,38 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
             }
         });
     }
+
+
+    @Override
+    public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener) {
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
+
+        // Verifica se l'ID del libro esiste già nella lista dei libri preferiti
+        userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    // L'ID del libro non esiste nella lista, aggiungilo
+                    userBooksRef.push().setValue(idBook);
+                    listener.onSaveSuccess(true); // Libro aggiunto con successo
+                } else {
+                    // L'ID del libro esiste già nella lista
+                    listener.onSaveSuccess(false); // Libro già presente
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gestisci l'errore
+                listener.onSaveFailure(error.getMessage());
+            }
+        });
+    }
+    /*
     @Override
     public void saveUserFavBooks(String idBook, String idToken){
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).setValue(idBook);
-    }
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).push().setValue(idBook);
+    }*/
 //TODO da rifare getUserFavoriteNews
     @Override
     public void getUserFavoriteNews(String idToken) {

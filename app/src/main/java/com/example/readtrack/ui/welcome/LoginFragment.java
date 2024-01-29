@@ -206,7 +206,6 @@ public class LoginFragment extends Fragment {
                     // No saved credentials found. Launch the One Tap sign-up flow, or
                     // do nothing and continue presenting the signed-out UI.
                     Log.d(TAG, e.getLocalizedMessage());
-
                     Snackbar.make(requireActivity().findViewById(android.R.id.content),
                             requireActivity().getString(R.string.error_no_google_account_found_message),
                             Snackbar.LENGTH_SHORT).show();

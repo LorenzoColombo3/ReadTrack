@@ -11,6 +11,7 @@ import com.example.readtrack.model.User;
 import com.example.readtrack.source.books.BooksCallback;
 import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
+import com.example.readtrack.util.OnSaveUserFavBooksListener;
 
 import java.util.List;
 import java.util.Set;
@@ -96,9 +97,9 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     }
     @Override
-    public void saveUserFavBooks(String idBook, String idToken){
+    public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener){
         if(idToken!=null){
-            userDataRemoteDataSource.saveUserFavBooks(idBook,idToken);
+            userDataRemoteDataSource.saveUserFavBooks(idBook,idToken, listener);
         }
     }
 

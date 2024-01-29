@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.IUserRepository;
+import com.example.readtrack.util.OnSaveUserFavBooksListener;
 
 import java.util.Set;
 
@@ -79,8 +80,8 @@ public class UserViewModel extends ViewModel {
         userFavoriteBooksMutableLiveData = userRepository.getUserFavoriteBooks(idToken);
     }
 
-    public void saveUserFavBooks(String idBook, String idToken){
-        userRepository.saveUserFavBooks(idBook,idToken);
+    public void saveUserFavBooks(String idBook, String idToken,OnSaveUserFavBooksListener listener){
+        userRepository.saveUserFavBooks(idBook,idToken, listener);
     }
 
     public void getUser(String email, String password, boolean isUserRegistered) {

@@ -30,6 +30,7 @@ import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.JSONparser;
+import com.example.readtrack.util.OnSaveUserFavBooksListener;
 import com.example.readtrack.util.ResponseCallback;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
@@ -96,7 +97,22 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                             e.printStackTrace();
                         }
                         Log.d("aaaaa","aaaaaa");
-                        userViewModel.saveUserFavBooks(book.getId(),idToken);
+                        userViewModel.saveUserFavBooks(book.getId(), idToken, new OnSaveUserFavBooksListener() {
+                            @Override
+                            public void onSaveSuccess(boolean isAdded) {
+                                if (isAdded) {
+                                    // Il libro è stato aggiunto con successo
+                                    // Puoi aggiungere qui eventuali azioni aggiuntive
+                                } else {
+                                    Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                                        "Il libro è già nei preferiti", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onSaveFailure(String errorMessage) {
+                            }
+                        });
                     }
                  });
         recyclerViewFavBooks.setLayoutManager(layoutManager);
