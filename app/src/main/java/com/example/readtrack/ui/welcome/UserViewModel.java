@@ -79,6 +79,10 @@ public class UserViewModel extends ViewModel {
         userFavoriteBooksMutableLiveData = userRepository.getUserFavoriteBooks(idToken);
     }
 
+    public void saveUserFavBooks(String idBook, String idToken){
+        userRepository.saveUserFavBooks(idBook,idToken);
+    }
+
     public void getUser(String email, String password, boolean isUserRegistered) {
         userRepository.getUser(email, password, isUserRegistered);
     }

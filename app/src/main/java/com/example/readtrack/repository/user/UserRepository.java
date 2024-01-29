@@ -95,6 +95,12 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     public void saveUserPreferences(String favoriteCountry, Set<String> favoriteTopics, String idToken) {
 
     }
+    @Override
+    public void saveUserFavBooks(String idBook, String idToken){
+        if(idToken!=null){
+            userDataRemoteDataSource.saveUserFavBooks(idBook,idToken);
+        }
+    }
 
     @Override
     public void onSuccessFromAuthentication(User user) {

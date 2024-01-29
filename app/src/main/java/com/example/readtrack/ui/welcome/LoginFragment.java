@@ -101,6 +101,8 @@ public class LoginFragment extends Fragment {
                 .setAutoSelectEnabled(true)
                 .build();
 
+        dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
+
         startIntentSenderForResult = new ActivityResultContracts.StartIntentSenderForResult();
 
         activityResultLauncher = registerForActivityResult(startIntentSenderForResult, activityResult -> {
@@ -153,9 +155,6 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        if (userViewModel.getLoggedUser() != null) {
-
-        }
         loginButton.setOnClickListener(v -> {
             String email = textInputLayoutEmail.getEditText().getText().toString().trim();
             String password = textInputLayoutPassword.getEditText().getText().toString().trim();
@@ -262,14 +261,13 @@ public class LoginFragment extends Fragment {
         }
     }
     private void saveLoginData(String email, String password, String idToken) {
-        /*try {
+        try {
             dataEncryptionUtil.writeSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, EMAIL_ADDRESS, email);
             dataEncryptionUtil.writeSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, PASSWORD, password);
             dataEncryptionUtil.writeSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN, idToken);
-
             if (password != null) {
                 dataEncryptionUtil.writeSecreteDataOnFile(ENCRYPTED_DATA_FILE_NAME,
                         email.concat(":").concat(password));
@@ -277,6 +275,6 @@ public class LoginFragment extends Fragment {
 
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }

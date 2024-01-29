@@ -1,15 +1,20 @@
 package com.example.readtrack.ui;
 
 
+import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
+import static com.example.readtrack.util.Constants.ID_TOKEN;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,15 +25,24 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
+import com.example.readtrack.repository.user.IUserRepository;
+import com.example.readtrack.ui.welcome.UserViewModel;
+import com.example.readtrack.ui.welcome.UserViewModelFactory;
+import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.JSONparser;
 import com.example.readtrack.util.ResponseCallback;
+import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BooksFragment extends Fragment implements ResponseCallback{
 
+    private UserViewModel userViewModel;
+    DataEncryptionUtil dataEncryptionUtil;
     private List<Books> booksList;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
 
@@ -36,7 +50,12 @@ public class BooksFragment extends Fragment implements ResponseCallback{
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
         booksList=new ArrayList<>();
+        IUserRepository userRepository = ServiceLocator.getInstance().
+                getUserRepository(getActivity().getApplication());
+        userViewModel = new ViewModelProvider(
+                this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +88,15 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onBooksItemClick(Books book) {
+                        String idToken = null;
+                        try {
+                            idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
+                                    ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
+                        } catch (GeneralSecurityException | IOException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("aaaaa","aaaaaa");
+                        userViewModel.saveUserFavBooks(book.getId(),idToken);
                     }
                  });
         recyclerViewFavBooks.setLayoutManager(layoutManager);

@@ -1,5 +1,6 @@
 package com.example.readtrack.source.user;
 
+import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 
@@ -70,6 +71,10 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                 userResponseCallback.onFailureFromRemoteDatabase(error.getMessage());
             }
         });
+    }
+    @Override
+    public void saveUserFavBooks(String idBook, String idToken){
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).setValue(idBook);
     }
 //TODO da rifare getUserFavoriteNews
     @Override

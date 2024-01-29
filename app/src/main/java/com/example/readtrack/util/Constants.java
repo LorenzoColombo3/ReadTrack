@@ -32,5 +32,5 @@ public class Constants {
     // Constants for Firebase Realtime Database
     public static final String FIREBASE_REALTIME_DATABASE = "https://readtracj-default-rtdb.europe-west1.firebasedatabase.app/";
     public static final String FIREBASE_USERS_COLLECTION = "users";
-    public static final String FIREBASE_FAVORITE_BOOKS_COLLECTION = "favorite_books";
+    public static final String FAVOURITES_BOOKS = "preferiti";
 }
