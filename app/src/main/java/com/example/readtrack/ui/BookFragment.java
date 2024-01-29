@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,9 +21,6 @@ import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.BooksRepositoryWithLiveData;
-import com.example.readtrack.util.ResponseCallback;
-import com.example.readtrack.util.ServiceLocator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -106,7 +102,7 @@ public class BookFragment extends Fragment  {
                 RecyclerView.LayoutManager layoutManager =
                         new LinearLayoutManager(requireContext(),
                                 LinearLayoutManager.HORIZONTAL, false);
-                this.otherBooks.addAll(((Result.Success) result).getData().getItems());
+                this.otherBooks.addAll(((Result.BooksResponseSuccess) result).getData().getItems());
                 booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(otherBooks,
                         new BooksRecyclerViewAdapter.OnItemClickListener() {
                             @Override
@@ -115,8 +111,8 @@ public class BookFragment extends Fragment  {
                                 booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
                                     if (res.isSuccess()) {
                                         Bundle bundle = new Bundle();
-                                        bundle.putParcelable("bookArgument", ((Result.Success) res).getData().getItems().get(0));
-                                        Log.d("libro cliccato", ((Result.Success) res).getData().getItems().get(0).getVolumeInfo().getTitle());  //return errato
+                                        bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                                        Log.d("libro cliccato", ((Result.BooksResponseSuccess) res).getData().getItems().get(0).getVolumeInfo().getTitle());  //return errato
                                         Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
                                     } else {
                                         // Gestisci il caso in cui non ci sono risultati

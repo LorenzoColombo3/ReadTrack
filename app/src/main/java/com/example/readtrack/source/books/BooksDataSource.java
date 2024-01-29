@@ -1,4 +1,4 @@
-package com.example.readtrack.source;
+package com.example.readtrack.source.books;
 
 import static com.example.readtrack.util.Constants.API_KEY_ERROR;
 import static com.example.readtrack.util.Constants.RETROFIT_ERROR;
@@ -8,20 +8,17 @@ import android.util.Log;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
-import com.example.readtrack.model.BooksResponse;
-import com.example.readtrack.model.Result;
 import com.example.readtrack.service.BookApiService;
+import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.util.ServiceLocator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class BooksDataSource extends BaseBooksSource{
+public class BooksDataSource extends BaseBooksSource {
 
     private final BookApiService bookApiService;
     private final String apiKey;

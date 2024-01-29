@@ -27,8 +27,7 @@ import com.example.readtrack.R;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.BooksRepositoryWithLiveData;
-import com.example.readtrack.util.ResponseCallback;
+import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
@@ -106,7 +105,7 @@ public class SearchFragment extends Fragment  {
                             searchBar.setText("");
                             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
                                 if (result.isSuccess()) {
-                                    BooksApiResponse booksApiResponse=((Result.Success) result).getData();
+                                    BooksApiResponse booksApiResponse=((Result.BooksResponseSuccess) result).getData();
                                     List<Books> booksSearched = booksApiResponse.getItems();
                                     if (!booksViewModel.isLoading()) {
                                         booksList.clear();
@@ -219,7 +218,7 @@ public class SearchFragment extends Fragment  {
                             // Osserva i risultati della ricerca
                             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
                                 if (result.isSuccess()) {
-                                    this.booksList.addAll(((Result.Success) result).getData().getItems());
+                                    this.booksList.addAll(((Result.BooksResponseSuccess) result).getData().getItems());
                                     recyclerViewFavBooks.setLayoutManager(layoutManager);
                                     recyclerViewFavBooks.setAdapter(booksSearchRecyclerViewAdapter);
                                 } else {
@@ -246,13 +245,13 @@ public class SearchFragment extends Fragment  {
             query="isbn:"+result.getContents();
             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), res -> {
                 if (res.isSuccess()) {
-                    String id=((Result.Success) res).getData().getItems().get(0).getId();
+                    String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
                     Log.d("id",id);
                     booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
                         if (book.isSuccess()) {
-                            Log.d("search result", ((Result.Success) book).getData().getItems().get(0).getVolumeInfo().getTitle());
+                            Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
                             Bundle bundle = new Bundle();
-                            bundle.putParcelable("bookArgument", ((Result.Success) book).getData().getItems().get(0));
+                            bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
                             Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
                         } else {
                             Log.d("search result", "Nessun risultato trovato");

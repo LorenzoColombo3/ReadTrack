@@ -1,4 +1,4 @@
-package com.example.readtrack.source;
+package com.example.readtrack.source.books;
 
 public abstract class BaseBooksSource {
 

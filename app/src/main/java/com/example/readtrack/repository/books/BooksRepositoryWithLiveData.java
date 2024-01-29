@@ -1,4 +1,4 @@
-package com.example.readtrack.repository;
+package com.example.readtrack.repository.books;
 
 import android.util.Log;
 
@@ -6,10 +6,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
-import com.example.readtrack.model.BooksResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.source.BaseBooksSource;
-import com.example.readtrack.source.BooksCallback;
+import com.example.readtrack.source.books.BaseBooksSource;
+import com.example.readtrack.source.books.BooksCallback;
 
 import java.util.List;
 
@@ -44,14 +43,14 @@ public class BooksRepositoryWithLiveData implements BooksCallback {
 
     @Override
     public void onSuccessFromRemote(BooksApiResponse booksApiResponse) {
-        Result.Success result = new Result.Success(booksApiResponse);
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksApiResponse);
         Log.d("return books", booksApiResponse.getItems().get(0).getVolumeInfo().getTitle());
         booksLiveData.postValue(result);
     }
 
     @Override
     public void onSuccessFromRemoteId(BooksApiResponse booksApiResponse) {
-        Result.Success result = new Result.Success(booksApiResponse);
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksApiResponse);
         Log.d("return id", booksApiResponse.getItems().get(0).getVolumeInfo().getTitle());
         favoriteBooksLiveData.setValue(result);
     }

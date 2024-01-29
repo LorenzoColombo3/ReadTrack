@@ -4,16 +4,30 @@ public abstract class Result {
     private Result() {}
 
     public boolean isSuccess() {
-        return this instanceof Success;
+        if (this instanceof BooksResponseSuccess || this instanceof UserResponseSuccess) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public static final class Success extends Result {
+    public static final class BooksResponseSuccess extends Result {
         private BooksApiResponse booksResponse;
-        public Success( BooksApiResponse booksResponse) {
+        public BooksResponseSuccess(BooksApiResponse booksResponse) {
             this.booksResponse = booksResponse;
         }
         public BooksApiResponse getData() {
             return booksResponse;
+        }
+    }
+
+    public static final class UserResponseSuccess extends Result {
+        private final User user;
+        public UserResponseSuccess(User user) {
+            this.user = user;
+        }
+        public User getData() {
+            return user;
         }
     }
     public static final class Error extends Result {

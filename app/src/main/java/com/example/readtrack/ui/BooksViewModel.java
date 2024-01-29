@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
 
 public class BooksViewModel extends ViewModel {
     private static final String TAG = BooksViewModel.class.getSimpleName();

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1089713696128",
+    "firebase_url": "https://readtracj-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "readtracj",
+    "storage_bucket": "readtracj.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1089713696128:android:17322392840a4602826565",
+        "android_client_info": {
+          "package_name": "com.example.readtrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1089713696128-eerkh5g1pcdi9895l3rjufspjcsgok54.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.readtrack",
+            "certificate_hash": "2b940e09c0bc84620a8c3307869048f5156cc9ea"
+          }
+        },
+        {
+          "client_id": "1089713696128-irvv9abbsojmtasu54fevkgj4hsgq6g6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvwqS6mgpwgZfcy23VnOo4RXZ3pM89XwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1089713696128-irvv9abbsojmtasu54fevkgj4hsgq6g6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
