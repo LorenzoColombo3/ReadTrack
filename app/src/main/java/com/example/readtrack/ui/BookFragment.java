@@ -1,11 +1,15 @@
 package com.example.readtrack.ui;
 
+import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
+import static com.example.readtrack.util.Constants.ID_TOKEN;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,13 +25,23 @@ import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
+import com.example.readtrack.repository.user.IUserRepository;
+import com.example.readtrack.ui.welcome.UserViewModel;
+import com.example.readtrack.ui.welcome.UserViewModelFactory;
+import com.example.readtrack.util.DataEncryptionUtil;
+import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.ServiceLocator;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BookFragment extends Fragment  {
-
+    String idToken = null;
+    private UserViewModel userViewModel;
+    DataEncryptionUtil dataEncryptionUtil;
     private List<Books> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
     private RecyclerView recyclerViewOthBooks;
@@ -44,6 +58,7 @@ public class BookFragment extends Fragment  {
     private TextView readMoreButton;
     private TextView readLessButton;
     private BooksViewModel booksViewModel;
+    private Button favouriteButton;
 
     private String query;
     public BookFragment(){}
@@ -54,7 +69,19 @@ public class BookFragment extends Fragment  {
         booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
         otherBooks=new ArrayList<>();
         query="";
-
+        dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
+        IUserRepository userRepository = ServiceLocator.getInstance().
+                getUserRepository(getActivity().getApplication());
+        userViewModel = new ViewModelProvider(
+                this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        try {
+            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
+            idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
+                    ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
+            Log.d("Token",idToken);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -74,6 +101,7 @@ public class BookFragment extends Fragment  {
         titleOthBooks=view.findViewById(R.id.title_oth_books);
         readMoreButton=view.findViewById(R.id.read_more_button);
         readLessButton=view.findViewById(R.id.read_less_button);
+        favouriteButton=view.findViewById(R.id.add_favourite);
         return view;
     }
 
@@ -81,21 +109,49 @@ public class BookFragment extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.d("inizio", "");
+        Books book;
         Bundle args = getArguments();
         if (args != null) {
-            Books book = null;
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
                 // Puoi essere sicuro che l'oggetto sia di tipo Books
                 book = (Books) args.get("bookArgument");
+                userViewModel.isFavouriteBook(book.getId(), idToken, new OnFavouriteCheckListener() {
+                    @Override
+                    public void onFavouriteCheckResult(boolean isFavourite) {
+                        if (isFavourite) {
+                            favouriteButton.setText("Rimuovi dai preferiti");
+                        } else {
+                            favouriteButton.setText("Aggiungi ai preferiti");
+                        }
+                    }
+                });
                 if(book.getVolumeInfo().getAuthors()!=null) {
                     query="autor:"+ book.getVolumeInfo().getAuthors().get(0);
                     Log.d("autore", query);
                 }else {
                     this.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
+            } else {
+                book = null;
             }
             setBook(book);
+        } else {
+            book = null;
         }
+
+        String finalIdToken = idToken;
+        favouriteButton.setOnClickListener(v->{
+            userViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
+                if (isFavourite) {
+                    favouriteButton.setText("Aggiungi ai preferiti");
+                    userViewModel.removeFavouriteBook(book.getId(),finalIdToken);
+                } else {
+                    favouriteButton.setText("Rimuovi dai preferiti");
+                    userViewModel.addFavouriteBook(book.getId(),finalIdToken);
+                }
+            });
+        });
+
 
         booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {

@@ -9,26 +9,19 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.User;
-import com.example.readtrack.util.OnSaveUserFavBooksListener;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
-    private static final String TAG = "ciaobella";//UserDataRemoteDataSource.class.getSimpleName();
+    private static final String TAG = UserDataRemoteDataSource.class.getSimpleName();
 
     private final DatabaseReference databaseReference;
     private final SharedPreferencesUtil sharedPreferencesUtil;
@@ -74,32 +67,70 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
         });
     }
 
-
     @Override
-    public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener) {
+    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
-
-        // Verifica se l'ID del libro esiste già nella lista dei libri preferiti
         userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    // L'ID del libro non esiste nella lista, aggiungilo
-                    userBooksRef.push().setValue(idBook);
-                    listener.onSaveSuccess(true); // Libro aggiunto con successo
-                } else {
-                    // L'ID del libro esiste già nella lista
-                    listener.onSaveSuccess(false); // Libro già presente
+                boolean isFavourite = snapshot.exists();
+                listener.onFavouriteCheckResult(isFavourite);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+    @Override
+    public void addFavouriteBook(String idBook, String idToken){
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).push().setValue(idBook);
+    }
+
+    @Override
+    public void removeFavouriteBook(String idBook, String idToken) {
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
+        userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        childSnapshot.getRef().removeValue();
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Gestisci l'errore
-                listener.onSaveFailure(error.getMessage());
             }
         });
     }
+
+    /*
+        @Override
+        public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener) {
+            DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
+
+            userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.exists()) {
+                        userBooksRef.push().setValue(idBook);
+                        listener.onSaveSuccess(true);
+                    } else {
+                        // L'ID del libro esiste già nella lista
+                        listener.onSaveSuccess(false); // Libro già presente
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Gestisci l'errore
+                    listener.onSaveFailure(error.getMessage());
+                }
+            });
+        }*/
     /*
     @Override
     public void saveUserFavBooks(String idBook, String idToken){

@@ -1,9 +1,6 @@
 package com.example.readtrack.ui;
 
 
-import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
-import static com.example.readtrack.util.Constants.ID_TOKEN;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +11,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,13 +26,10 @@ import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.JSONparser;
-import com.example.readtrack.util.OnSaveUserFavBooksListener;
 import com.example.readtrack.util.ResponseCallback;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +39,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
     DataEncryptionUtil dataEncryptionUtil;
     private List<Books> booksList;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
+    private RecyclerView favouriteRecView;
 
     public BooksFragment() {}
 
@@ -77,46 +71,18 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 return false;
             }
         });
-
-        RecyclerView recyclerViewFavBooks = view.findViewById(R.id.recyclerview_fav_books);
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(requireContext(),
                         LinearLayoutManager.HORIZONTAL, false);
-
-        booksList= getBooksListWithWithGSon();
-
+        favouriteRecView= view.findViewById(R.id.recyclerview_fav_books);
         booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(booksList,
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
                     @Override
                     public void onBooksItemClick(Books book) {
-                        String idToken = null;
-                        try {
-                            idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
-                                    ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-                        } catch (GeneralSecurityException | IOException e) {
-                            e.printStackTrace();
-                        }
-                        Log.d("aaaaa","aaaaaa");
-                        userViewModel.saveUserFavBooks(book.getId(), idToken, new OnSaveUserFavBooksListener() {
-                            @Override
-                            public void onSaveSuccess(boolean isAdded) {
-                                if (isAdded) {
-                                    // Il libro è stato aggiunto con successo
-                                    // Puoi aggiungere qui eventuali azioni aggiuntive
-                                } else {
-                                    Snackbar.make(requireActivity().findViewById(android.R.id.content),
-                                        "Il libro è già nei preferiti", Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onSaveFailure(String errorMessage) {
-                            }
-                        });
                     }
                  });
-        recyclerViewFavBooks.setLayoutManager(layoutManager);
-        recyclerViewFavBooks.setAdapter(booksRecyclerViewAdapter);
+        favouriteRecView.setLayoutManager(layoutManager);
+        favouriteRecView.setAdapter(booksRecyclerViewAdapter);
 
     }
 

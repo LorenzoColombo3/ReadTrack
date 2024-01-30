@@ -2,7 +2,7 @@ package com.example.readtrack.source.user;
 
 import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.UserResponseCallback;
-import com.example.readtrack.util.OnSaveUserFavBooksListener;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 
 public abstract class BaseUserDataRemoteDataSource {
     protected UserResponseCallback userResponseCallback;
@@ -12,8 +12,9 @@ public abstract class BaseUserDataRemoteDataSource {
     }
 
     public abstract void saveUserData(User user);
-
-    public abstract void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener);
-
     public abstract void getUserFavoriteNews(String idToken);
+
+    public abstract void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener);
+    public abstract void removeFavouriteBook(String idBook, String idToken);
+    public abstract void addFavouriteBook(String idBook, String idToken);
 }

@@ -11,7 +11,7 @@ import com.example.readtrack.model.User;
 import com.example.readtrack.source.books.BooksCallback;
 import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
-import com.example.readtrack.util.OnSaveUserFavBooksListener;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 
 import java.util.List;
 import java.util.Set;
@@ -57,7 +57,6 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     @Override
     public MutableLiveData<Result> getUserFavoriteBooks(String idToken) {
-        userDataRemoteDataSource.getUserFavoriteNews(idToken);
         return userFavoriteNewsMutableLiveData;
     }
 
@@ -96,18 +95,10 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     public void saveUserPreferences(String favoriteCountry, Set<String> favoriteTopics, String idToken) {
 
     }
-    @Override
-    public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener){
-        if(idToken!=null){
-            userDataRemoteDataSource.saveUserFavBooks(idBook,idToken, listener);
-        }
-    }
 
     @Override
     public void onSuccessFromAuthentication(User user) {
-        Log.d("qui non dovrebbe entrare null","user rep");
         if (user != null) {
-            Log.d("qui non dovrebbe entrare","user rep");
             userDataRemoteDataSource.saveUserData(user);
         }
     }
@@ -168,6 +159,20 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     @Override
     public void onDeleteFavoriteBooksSuccess(List<Books> favoriteBooks) {
 
+    }
+    @Override
+    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+        userDataRemoteDataSource.isFavouriteBook(idBook,idToken,listener);
+    }
+
+    @Override
+    public void removeFavouriteBook(String idBook, String idToken) {
+        userDataRemoteDataSource.removeFavouriteBook(idBook,idToken);
+    }
+
+    @Override
+    public void addFavouriteBook(String idBook, String idToken) {
+        userDataRemoteDataSource.addFavouriteBook(idBook,idToken);
     }
 
 }

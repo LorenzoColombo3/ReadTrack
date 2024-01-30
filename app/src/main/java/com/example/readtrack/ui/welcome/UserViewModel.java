@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.IUserRepository;
-import com.example.readtrack.util.OnSaveUserFavBooksListener;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 
 import java.util.Set;
 
@@ -80,10 +80,6 @@ public class UserViewModel extends ViewModel {
         userFavoriteBooksMutableLiveData = userRepository.getUserFavoriteBooks(idToken);
     }
 
-    public void saveUserFavBooks(String idBook, String idToken,OnSaveUserFavBooksListener listener){
-        userRepository.saveUserFavBooks(idBook,idToken, listener);
-    }
-
     public void getUser(String email, String password, boolean isUserRegistered) {
         userRepository.getUser(email, password, isUserRegistered);
     }
@@ -103,4 +99,16 @@ public class UserViewModel extends ViewModel {
     private void getUserData(String token) {
         userMutableLiveData = userRepository.getGoogleUser(token);
     }
+
+    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
+        userRepository.isFavouriteBook(idBook,idToken,listener);
+    }
+
+    public void removeFavouriteBook(String idBook, String idToken){
+        userRepository.removeFavouriteBook(idBook,idToken);
+    }
+    public void addFavouriteBook(String idBook, String idToken){
+        userRepository.addFavouriteBook(idBook,idToken);
+    }
+
 }
