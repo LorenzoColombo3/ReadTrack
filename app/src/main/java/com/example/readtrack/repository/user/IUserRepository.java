@@ -22,5 +22,5 @@ public interface IUserRepository {
     void saveUserPreferences(String favoriteCountry, Set<String> favoriteTopics, String idToken);
     void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener);
     void removeFavouriteBook(String idBook, String idToken);
-    void addFavouriteBook(String idBook, String idToken);
+    void addFavouriteBook(String idBook, String imageLink, String idToken);
 }

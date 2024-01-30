@@ -236,16 +236,7 @@ public class LoginFragment extends Fragment {
             textInputLayoutPassword.setError(null);
             return true;
         }
-    }/*
-    private void retrieveUserInformationAndStartActivity(User user, int destination) {
-        userViewModel.getUserFavoriteBooksMutableLiveData(user.getIdToken()).observe(
-                getViewLifecycleOwner(), result -> {
-                    Navigation.findNavController(requireView()).navigate(destination);
-                    requireActivity().finish();
-                    Log.d("prova","retrive");
-                }
-        );
-    }*/
+    }
     private String getErrorMessage(String errorType) {
         switch (errorType) {
             case INVALID_CREDENTIALS_ERROR:

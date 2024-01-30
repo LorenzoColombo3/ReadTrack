@@ -74,7 +74,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
     @Override
     public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
-        userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+        userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFavourite = snapshot.exists();
@@ -87,14 +87,14 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
         });
     }
     @Override
-    public void addFavouriteBook(String idBook, String idToken){
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).push().setValue(idBook);
+    public void addFavouriteBook(String idBook, String imageLink, String idToken){
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).child(idBook).push().setValue(imageLink);
     }
 
     @Override
     public void removeFavouriteBook(String idBook, String idToken) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
-        userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+        userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -109,10 +109,6 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                 // Gestisci l'errore
             }
         });
-    }
-    @Override
-    public void saveUserFavBooks(String idBook, String idToken){
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).push().setValue(idBook);
     }
     @Override
     public void getUserFavoriteBooks(String idToken) {

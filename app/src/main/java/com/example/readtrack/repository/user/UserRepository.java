@@ -175,8 +175,8 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     }
 
     @Override
-    public void addFavouriteBook(String idBook, String idToken) {
-        userDataRemoteDataSource.addFavouriteBook(idBook,idToken);
+    public void addFavouriteBook(String idBook, String imageLink, String idToken) {
+        userDataRemoteDataSource.addFavouriteBook(idBook, imageLink, idToken);
     }
 
 }

@@ -101,7 +101,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                  });
         favouriteRecView.setLayoutManager(layoutManager);
         favouriteRecView.setAdapter(booksRecyclerViewAdapter);
-        retrieveUserInformationAndStartActivity(idToken);
+       // retrieveUserInformationAndStartActivity(idToken);
     }
 
     @Override

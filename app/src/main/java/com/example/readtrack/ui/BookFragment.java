@@ -84,10 +84,8 @@ public class BookFragment extends Fragment  {
         userViewModel = new ViewModelProvider(
                 this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
         try {
-            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-            Log.d("Token",idToken);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
@@ -122,7 +120,6 @@ public class BookFragment extends Fragment  {
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
-                // Puoi essere sicuro che l'oggetto sia di tipo Books
                 book = (Books) args.get("bookArgument");
                 userViewModel.isFavouriteBook(book.getId(), idToken, new OnFavouriteCheckListener() {
                     @Override
@@ -154,8 +151,9 @@ public class BookFragment extends Fragment  {
                     favouriteButton.setText("Aggiungi ai preferiti");
                     userViewModel.removeFavouriteBook(book.getId(),finalIdToken);
                 } else {
+                    String imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
                     favouriteButton.setText("Rimuovi dai preferiti");
-                    userViewModel.addFavouriteBook(book.getId(),finalIdToken);
+                    userViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
                 }
             });
         });
@@ -192,7 +190,6 @@ public class BookFragment extends Fragment  {
                     recyclerViewOthBooks.setLayoutManager(layoutManager);
                     recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
                 } else {
-                    Log.d("scroll3", "");
                     booksViewModel.setLoading(false);
                     booksViewModel.setCurrentResults(otherBooks.size());
                     int initialSize = otherBooks.size();

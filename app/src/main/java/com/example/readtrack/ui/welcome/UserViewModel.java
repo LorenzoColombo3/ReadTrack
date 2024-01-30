@@ -105,8 +105,8 @@ public class UserViewModel extends ViewModel {
     public void removeFavouriteBook(String idBook, String idToken){
         userRepository.removeFavouriteBook(idBook,idToken);
     }
-    public void addFavouriteBook(String idBook, String idToken){
-        userRepository.addFavouriteBook(idBook,idToken);
+    public void addFavouriteBook(String idBook, String imageLink, String idToken){
+        userRepository.addFavouriteBook(idBook, imageLink, idToken);
     }
 
 }
