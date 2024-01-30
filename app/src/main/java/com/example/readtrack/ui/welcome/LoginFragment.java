@@ -118,8 +118,8 @@ public class LoginFragment extends Fragment {
                                 User user = ((Result.UserResponseSuccess) authenticationResult).getData();
                                 saveLoginData(user.getEmail(), null, user.getIdToken());
                                 userViewModel.setAuthenticationError(false);
-
-                                //retrieveUserInformationAndStartActivity(user, R.id.action_loginFragment_to_mainActivity);
+                                Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
+                                requireActivity().finish();
                             } else {
                                 userViewModel.setAuthenticationError(true);
                                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
@@ -172,7 +172,6 @@ public class LoginFragment extends Fragment {
                                     userViewModel.setAuthenticationError(false);
                                     Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
                                     requireActivity().finish();
-                                    //retrieveUserInformationAndStartActivity(user, R.id.action_loginFragment_to_mainActivity);
                                     Log.d("prova","b");
                                 } else {
                                     userViewModel.setAuthenticationError(true);
