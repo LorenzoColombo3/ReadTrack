@@ -26,14 +26,18 @@ import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
+import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.ServiceLocator;
+import com.example.readtrack.ui.BooksViewModel;
+
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +68,18 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.bookList = new HashMap<String, String>();
-        //booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
+        BooksRepositoryWithLiveData booksRepositoryWithLiveData =
+                ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
+
+        booksViewModel = new ViewModelProvider(
+                requireActivity(),
+                new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
+
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
         IUserRepository userRepository = ServiceLocator.getInstance().
                 getUserRepository(getActivity().getApplication());
@@ -98,14 +109,14 @@ public class ProfileFragment extends Fragment {
                 new HashMapRecyclerViewAdapter.OnItemClickListener(){
                       @Override
                       public void onBooksItemClick(String id) {
-                          booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
-                              if (book.isSuccess()) {
-                                  //TODO Sistemare questo pezzo, perchè non funziona
-                                  Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
+                          booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                              if (res.isSuccess()) {
                                   Bundle bundle = new Bundle();
-                                  bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
-                                  Navigation.findNavController(getView()).navigate(R.id.action_profile_fragment_to_bookFragment, bundle);
+                                  bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                                  Navigation.findNavController(view).navigate(R.id.action_profile_fragment_to_bookFragment, bundle);
                               } else {
+                                  // Gestisci il caso in cui non ci sono risultati
+                                  Log.d("search", "Nessun risultato trovato");
                               }
                           });
                       }
@@ -115,14 +126,19 @@ public class ProfileFragment extends Fragment {
         recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
         userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
                 getViewLifecycleOwner(), result -> {
-                    if(result.isSuccess()){
-                        this.bookList = ((Result.BooksResponseSuccess) result).getFavData();
-                        recyclerViewOthBooks.setLayoutManager(layoutManager);
-                        recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+                    if (result.isSuccess()) {
+                        // Aggiorna la lista dei libri
+                        bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                        // Aggiorna l'adapter con la nuova lista
+                        booksRecyclerViewAdapter.setBookList(bookList);
+                        // Notifica il cambiamento solo dopo aver aggiornato i dati
+                        booksRecyclerViewAdapter.notifyDataSetChanged();
+                    } else {
+                        // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                     }
-                    booksRecyclerViewAdapter.notifyItemRangeInserted(initialSize, otherBooks.size());
                 }
         );
+
     }
 
     private void generateRecyclerView(List<Books> booksList){

@@ -31,6 +31,7 @@ import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
+import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -75,7 +76,12 @@ public class BookFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
+        BooksRepositoryWithLiveData booksRepositoryWithLiveData =
+                ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
+
+        booksViewModel = new ViewModelProvider(
+                requireActivity(),
+                new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
         otherBooks=new ArrayList<>();
         query="";
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());

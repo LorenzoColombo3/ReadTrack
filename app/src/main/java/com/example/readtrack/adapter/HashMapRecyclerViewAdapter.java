@@ -44,6 +44,12 @@ public class HashMapRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return new BooksViewHolder(view);
     }
 
+    public void setBookList(HashMap<String, String> newBookList) {
+        this.bookList.clear();
+        this.bookList.putAll(newBookList);
+        this.chiavi = new ArrayList<>(newBookList.keySet());
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((BooksViewHolder) holder).bind(bookList.get(chiavi.get(position)));

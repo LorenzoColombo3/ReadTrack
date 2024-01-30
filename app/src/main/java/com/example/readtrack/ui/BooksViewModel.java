@@ -21,6 +21,8 @@ public class BooksViewModel extends ViewModel {
     private int totalResults;
     private boolean isLoading;
 
+
+
     public BooksViewModel(BooksRepositoryWithLiveData booksRepositoryWithLiveData) {
         this.booksRepositoryWithLiveData = booksRepositoryWithLiveData;
     }

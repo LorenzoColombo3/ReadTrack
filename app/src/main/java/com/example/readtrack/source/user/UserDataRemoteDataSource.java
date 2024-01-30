@@ -89,7 +89,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
     }
     @Override
     public void addFavouriteBook(String idBook, String imageLink, String idToken){
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).child(idBook).push().setValue(imageLink);
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).child(idBook).setValue(imageLink);
     }
 
     @Override
