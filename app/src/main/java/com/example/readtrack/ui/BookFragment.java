@@ -2,7 +2,11 @@ package com.example.readtrack.ui;
 
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
+import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
+import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
@@ -39,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookFragment extends Fragment  {
-    String idToken = null;
+    String idToken;
     private UserViewModel userViewModel;
     DataEncryptionUtil dataEncryptionUtil;
     private List<Books> otherBooks;
@@ -59,7 +65,10 @@ public class BookFragment extends Fragment  {
     private TextView readLessButton;
     private BooksViewModel booksViewModel;
     private Button favouriteButton;
-
+    private int totalItemCount;
+    private int lastVisibleItem;
+    private int visibleItemCount;
+    private final int threshold = 1;
     private String query;
     public BookFragment(){}
 
@@ -108,7 +117,7 @@ public class BookFragment extends Fragment  {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("inizio", "");
+        booksViewModel.reset();
         Books book;
         Bundle args = getArguments();
         if (args != null) {
@@ -127,7 +136,6 @@ public class BookFragment extends Fragment  {
                 });
                 if(book.getVolumeInfo().getAuthors()!=null) {
                     query="autor:"+ book.getVolumeInfo().getAuthors().get(0);
-                    Log.d("autore", query);
                 }else {
                     this.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
@@ -153,45 +161,111 @@ public class BookFragment extends Fragment  {
         });
 
 
-        booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
-            if (result.isSuccess()) {
-                RecyclerView.LayoutManager layoutManager =
-                        new LinearLayoutManager(requireContext(),
-                                LinearLayoutManager.HORIZONTAL, false);
-                this.otherBooks.addAll(((Result.BooksResponseSuccess) result).getData().getItems());
-                booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(otherBooks,
-                        new BooksRecyclerViewAdapter.OnItemClickListener() {
-                            @Override
-                            public void onBooksItemClick(Books books) {
-                                String id=books.getId();
-                                booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
-                                    if (res.isSuccess()) {
-                                        Bundle bundle = new Bundle();
-                                        bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
-                                        Log.d("libro cliccato", ((Result.BooksResponseSuccess) res).getData().getItems().get(0).getVolumeInfo().getTitle());  //return errato
-                                        Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
-                                    } else {
-                                        // Gestisci il caso in cui non ci sono risultati
-                                        Log.d("search", "Nessun risultato trovato");
-                                    }
-                                });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(otherBooks,
+                new BooksRecyclerViewAdapter.OnItemClickListener() {
+                    @Override
+                    public void onBooksItemClick(Books books) {
+                        String id=books.getId();
+                        booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                            if (res.isSuccess()) {
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                                Navigation.findNavController(view).navigate(R.id.action_bookFragment_self, bundle);
+                            } else {
+                                // Gestisci il caso in cui non ci sono risultati
+                                Log.d("search", "Nessun risultato trovato");
                             }
                         });
-                recyclerViewOthBooks.setLayoutManager(layoutManager);
-                recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+                    }
+                });
+        recyclerViewOthBooks.setLayoutManager(layoutManager);
+        recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+        booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
+            if (result.isSuccess()) {
+                BooksApiResponse booksApiResponse=((Result.BooksResponseSuccess) result).getData();
+                List<Books> booksSearched = booksApiResponse.getItems();
+                if (!booksViewModel.isLoading()) {
+                    otherBooks.clear();
+                    booksViewModel.setTotalResults(booksApiResponse.getTotalItems());
+                    this.otherBooks.addAll(booksSearched);
+                    recyclerViewOthBooks.setLayoutManager(layoutManager);
+                    recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+                } else {
+                    Log.d("scroll3", "");
+                    booksViewModel.setLoading(false);
+                    booksViewModel.setCurrentResults(otherBooks.size());
+                    int initialSize = otherBooks.size();
+                    for (int i = 0; i < otherBooks.size(); i++) {
+                        if (otherBooks.get(i) == null) {
+                            otherBooks.remove(otherBooks.get(i));
+                        }
+                    }
+                    for (int i = 0; i < booksSearched.size(); i++) {
+                        otherBooks.add(booksSearched.get(i));
+                    }
+                    booksRecyclerViewAdapter.notifyItemRangeInserted(initialSize, otherBooks.size());
+                }
             } else {
                 // Gestisci il caso in cui non ci sono risultati
                 Log.d("search result", "Nessun risultato trovato");
             }
         });
+        recyclerViewOthBooks.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                boolean isConnected = isConnected();
+                if (isConnected && totalItemCount != booksViewModel.getTotalResults()) {
+
+                    totalItemCount = layoutManager.getItemCount();
+                    lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                    visibleItemCount = layoutManager.getChildCount();
+                    // Condition to enable the loading of other news while the user is scrolling the list
+                    if (totalItemCount == visibleItemCount ||
+                            (totalItemCount <= (lastVisibleItem + threshold) &&
+                                    dx > 0 &&
+                                    !booksViewModel.isLoading()
+                            ) &&
+                                    booksViewModel.getBooksResponseLiveData().getValue() != null &&
+                                    booksViewModel.getCurrentResults() != booksViewModel.getTotalResults()
+                    ) {
+                        MutableLiveData<Result> booksListMutableLiveData = booksViewModel.getBooksResponseLiveData();
+                        if (booksListMutableLiveData.getValue() != null &&
+                                booksListMutableLiveData.getValue().isSuccess()) {
+                            booksViewModel.setLoading(true);
+                            otherBooks.add(null);
+                            booksRecyclerViewAdapter.notifyItemRangeInserted(otherBooks.size(), otherBooks.size() + 1);
+                            int page = booksViewModel.getPage() + TOP_HEADLINES_PAGE_SIZE_VALUE;
+                            booksViewModel.setPage(page);
+                            booksViewModel.getBooks(query);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 
-    //TODO controllare i casi null che potrebbero crashare
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        booksViewModel.setLoading(false);
+    }
+
     private void setBook(Books book){
         this.title.setText(book.getVolumeInfo().getTitle());
-        Picasso.get()
-                .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
-                .into(this.cover);
+        if(book.getVolumeInfo().getImageLinks()!=null) {
+            Picasso.get()
+                    .load("https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
+                    .into(this.cover);
+        }
         if(book.getVolumeInfo().getAuthors()!=null){
             this.author.setText(book.getVolumeInfo().getAuthors().get(0));
         }else{

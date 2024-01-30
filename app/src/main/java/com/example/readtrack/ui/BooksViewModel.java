@@ -20,13 +20,17 @@ public class BooksViewModel extends ViewModel {
     private int currentResults;
     private int totalResults;
     private boolean isLoading;
-    private boolean firstLoading;
 
     public BooksViewModel(BooksRepositoryWithLiveData booksRepositoryWithLiveData) {
         this.booksRepositoryWithLiveData = booksRepositoryWithLiveData;
-        this.page = 1;
-        this.totalResults = 0;
-        this.firstLoading = true;
+    }
+
+    public void reset(){
+        booksListLiveData = new MutableLiveData<Result>();
+        favoriteBookListLiveData = new MutableLiveData<Result>();
+        this.page=0;
+        this.totalResults=0;
+        booksRepositoryWithLiveData.reset();
     }
 
     public MutableLiveData<Result> getBooks(String query) {
@@ -74,13 +78,5 @@ public class BooksViewModel extends ViewModel {
 
     public void setLoading(boolean loading) {
         isLoading = loading;
-    }
-
-    public boolean isFirstLoading() {
-        return firstLoading;
-    }
-
-    public void setFirstLoading(boolean firstLoading) {
-        this.firstLoading = firstLoading;
     }
 }

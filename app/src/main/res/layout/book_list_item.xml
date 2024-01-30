@@ -8,6 +8,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <ImageView
+        android:scaleType="centerCrop"
         android:id="@+id/image_cover"
         android:padding="10dp"
         android:layout_width="105dp"

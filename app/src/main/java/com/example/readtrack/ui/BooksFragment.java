@@ -1,6 +1,9 @@
 package com.example.readtrack.ui;
 
 
+import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
+import static com.example.readtrack.util.Constants.ID_TOKEN;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,9 +11,11 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,6 +26,8 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Result;
+import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -30,6 +37,8 @@ import com.example.readtrack.util.ResponseCallback;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +49,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
     private List<Books> booksList;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
     private RecyclerView favouriteRecView;
+    private String idToken;
 
     public BooksFragment() {}
 
@@ -51,6 +61,14 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 getUserRepository(getActivity().getApplication());
         userViewModel = new ViewModelProvider(
                 this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        try {
+            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
+            idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
+                    ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
+            Log.d("Token",idToken);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +101,7 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                  });
         favouriteRecView.setLayoutManager(layoutManager);
         favouriteRecView.setAdapter(booksRecyclerViewAdapter);
-
+        retrieveUserInformationAndStartActivity(idToken);
     }
 
     @Override
@@ -110,6 +128,19 @@ public class BooksFragment extends Fragment implements ResponseCallback{
     private List<Books> getBooksListWithWithGSon() {
         JSONparser jsonParserUtil = new JSONparser(requireActivity().getApplication());
         return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie&startIndex=0&maxResults=40").getItems();
+    }
+
+
+    private void retrieveUserInformationAndStartActivity(String idToken) {
+        Log.d("start", "Start");
+        userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
+                getViewLifecycleOwner(), result -> {
+                    if(result.isSuccess()){
+                        List<String> books = ((Result.BooksResponseSuccess) result).getFavData();
+                        Log.d("idFavourite", books.get(0));
+                    }
+                }
+        );
     }
 
 }

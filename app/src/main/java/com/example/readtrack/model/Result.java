@@ -1,5 +1,7 @@
 package com.example.readtrack.model;
 
+import java.util.List;
+
 public abstract class Result {
     private Result() {}
 
@@ -11,11 +13,18 @@ public abstract class Result {
         }
     }
 
+
+
     public static final class BooksResponseSuccess extends Result {
         private BooksApiResponse booksResponse;
+        private List<String> favUserBooks;
         public BooksResponseSuccess(BooksApiResponse booksResponse) {
             this.booksResponse = booksResponse;
         }
+        public BooksResponseSuccess(List<String> favUserBooks){
+            this.favUserBooks=favUserBooks;
+        }
+        public List<String> getFavData(){ return favUserBooks; }
         public BooksApiResponse getData() {
             return booksResponse;
         }

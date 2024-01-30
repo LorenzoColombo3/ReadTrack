@@ -46,4 +46,9 @@
     <string name="error_login_password_message">errorelogin password</string>
     <string name="error_login_user_message">errore login user</string>
     <string name="error_no_google_account_found_message">nessun account google trovato</string>
+    <string name="preferiti">Preferiti</string>
+    <string name="stai_leggendo">Stai leggendo</string>
+    <string name="publisher">publisher</string>
+    <string name="date">date</string>
+    <string name="readtrack">ReadTrack</string>
 </resources>

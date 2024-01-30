@@ -91,11 +91,17 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         private final TextView title;
         private final TextView author;
 
+        private final TextView publisher;
+
+        private final TextView date;
+
         public BooksSearchViewHolder(@NonNull View itemView) {
             super(itemView);
             imageViewThumbnail = itemView.findViewById(R.id.image_cover);
             title = itemView.findViewById(R.id.book_title);
             author = itemView.findViewById(R.id.book_author);
+            publisher = itemView.findViewById(R.id.book_publisher);
+            date = itemView.findViewById(R.id.book_date);
             itemView.setOnClickListener(this);
         }
         public void bind(Books book) {
@@ -105,6 +111,8 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
                         .into(imageViewThumbnail);
                 title.setText(setContent(book.getVolumeInfo().getTitle()));
                 author.setText(setContent(book.getVolumeInfo().getAuthors().get(0)));
+                publisher.setText(setContent(book.getVolumeInfo().getPublisher()));
+                date.setText(setContent(book.getVolumeInfo().getPublishedDate().substring(0,4)));
             }catch(NullPointerException pointerException){
                 Log.d("pointer exception", pointerException.toString());
             }

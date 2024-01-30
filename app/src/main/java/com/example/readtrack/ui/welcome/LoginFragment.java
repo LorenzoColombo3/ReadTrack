@@ -118,7 +118,8 @@ public class LoginFragment extends Fragment {
                                 User user = ((Result.UserResponseSuccess) authenticationResult).getData();
                                 saveLoginData(user.getEmail(), null, user.getIdToken());
                                 userViewModel.setAuthenticationError(false);
-                                retrieveUserInformationAndStartActivity(user, R.id.action_loginFragment_to_mainActivity);
+
+                                //retrieveUserInformationAndStartActivity(user, R.id.action_loginFragment_to_mainActivity);
                             } else {
                                 userViewModel.setAuthenticationError(true);
                                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
@@ -235,20 +236,16 @@ public class LoginFragment extends Fragment {
             textInputLayoutPassword.setError(null);
             return true;
         }
-    }
+    }/*
     private void retrieveUserInformationAndStartActivity(User user, int destination) {
         userViewModel.getUserFavoriteBooksMutableLiveData(user.getIdToken()).observe(
-                getViewLifecycleOwner(), userFavoriteNewsRetrievalResult -> {
-                    startActivityBasedOnCondition(MainActivity.class, destination);
+                getViewLifecycleOwner(), result -> {
+                    Navigation.findNavController(requireView()).navigate(destination);
+                    requireActivity().finish();
                     Log.d("prova","retrive");
                 }
         );
-    }
-    private void startActivityBasedOnCondition(Class<?> destinationActivity, int destination) {
-        Navigation.findNavController(requireView()).navigate(destination);
-        requireActivity().finish();
-        Log.d("prova","startActivity");
-    }
+    }*/
     private String getErrorMessage(String errorType) {
         switch (errorType) {
             case INVALID_CREDENTIALS_ERROR:

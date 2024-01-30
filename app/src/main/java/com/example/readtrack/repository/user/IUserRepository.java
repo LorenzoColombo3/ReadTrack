@@ -6,6 +6,7 @@ import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
+import java.util.List;
 import java.util.Set;
 
 public interface IUserRepository {

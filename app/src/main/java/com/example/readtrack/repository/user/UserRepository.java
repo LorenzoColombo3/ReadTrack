@@ -25,12 +25,14 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     private final MutableLiveData<Result> userMutableLiveData;
     private final MutableLiveData<Result> userFavoriteNewsMutableLiveData;
     private final MutableLiveData<Result> userPreferencesMutableLiveData;
+    private MutableLiveData<Result> favoriteBooksLiveData;
 
     public UserRepository(BaseUserAuthenticationRemoteDataSource userRemoteDataSource,
                           BaseUserDataRemoteDataSource userDataRemoteDataSource) {
         this.userRemoteDataSource = userRemoteDataSource;
         this.userDataRemoteDataSource = userDataRemoteDataSource;
         this.userMutableLiveData = new MutableLiveData<>();
+        this.favoriteBooksLiveData =new MutableLiveData<>();
         this.userPreferencesMutableLiveData = new MutableLiveData<>();
         this.userFavoriteNewsMutableLiveData = new MutableLiveData<>();
         this.userRemoteDataSource.setUserResponseCallback(this);
@@ -54,10 +56,10 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
         signInWithGoogle(idToken);
         return userMutableLiveData;
     }
-
     @Override
-    public MutableLiveData<Result> getUserFavoriteBooks(String idToken) {
-        return userFavoriteNewsMutableLiveData;
+    public MutableLiveData<Result> getUserFavoriteBooks(String idToken){
+        userDataRemoteDataSource.getUserFavoriteBooks(idToken);
+        return favoriteBooksLiveData;
     }
 
     @Override
@@ -117,8 +119,10 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     }
 
     @Override
-    public void onSuccessFromRemoteDatabase(List<Books> BooksList) {
-
+    public void onSuccessFromRemoteDatabase(List<String> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+        favoriteBooksLiveData.postValue(result);
+        Log.d("result", String.valueOf(booksList.size()));
     }
 
     @Override

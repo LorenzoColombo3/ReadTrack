@@ -91,7 +91,6 @@ public class SearchFragment extends Fragment  {
                         Bundle bundle = new Bundle();
                         bundle.putParcelable("bookArgument", book);
                         Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
-                        booksSearchRecyclerViewAdapter.clear();
                     }
                 });
         searchView
@@ -100,7 +99,8 @@ public class SearchFragment extends Fragment  {
                         (v, actionId, event) -> {
                             searchBar.setText(searchView.getText());
                             searchView.hide();
-
+                            query="";
+                            booksViewModel.reset();
                             query=searchBar.getText().toString();
                             searchBar.setText("");
                             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
@@ -110,7 +110,6 @@ public class SearchFragment extends Fragment  {
                                     if (!booksViewModel.isLoading()) {
                                         booksList.clear();
                                         booksViewModel.setTotalResults(booksApiResponse.getTotalItems());
-                                        booksViewModel.setFirstLoading(false);
                                         this.booksList.addAll(booksSearched);
                                         recyclerViewFavBooks.setLayoutManager(layoutManager);
                                         recyclerViewFavBooks.setAdapter(booksSearchRecyclerViewAdapter);
@@ -118,20 +117,15 @@ public class SearchFragment extends Fragment  {
                                         booksViewModel.setLoading(false);
                                         booksViewModel.setCurrentResults(booksList.size());
                                         int initialSize = booksList.size();
-
                                         for (int i = 0; i < booksList.size(); i++) {
                                             if (booksList.get(i) == null) {
                                                 booksList.remove(booksList.get(i));
                                             }
                                         }
-                                        int startIndex = (booksViewModel.getPage()*TOP_HEADLINES_PAGE_SIZE_VALUE) -
-                                                TOP_HEADLINES_PAGE_SIZE_VALUE;
-                                        for (int i = startIndex; i < booksSearched.size(); i++) {
+                                        for (int i = 0; i < booksSearched.size(); i++) {
                                             booksList.add(booksSearched.get(i));
                                         }
-
                                         booksSearchRecyclerViewAdapter.notifyItemRangeInserted(initialSize, booksList.size());
-
                                     }
                                 } else {
                                     Log.d("search result", "Nessun risultato trovato");
@@ -145,7 +139,6 @@ public class SearchFragment extends Fragment  {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 boolean isConnected = isConnected();
-
                 if (isConnected && totalItemCount != booksViewModel.getTotalResults()) {
 
                     totalItemCount = layoutManager.getItemCount();
@@ -162,17 +155,13 @@ public class SearchFragment extends Fragment  {
                                     booksViewModel.getCurrentResults() != booksViewModel.getTotalResults()
                     ) {
                         MutableLiveData<Result> booksListMutableLiveData = booksViewModel.getBooksResponseLiveData();
-                        Log.d("risultati totali", String.valueOf(booksViewModel.getTotalResults()));
-                        Log.d("risultati correnti", String.valueOf(booksViewModel.getCurrentResults()));
                         if (booksListMutableLiveData.getValue() != null &&
                                 booksListMutableLiveData.getValue().isSuccess()) {
 
                             booksViewModel.setLoading(true);
                             booksList.add(null);
-                            booksSearchRecyclerViewAdapter.notifyItemRangeInserted(booksList.size(),
-                                    booksList.size() + 1);
-
-                            int page = booksViewModel.getPage() + 1;
+                            booksSearchRecyclerViewAdapter.notifyItemRangeInserted(booksList.size(), booksList.size() + 1);
+                            int page = booksViewModel.getPage() + TOP_HEADLINES_PAGE_SIZE_VALUE;
                             booksViewModel.setPage(page);
                             booksViewModel.getBooks(query);
                         }
@@ -182,53 +171,6 @@ public class SearchFragment extends Fragment  {
         });
         return view;
     }
-
-    /*@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_search, container, false);
-        searchView = view.findViewById(R.id.search_view);
-        searchBar = view.findViewById(R.id.search_bar);
-        isbnSearch = view.findViewById(R.id.isbn_search_button);
-        isbnSearch.setOnClickListener(v -> {
-            scanCode();
-        });
-        RecyclerView recyclerViewFavBooks = view.findViewById(R.id.search_results);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
-        booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(booksList, requireActivity().getApplication(),
-                new BooksSearchRecyclerAdapter.OnItemClickListener() {
-                    @Override
-                    public void onBooksItemClick(Books book) {
-                        ((MainActivity) requireActivity()).hideBottomNavigation();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("bookArgument", book);
-                        Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
-
-                    }
-                });
-        searchView
-                .getEditText()
-                .setOnEditorActionListener(
-                        (v, actionId, event) -> {
-                            searchBar.setText(searchView.getText());
-                            searchView.hide();
-
-                            query=searchBar.getText().toString();
-                            searchBar.setText("");
-                            // Osserva i risultati della ricerca
-                            booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
-                                if (result.isSuccess()) {
-                                    this.booksList.addAll(((Result.BooksResponseSuccess) result).getData().getItems());
-                                    recyclerViewFavBooks.setLayoutManager(layoutManager);
-                                    recyclerViewFavBooks.setAdapter(booksSearchRecyclerViewAdapter);
-                                } else {
-                                    Log.d("search result", "Nessun risultato trovato");
-                                }
-                            });
-                            return false;
-                        });
-        return view;
-    }*/
     private void scanCode() {
         ScanOptions options= new ScanOptions();
         options.setPrompt("scannerizza codice");
@@ -241,12 +183,11 @@ public class SearchFragment extends Fragment  {
 
     ActivityResultLauncher<ScanOptions> barLauncher= registerForActivityResult(new ScanContract(), result ->{
         if(result.getContents()!=null){
-            Log.d("isbn:",result.getContents());
             query="isbn:"+result.getContents();
+            booksViewModel.reset();
             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), res -> {
                 if (res.isSuccess()) {
                     String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
-                    Log.d("id",id);
                     booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
                         if (book.isSuccess()) {
                             Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
@@ -254,11 +195,9 @@ public class SearchFragment extends Fragment  {
                             bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
                             Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
                         } else {
-                            Log.d("search result", "Nessun risultato trovato");
                         }
                     });
                 } else {
-                    Log.d("search result", "Nessun risultato trovato");
                 }
             });
         }
@@ -281,10 +220,17 @@ public class SearchFragment extends Fragment  {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        booksViewModel.setFirstLoading(true);
         booksViewModel.setLoading(false);
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -18,7 +18,7 @@ public class Constants {
 
     public static final String TOP_HEADLINES_QUERY_PARAMETER = "q";
     public static final String TOP_HEADLINES_PAGE_SIZE_PARAMETER = "pageSize";
-    public static final String TOP_HEADLINES_PAGE_PARAMETER = "page";
+    public static final String TOP_HEADLINES_PAGE_PARAMETER = "startIndex";
     public static final int TOP_HEADLINES_PAGE_SIZE_VALUE = 10;
     public static final String BOOK_DATABASE_NAME = "book_db";
     // Constants for managing errors

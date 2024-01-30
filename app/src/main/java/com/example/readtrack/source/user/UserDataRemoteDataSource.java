@@ -8,6 +8,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.readtrack.model.Books;
 import com.example.readtrack.model.User;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
@@ -18,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
@@ -106,56 +110,30 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
             }
         });
     }
-
-    /*
-        @Override
-        public void saveUserFavBooks(String idBook, String idToken, OnSaveUserFavBooksListener listener) {
-            DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
-
-            userBooksRef.orderByValue().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (!snapshot.exists()) {
-                        userBooksRef.push().setValue(idBook);
-                        listener.onSaveSuccess(true);
-                    } else {
-                        // L'ID del libro esiste già nella lista
-                        listener.onSaveSuccess(false); // Libro già presente
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // Gestisci l'errore
-                    listener.onSaveFailure(error.getMessage());
-                }
-            });
-        }*/
-    /*
     @Override
     public void saveUserFavBooks(String idBook, String idToken){
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).push().setValue(idBook);
-    }*/
-//TODO da rifare getUserFavoriteNews
+    }
     @Override
-    public void getUserFavoriteNews(String idToken) {
-        /*databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
-                child(FIREBASE_FAVORITE_NEWS_COLLECTION).get().addOnCompleteListener(task -> {
+    public void getUserFavoriteBooks(String idToken) {
+        Log.d("start", "UserData");
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         Log.d(TAG, "Error getting data", task.getException());
                         userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
                     }
                     else {
                         Log.d(TAG, "Successful read: " + task.getResult().getValue());
-
-                        List<News> newsList = new ArrayList<>();
+                        List<String> booksList = new ArrayList<>();
                         for(DataSnapshot ds : task.getResult().getChildren()) {
-                            News news = ds.getValue(News.class);
-                            newsList.add(news);
+                            Log.d("value", ds.getValue(String.class));
+                            String book = ds.getValue(String.class);
+                            booksList.add(book);
                         }
 
-                        userResponseCallback.onSuccessFromRemoteDatabase(newsList);
+                        userResponseCallback.onSuccessFromRemoteDatabase(booksList);
                     }
-                });*/
+                });
     }
 }

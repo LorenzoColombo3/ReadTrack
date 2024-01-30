@@ -12,9 +12,10 @@ public abstract class BaseUserDataRemoteDataSource {
     }
 
     public abstract void saveUserData(User user);
-    public abstract void getUserFavoriteNews(String idToken);
+    public abstract void getUserFavoriteBooks(String idToken);
 
     public abstract void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener);
     public abstract void removeFavouriteBook(String idBook, String idToken);
     public abstract void addFavouriteBook(String idBook, String idToken);
+    public abstract void saveUserFavBooks(String idBook, String idToken);
 }

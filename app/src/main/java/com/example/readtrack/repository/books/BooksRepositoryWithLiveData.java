@@ -16,8 +16,8 @@ public class BooksRepositoryWithLiveData implements BooksCallback {
 
     private static final String TAG = BooksRepositoryWithLiveData.class.getSimpleName();
 
-    private final MutableLiveData<Result> booksLiveData;
-    private final MutableLiveData<Result> favoriteBooksLiveData;
+    private  MutableLiveData<Result> booksLiveData;
+    private  MutableLiveData<Result> favoriteBooksLiveData;
     private final BaseBooksSource booksDataSource;
 
     public BooksRepositoryWithLiveData(BaseBooksSource booksDataSource) {
@@ -33,6 +33,10 @@ public class BooksRepositoryWithLiveData implements BooksCallback {
         Log.d("searching books", "");
         booksDataSource.searchBooks(query, page);
         return booksLiveData;
+    }
+    public void reset(){
+        booksLiveData = new MutableLiveData<Result>();
+        favoriteBooksLiveData = new MutableLiveData<Result>();
     }
 
     public MutableLiveData<Result> searchBooksById(String id) {

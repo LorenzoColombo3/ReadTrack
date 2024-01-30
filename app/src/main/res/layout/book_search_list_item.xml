@@ -8,6 +8,7 @@
     android:descendantFocusability="blocksDescendants">
 
     <ImageView
+        android:scaleType="centerCrop"
         android:id="@+id/image_cover"
         android:padding="10dp"
         android:layout_width="105dp"
@@ -18,7 +19,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/book_title"
         android:layout_width="0dp"
@@ -40,6 +40,28 @@
         app:layout_constraintStart_toEndOf="@id/image_cover"
         app:layout_constraintTop_toTopOf="@id/book_title"
         tools:text="@string/book_author" />
+
+    <TextView
+        android:id="@+id/book_publisher"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintTop_toTopOf="@id/book_author"
+        tools:text="@string/publisher" />
+
+    <TextView
+        android:id="@+id/book_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        app:layout_constraintStart_toEndOf="@id/book_publisher"
+        app:layout_constraintTop_toTopOf="@id/book_author"
+        tools:text="@string/date" />
 
     <View
         android:layout_width="match_parent"
