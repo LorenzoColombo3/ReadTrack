@@ -190,6 +190,7 @@ public class SearchFragment extends Fragment  {
                     String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
                     booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
                         if (book.isSuccess()) {
+                            ((MainActivity) requireActivity()).hideBottomNavigation();
                             Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
                             Bundle bundle = new Bundle();
                             bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));

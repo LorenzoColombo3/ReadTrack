@@ -111,6 +111,7 @@ public class ProfileFragment extends Fragment {
                       public void onBooksItemClick(String id) {
                           booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
                               if (res.isSuccess()) {
+                                  ((MainActivity) requireActivity()).hideBottomNavigation();
                                   Bundle bundle = new Bundle();
                                   bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
                                   Navigation.findNavController(view).navigate(R.id.action_profile_fragment_to_bookFragment, bundle);
