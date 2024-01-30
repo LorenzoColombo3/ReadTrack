@@ -30,10 +30,10 @@ public class HashMapRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Map<String, String> bookList;
     private List<String> chiavi;
 
-    public HashMapRecyclerViewAdapter(HashMap<String,String> booklist, OnItemClickListener onItemClickListener) {
+    public HashMapRecyclerViewAdapter(HashMap<String,String> bookList, OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
-        this.bookList=booklist;
-        this.chiavi= new ArrayList<>(bookList.keySet());
+        this.bookList=bookList;
+        this.chiavi= new ArrayList<>(this.bookList.keySet());
     }
 
     @NonNull

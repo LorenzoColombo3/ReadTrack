@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
@@ -120,15 +121,22 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                         userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
                     }
                     else {
-                        Log.d(TAG, "Successful read: " + task.getResult().getValue());
-                        List<String> booksList = new ArrayList<>();
-                        for(DataSnapshot ds : task.getResult().getChildren()) {
-                            Log.d("value", ds.getValue(String.class));
-                            String book = ds.getValue(String.class);
-                            booksList.add(book);
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> favoritesMap = new HashMap<>();
+                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                // Assume che i dati siano delle stringhe
+                                String bookId = bookSnapshot.getKey();
+                                String bookData = String.valueOf(bookSnapshot.getValue());
+                                favoritesMap.put(bookId, bookData);
+                            }
+                            // Passa l'HashMap al callback di successo
+                            userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap);
+                        } else {
+                            // Nessun dato trovato
+                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
                         }
-
-                        userResponseCallback.onSuccessFromRemoteDatabase(booksList);
                     }
                 });
     }

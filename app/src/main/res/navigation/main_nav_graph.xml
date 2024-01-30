@@ -11,7 +11,11 @@
     <fragment
         android:id="@+id/profile_fragment"
         android:name="com.example.readtrack.ui.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_fragment_to_bookFragment"
+            app:destination="@id/bookFragment" />
+    </fragment>
     <fragment
         android:id="@+id/search_fragment"
         android:name="com.example.readtrack.ui.SearchFragment"

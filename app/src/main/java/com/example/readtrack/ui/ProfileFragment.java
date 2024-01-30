@@ -1,5 +1,7 @@
 package com.example.readtrack.ui;
 
+import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
+import static com.example.readtrack.util.Constants.ID_TOKEN;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
 import android.os.Bundle;
@@ -24,7 +26,14 @@ import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
+import com.example.readtrack.repository.user.IUserRepository;
+import com.example.readtrack.ui.welcome.UserViewModel;
+import com.example.readtrack.ui.welcome.UserViewModelFactory;
+import com.example.readtrack.util.DataEncryptionUtil;
+import com.example.readtrack.util.ServiceLocator;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +41,14 @@ import java.util.Map;
 public class ProfileFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
     private BooksViewModel booksViewModel;
     private HashMapRecyclerViewAdapter booksRecyclerViewAdapter;
     private RecyclerView recyclerViewOthBooks;
+    private UserViewModel userViewModel;
+    private DataEncryptionUtil dataEncryptionUtil;
     private String mParam1;
     private String mParam2;
+    String idToken;
 
     private HashMap<String, String> bookList;
     public ProfileFragment() {
@@ -57,10 +68,19 @@ public class ProfileFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.bookList = new HashMap<String, String>();
-        booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        //booksViewModel = new ViewModelProvider(requireActivity()).get(BooksViewModel.class);
+        dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
+        IUserRepository userRepository = ServiceLocator.getInstance().
+                getUserRepository(getActivity().getApplication());
+        userViewModel = new ViewModelProvider(
+                this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        try {
+            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
+            idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
+                    ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
+            Log.d("Token",idToken);
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -73,13 +93,36 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewOthBooks= view.findViewById(R.id.fav_books);
         booksRecyclerViewAdapter = new HashMapRecyclerViewAdapter(bookList,
                 new HashMapRecyclerViewAdapter.OnItemClickListener(){
                       @Override
                       public void onBooksItemClick(String id) {
-
+                          booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
+                              if (book.isSuccess()) {
+                                  //TODO Sistemare questo pezzo, perchè non funziona
+                                  Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
+                                  Bundle bundle = new Bundle();
+                                  bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
+                                  Navigation.findNavController(getView()).navigate(R.id.action_profile_fragment_to_bookFragment, bundle);
+                              } else {
+                              }
+                          });
                       }
                 });
+
+        recyclerViewOthBooks.setLayoutManager(layoutManager);
+        recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+        userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
+                getViewLifecycleOwner(), result -> {
+                    if(result.isSuccess()){
+                        this.bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                        recyclerViewOthBooks.setLayoutManager(layoutManager);
+                        recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+                    }
+                    booksRecyclerViewAdapter.notifyItemRangeInserted(initialSize, otherBooks.size());
+                }
+        );
     }
 
     private void generateRecyclerView(List<Books> booksList){
@@ -165,5 +208,15 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });*/
+    }
+    private void retrieveUserInformationAndStartActivity(String idToken) {
+        Log.d("start", "Start");
+        userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
+                getViewLifecycleOwner(), result -> {
+                    if(result.isSuccess()){
+                        HashMap<String,String> books = ((Result.BooksResponseSuccess) result).getFavData();
+                    }
+                }
+        );
     }
 }

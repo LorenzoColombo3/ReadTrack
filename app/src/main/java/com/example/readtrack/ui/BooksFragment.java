@@ -136,8 +136,8 @@ public class BooksFragment extends Fragment implements ResponseCallback{
         userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
                 getViewLifecycleOwner(), result -> {
                     if(result.isSuccess()){
-                        List<String> books = ((Result.BooksResponseSuccess) result).getFavData();
-                        Log.d("idFavourite", books.get(0));
+                        //List<String> books = ((Result.BooksResponseSuccess) result).getFavData();
+                        //Log.d("idFavourite", books.get(0));
                     }
                 }
         );

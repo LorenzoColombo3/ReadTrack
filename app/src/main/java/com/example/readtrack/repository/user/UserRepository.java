@@ -13,6 +13,7 @@ import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +120,7 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     }
 
     @Override
-    public void onSuccessFromRemoteDatabase(List<String> booksList) {
+    public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
         favoriteBooksLiveData.postValue(result);
         Log.d("result", String.valueOf(booksList.size()));

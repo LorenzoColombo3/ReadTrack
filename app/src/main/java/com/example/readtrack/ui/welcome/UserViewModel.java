@@ -30,6 +30,7 @@ public class UserViewModel extends ViewModel {
         authenticationError = false;
     }
 
+
     public MutableLiveData<Result> getUserMutableLiveData(
             String email, String password, boolean isUserRegistered) {
         if (userMutableLiveData == null) {
