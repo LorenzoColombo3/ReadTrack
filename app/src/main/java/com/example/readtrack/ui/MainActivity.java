@@ -95,6 +95,6 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setVisibility(View.GONE);
     }
 
-    }
+}
 
 
