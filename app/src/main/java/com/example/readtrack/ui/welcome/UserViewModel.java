@@ -114,4 +114,8 @@ public class UserViewModel extends ViewModel {
         userRepository.resetPassword(email);
     }
 
+    public void updateReadingBooks(String idBook, int page, String linkImg, String idToken){
+        userRepository.updateReadingBook(idBook,page,linkImg,idToken);
+    }
+
 }

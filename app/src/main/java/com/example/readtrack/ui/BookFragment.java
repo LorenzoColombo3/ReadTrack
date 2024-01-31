@@ -5,6 +5,7 @@ import static com.example.readtrack.util.Constants.ID_TOKEN;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -14,11 +15,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -38,6 +43,7 @@ import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.ServiceLocator;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -46,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookFragment extends Fragment  {
+    BottomSheetBehavior bottomSheetBehavior;
     String idToken;
     private UserViewModel userViewModel;
     DataEncryptionUtil dataEncryptionUtil;
@@ -65,7 +72,8 @@ public class BookFragment extends Fragment  {
     private TextView readMoreButton;
     private TextView readLessButton;
     private BooksViewModel booksViewModel;
-    private Button favouriteButton;
+    private ImageButton favouriteButton;
+    private Button aggiungiSegnalibro;
     private int totalItemCount;
     private int lastVisibleItem;
     private int visibleItemCount;
@@ -115,6 +123,7 @@ public class BookFragment extends Fragment  {
         readMoreButton=view.findViewById(R.id.read_more_button);
         readLessButton=view.findViewById(R.id.read_less_button);
         favouriteButton=view.findViewById(R.id.add_favourite);
+        aggiungiSegnalibro=view.findViewById(R.id.add_reading);
         return view;
     }
 
@@ -131,9 +140,13 @@ public class BookFragment extends Fragment  {
                     @Override
                     public void onFavouriteCheckResult(boolean isFavourite) {
                         if (isFavourite) {
-                            favouriteButton.setText("Rimuovi dai preferiti");
+                            favouriteButton.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
+                                    R.drawable.ic_baseline_favorite_24));
+                            favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
                         } else {
-                            favouriteButton.setText("Aggiungi ai preferiti");
+                            favouriteButton.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
+                                    R.drawable.ic_baseline_favorite_border_24));
+                            favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
                         }
                     }
                 });
@@ -154,11 +167,15 @@ public class BookFragment extends Fragment  {
         favouriteButton.setOnClickListener(v->{
             userViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
                 if (isFavourite) {
-                    favouriteButton.setText("Aggiungi ai preferiti");
+                    favouriteButton.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
+                            R.drawable.ic_baseline_favorite_border_24));
+                    favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
                     userViewModel.removeFavouriteBook(book.getId(),finalIdToken);
                 } else {
                     String imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
-                    favouriteButton.setText("Rimuovi dai preferiti");
+                    favouriteButton.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
+                            R.drawable.ic_baseline_favorite_24));
+                    favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
                     userViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
                 }
             });
@@ -247,6 +264,15 @@ public class BookFragment extends Fragment  {
                 }
             }
         });
+        aggiungiSegnalibro.setOnClickListener(v -> {
+            Log.d("entrah?", "non penso proprioh");
+            mostraModalBottomSheet(book);
+        });
+
+    }
+    private void mostraModalBottomSheet(Books book) {
+        ModalBottomSheet modalBottomSheet = new ModalBottomSheet(book);
+        modalBottomSheet.show(getActivity().getSupportFragmentManager(), ModalBottomSheet.TAG);
     }
     private boolean isConnected() {
         ConnectivityManager cm =
@@ -263,7 +289,13 @@ public class BookFragment extends Fragment  {
     }
 
     private void setBook(Books book){
-        this.title.setText(book.getVolumeInfo().getTitle());
+        String titleString=book.getVolumeInfo().getTitle();
+        if(titleString.length()>30) {
+            this.title.setText(book.getVolumeInfo().getTitle().substring(0, 30) + "...");
+        }else{
+            this.title.setText(book.getVolumeInfo().getTitle());
+        }
+
         if(book.getVolumeInfo().getImageLinks()!=null) {
             Picasso.get()
                     .load("https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))

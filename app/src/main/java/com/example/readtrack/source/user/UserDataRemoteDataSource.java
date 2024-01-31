@@ -3,6 +3,9 @@ package com.example.readtrack.source.user;
 import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
+import static com.example.readtrack.util.Constants.IMG;
+import static com.example.readtrack.util.Constants.PAGE;
+import static com.example.readtrack.util.Constants.READING_BOOKS;
 
 import android.util.Log;
 
@@ -23,6 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
@@ -111,6 +116,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
             }
         });
     }
+
     @Override
     public void getUserFavoriteBooks(String idToken) {
         Log.d("start", "UserData");
@@ -139,5 +145,30 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                         }
                     }
                 });
+    }
+    @Override
+    public void updateReadingBook(String idBook, int page, String imgLink, String idToken){
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
+        userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        childSnapshot.getRef().child(PAGE).setValue(page);
+                    }
+                }else{
+                    userBooksRef.child(idBook).child(PAGE).setValue(page);
+                    userBooksRef.child(idBook).child(IMG).setValue(imgLink);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Gestisci l'errore
+            }
+        });
+
+
+
     }
 }

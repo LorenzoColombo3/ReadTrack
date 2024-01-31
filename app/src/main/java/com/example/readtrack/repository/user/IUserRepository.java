@@ -24,4 +24,5 @@ public interface IUserRepository {
     void removeFavouriteBook(String idBook, String idToken);
     void addFavouriteBook(String idBook, String imageLink, String idToken);
     void resetPassword(String email);
+    void updateReadingBook(String idBook, int page, String linkImg, String idToken);
 }

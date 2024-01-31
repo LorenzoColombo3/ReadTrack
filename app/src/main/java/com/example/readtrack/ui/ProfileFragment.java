@@ -91,6 +91,10 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        binding.circularImageView.setOnClickListener(v -> {
+            //inserire codice qui
+        });
+        binding.userName.setText(userViewModel.getLoggedUser().getEmail());
         generateRecyclerView(view, binding.readingBooks);
         generateRecyclerView(view, binding.booksRead);
         generateRecyclerView(view, binding.favBooks);

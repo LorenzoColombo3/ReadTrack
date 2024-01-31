@@ -34,4 +34,9 @@ public class Constants {
     public static final String FIREBASE_USERS_COLLECTION = "users";
     public static final String FAVOURITES_BOOKS = "preferiti";
     public static final String READING_BOOKS = "reading";
+    public static final String RED_BOOKS = "read";
+    public static final String WANT_TO_READ="wantRead";
+    public static final String PAGE="page";
+    public static final String IMG="img";
+    public static final int PICK_PROFILE_IMAGE_REQUEST_CODE=1;
 }

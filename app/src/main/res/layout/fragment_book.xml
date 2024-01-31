@@ -6,6 +6,7 @@
     android:layout_height="match_parent">
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="29dp"
@@ -14,19 +15,39 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp">
+            android:padding="10dp"
+            >
 
-            <TextView
-                android:id="@+id/title"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/container_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/book_title"
-                android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceTitleLarge"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:maxLines="1"
+                    android:text="@string/book_title"
+                    android:textAlignment="textStart"
+                    android:textAppearance="?attr/textAppearanceTitleLarge"
+                    app:layout_constraintBottom_toBottomOf="@id/container_title"
+                    app:layout_constraintStart_toStartOf="@id/container_title"
+                    app:layout_constraintTop_toTopOf="@id/container_title" />
+
+                <ImageButton
+                    android:id="@+id/add_favourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/container_title"
+                    app:layout_constraintTop_toTopOf="@id/container_title"
+                    android:background="@color/zxing_transparent"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
                 android:id="@+id/cover"
@@ -34,8 +55,8 @@
                 android:layout_height="150dp"
                 android:layout_margin="20dp"
                 android:src="@drawable/image_not_found"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/title" />
+                app:layout_constraintStart_toStartOf="@id/container_title"
+                app:layout_constraintTop_toBottomOf="@id/container_title" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -46,7 +67,7 @@
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cover"
-                app:layout_constraintTop_toBottomOf="@+id/title">
+                app:layout_constraintTop_toBottomOf="@+id/container_title">
 
                 <TextView
                     android:id="@+id/author"
@@ -109,14 +130,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cover" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@+id/linearProgressIndicator"
-                app:layout_constraintEnd_toStartOf="@+id/num_pages"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-                android:contentDescription="@string/actual_page"/>
-
             <TextView
                 android:id="@+id/num_pages"
                 android:layout_width="wrap_content"
@@ -153,14 +166,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
             <Button
-                android:id="@+id/add_favourite"
+                android:id="@+id/want_to_read"
                 style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_marginTop="20dp"
                 android:contentDescription="@string/add_favourite"
-                android:text="Aggiungi ai preferiti"
+                android:text="@string/salva_per_dopo"
                 android:textSize="13dp"
                 app:layout_constraintEnd_toStartOf="@+id/add_reading"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -175,11 +188,11 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:contentDescription="@string/add_favourite"
-                android:text="Inizia a Leggere"
+                android:text="@string/aggiungi_segnalibro"
                 android:textSize="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/add_favourite"
+                app:layout_constraintStart_toEndOf="@+id/want_to_read"
                 app:layout_constraintTop_toTopOf="@+id/view"
                 tools:ignore="TextSizeCheck" />
 
@@ -197,7 +210,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_favourite"
+                app:layout_constraintTop_toBottomOf="@+id/want_to_read"
                 android:maxLines="10"/>
 
             <TextView
@@ -264,5 +277,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

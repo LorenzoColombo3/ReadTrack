@@ -16,5 +16,6 @@ public abstract class BaseUserDataRemoteDataSource {
     public abstract void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener);
     public abstract void removeFavouriteBook(String idBook, String idToken);
     public abstract void addFavouriteBook(String idBook, String imageLink, String idToken);
+    public abstract void updateReadingBook(String idBook, int page, String imageLink, String idToken);
 
 }

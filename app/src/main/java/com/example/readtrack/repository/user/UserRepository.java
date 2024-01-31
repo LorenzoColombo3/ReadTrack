@@ -21,7 +21,7 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     private static final String TAG = UserRepository.class.getSimpleName();
 
-    private final BaseUserAuthenticationRemoteDataSource userRemoteDataSource;
+    private final BaseUserAuthenticationRemoteDataSource userAuthRemoteDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
     private final MutableLiveData<Result> userMutableLiveData;
     private final MutableLiveData<Result> userFavoriteNewsMutableLiveData;
@@ -30,13 +30,13 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     public UserRepository(BaseUserAuthenticationRemoteDataSource userRemoteDataSource,
                           BaseUserDataRemoteDataSource userDataRemoteDataSource) {
-        this.userRemoteDataSource = userRemoteDataSource;
+        this.userAuthRemoteDataSource = userRemoteDataSource;
         this.userDataRemoteDataSource = userDataRemoteDataSource;
         this.userMutableLiveData = new MutableLiveData<>();
         this.favoriteBooksLiveData =new MutableLiveData<>();
         this.userPreferencesMutableLiveData = new MutableLiveData<>();
         this.userFavoriteNewsMutableLiveData = new MutableLiveData<>();
-        this.userRemoteDataSource.setUserResponseCallback(this);
+        this.userAuthRemoteDataSource.setUserResponseCallback(this);
         this.userDataRemoteDataSource.setUserResponseCallback(this);
     }
 
@@ -70,28 +70,28 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     @Override
     public User getLoggedUser() {
-        return userRemoteDataSource.getLoggedUser();
+        return userAuthRemoteDataSource.getLoggedUser();
     }
 
     @Override
     public MutableLiveData<Result> logout() {
-        userRemoteDataSource.logout();
+        userAuthRemoteDataSource.logout();
         return userMutableLiveData;
     }
 
     @Override
     public void signUp(String email, String password) {
-        userRemoteDataSource.signUp(email, password);
+        userAuthRemoteDataSource.signUp(email, password);
     }
 
     @Override
     public void signIn(String email, String password) {
-        userRemoteDataSource.signIn(email, password);
+        userAuthRemoteDataSource.signIn(email, password);
     }
 
     @Override
     public void signInWithGoogle(String token) {
-        userRemoteDataSource.signInWithGoogle(token);
+        userAuthRemoteDataSource.signInWithGoogle(token);
     }
 
     @Override
@@ -181,7 +181,11 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     }
     @Override
     public void resetPassword(String email){
-        userRemoteDataSource.resetPassword(email);
+        userAuthRemoteDataSource.resetPassword(email);
+    }
+    @Override
+    public void updateReadingBook(String idBook, int page, String linkImg, String idToken){
+        userDataRemoteDataSource.updateReadingBook(idBook,page,linkImg,idToken);
     }
 
 }
