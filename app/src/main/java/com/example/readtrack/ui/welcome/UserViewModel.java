@@ -110,4 +110,8 @@ public class UserViewModel extends ViewModel {
         userRepository.addFavouriteBook(idBook, imageLink, idToken);
     }
 
+    public void resetPassword(String email){
+        userRepository.resetPassword(email);
+    }
+
 }

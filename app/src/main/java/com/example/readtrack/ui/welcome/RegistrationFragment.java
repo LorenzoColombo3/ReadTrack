@@ -45,7 +45,6 @@ public class RegistrationFragment extends Fragment {
 
     private FragmentRegistrationBinding binding;
     private UserViewModel userViewModel;
-    private DataEncryptionUtil dataEncryptionUtil;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -96,7 +95,6 @@ public class RegistrationFragment extends Fragment {
                                 if (result.isSuccess()) {
                                     User user = ((Result.UserResponseSuccess) result).getData();
                                     userViewModel.setAuthenticationError(false);
-                                    saveLoginData(email, password, user.getIdToken());
                                     Navigation.findNavController(view).navigate(
                                             R.id.action_registration_to_loginFragment);
                                 } else {
@@ -159,14 +157,5 @@ public class RegistrationFragment extends Fragment {
             binding.textInputLayoutPassword.setError(null);
             return true;
         }
-    }
-
-    private void saveLoginData(String email, String password, String idToken) {
-        /*try {
-            dataEncryptionUtil.writeSecreteDataOnFile(ENCRYPTED_DATA_FILE_NAME,
-                    email.concat(":").concat(password));
-        } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
-        }*/
     }
 }

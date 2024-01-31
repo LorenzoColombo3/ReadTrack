@@ -63,6 +63,7 @@ public class LoginFragment extends Fragment {
     private BeginSignInRequest signInRequest;
     private TextInputLayout textInputLayoutEmail;
     private TextInputLayout textInputLayoutPassword;
+    private Button resetPassword;
     private Button loginButton;
     private Button registrationButton;
     private Button buttonGoogleLogin;
@@ -149,6 +150,7 @@ public class LoginFragment extends Fragment {
         registrationButton= v.findViewById(R.id.button_register);
         progressIndicator= v.findViewById(R.id.progress_bar);
         buttonGoogleLogin= v.findViewById(R.id.button_google_login);
+        resetPassword= v.findViewById(R.id.button_forgot_password);
         return v;
     }
 
@@ -156,6 +158,9 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        resetPassword.setOnClickListener(v -> {
+            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_resetPassword);
+        });
         loginButton.setOnClickListener(v -> {
             String email = textInputLayoutEmail.getEditText().getText().toString().trim();
             String password = textInputLayoutPassword.getEditText().getText().toString().trim();

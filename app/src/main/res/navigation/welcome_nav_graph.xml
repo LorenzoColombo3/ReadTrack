@@ -24,10 +24,22 @@
         <action
             android:id="@+id/action_loginFragment_to_mainActivity"
             app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_loginFragment_to_resetPassword"
+            app:destination="@id/resetPassword" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.readtrack.ui.MainActivity"
         android:label="MainActivity"
         tools:layout="@layout/fragment_books"/>
+    <fragment
+        android:id="@+id/resetPassword"
+        android:name="com.example.readtrack.ui.welcome.ResetPassword"
+        android:label="fragment_reset_password"
+        tools:layout="@layout/fragment_reset_password" >
+        <action
+            android:id="@+id/action_resetPassword_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>

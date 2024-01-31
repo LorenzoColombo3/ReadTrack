@@ -11,8 +11,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.User;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -131,5 +133,12 @@ public class UserAuthenticationRemoteDataSource extends BaseUserAuthenticationRe
             return USER_COLLISION_ERROR;
         }
         return UNEXPECTED_ERROR;
+    }
+
+    @Override
+    public void resetPassword(String email){
+        Log.d("email", "reset prima");
+        firebaseAuth.sendPasswordResetEmail(email);
+        Log.d("email", "reset dopo");
     }
 }
