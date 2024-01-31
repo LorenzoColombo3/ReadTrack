@@ -3,6 +3,7 @@ package com.example.readtrack.ui;
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,9 +40,13 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     public static final String TAG = "ModalBottomSheet";
     private ModalBottomSheetContentBinding binding;
     private DataEncryptionUtil dataEncryptionUtil;
+
+    private BottomSheetListener mListener;
+    private String segnalibro;
     private String idToken;
 
-    public ModalBottomSheet(Books book){
+    public ModalBottomSheet(Books book, String segnalibro ){
+        this.segnalibro=segnalibro;
         this.book=book;
     }
 
@@ -69,20 +74,58 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState){
+        if(segnalibro!=null)
+          binding.textInputEditText.setText(segnalibro);
+        else
+            binding.textInputEditText.setText("0");
         binding.update.setOnClickListener(v->{
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
-            Log.d("pagina",binding.textInputEditText.getText().toString());
-
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>0) {
+                Log.d("null", String.valueOf(getParentFragment()==null));
                 userViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4), idToken);
+                dismiss();
+                Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                        "Segnalibro aggiornato",
+                        Snackbar.LENGTH_SHORT).show();
             } else {
+                binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,
                         "Inserisci un numero di pagine corretto",
                         Snackbar.LENGTH_SHORT).show();
             }
         });
+
+        binding.btnPlus.setOnClickListener(v->{
+            int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
+            pagina++;
+            binding.textInputEditText.setText(String.valueOf(pagina));
+        });
+
+        binding.btnMinus.setOnClickListener(v->{
+            int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
+            pagina--;
+            binding.textInputEditText.setText(String.valueOf(pagina));
+        });
+    }
+    public interface BottomSheetListener {
+        void onButtonPressed();
     }
 
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        notifyButtonPressed();
+    }
+
+    public void setBottomSheetListener(BottomSheetListener listener) {
+        this.mListener = listener;
+    }
+
+    private void notifyButtonPressed() {
+        if (mListener != null) {
+            mListener.onButtonPressed();
+        }
+    }
 
 }

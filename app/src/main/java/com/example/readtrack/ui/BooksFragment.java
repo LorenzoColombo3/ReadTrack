@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,8 +25,6 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.model.Books;
-import com.example.readtrack.model.Result;
-import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -130,17 +127,5 @@ public class BooksFragment extends Fragment implements ResponseCallback{
         return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie&startIndex=0&maxResults=40").getItems();
     }
 
-
-    private void retrieveUserInformationAndStartActivity(String idToken) {
-        Log.d("start", "Start");
-        userViewModel.getUserFavoriteBooksMutableLiveData(idToken).observe(
-                getViewLifecycleOwner(), result -> {
-                    if(result.isSuccess()){
-                        //List<String> books = ((Result.BooksResponseSuccess) result).getFavData();
-                        //Log.d("idFavourite", books.get(0));
-                    }
-                }
-        );
-    }
 
 }

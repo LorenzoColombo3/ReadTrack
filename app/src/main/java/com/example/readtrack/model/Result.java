@@ -19,12 +19,14 @@ public abstract class Result {
     public static final class BooksResponseSuccess extends Result {
         private BooksApiResponse booksResponse;
         private HashMap<String,String> favUserBooks;
+
         public BooksResponseSuccess(BooksApiResponse booksResponse) {
             this.booksResponse = booksResponse;
         }
         public BooksResponseSuccess(HashMap<String,String> favUserBooks){
             this.favUserBooks=favUserBooks;
         }
+
         public HashMap<String, String> getFavData(){ return favUserBooks; }
         public BooksApiResponse getData() {
             return booksResponse;

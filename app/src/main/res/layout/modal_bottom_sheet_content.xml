@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:text="000"
+                android:maxLength="4"
                 android:textSize="75dp"
                 app:layout_constraintEnd_toStartOf="@+id/btnPlus"
                 app:layout_constraintStart_toEndOf="@+id/btnMinus"

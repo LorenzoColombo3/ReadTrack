@@ -11,7 +11,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.readtrack.model.Books;
 import com.example.readtrack.model.User;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
@@ -23,11 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
@@ -116,36 +111,37 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
             }
         });
     }
-
     @Override
-    public void getUserFavoriteBooks(String idToken) {
+    public void getUserFavBooks(String idToken) {
         Log.d("start", "UserData");
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
-                child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.d(TAG, "Error getting data", task.getException());
-                        userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
-                    }
-                    else {
-                        DataSnapshot dataSnapshot = task.getResult();
-                        if (dataSnapshot.exists()) {
-                            // Ottieni i dati come HashMap<String, String>
-                            HashMap<String, String> favoritesMap = new HashMap<>();
-                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
-                                // Assume che i dati siano delle stringhe
-                                String bookId = bookSnapshot.getKey();
-                                String bookData = String.valueOf(bookSnapshot.getValue());
-                                favoritesMap.put(bookId, bookData);
-                            }
-                            // Passa l'HashMap al callback di successo
-                            userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap);
+            databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                    child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Log.d(TAG, "Error getting data", task.getException());
+                            userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
                         } else {
-                            // Nessun dato trovato
-                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
+                            DataSnapshot dataSnapshot = task.getResult();
+                            if (dataSnapshot.exists()) {
+                                // Ottieni i dati come HashMap<String, String>
+                                HashMap<String, String> favoritesMap = new HashMap<>();
+                                for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                    String bookId = bookSnapshot.getKey();
+                                    String bookData = String.valueOf(bookSnapshot.getValue());
+                                    favoritesMap.put(bookId, bookData);
+                                }
+                                // Passa l'HashMap al callback di successo
+                                userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap);
+                            } else {
+                                // Nessun dato trovato
+                                userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
+                            }
                         }
-                    }
-                });
-    }
+                    });
+
+        }
+
+
+
     @Override
     public void updateReadingBook(String idBook, int page, String imgLink, String idToken){
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
@@ -160,6 +156,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                     userBooksRef.child(idBook).child(PAGE).setValue(page);
                     userBooksRef.child(idBook).child(IMG).setValue(imgLink);
                 }
+                getSegnalibro(idBook, idToken);
             }
 
             @Override
@@ -170,5 +167,31 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
 
 
+    }
+
+    @Override
+    public void getReadingBooks(String idToken) {
+    }
+
+    @Override
+    public void getSegnalibro(String idBook, String idToken) {
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(READING_BOOKS).child(idBook).child(PAGE).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
+                    }
+                    else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> readMap = new HashMap<>();
+                            readMap.put(dataSnapshot.getKey(), String.valueOf( dataSnapshot.getValue()));
+                            userResponseCallback.onSuccessFromRemoteBookReading(readMap);
+                        } else {
+                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
+                        }
+                    }
+                });
     }
 }

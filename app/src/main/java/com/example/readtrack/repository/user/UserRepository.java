@@ -26,16 +26,18 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     private final MutableLiveData<Result> userMutableLiveData;
     private final MutableLiveData<Result> userFavoriteNewsMutableLiveData;
     private final MutableLiveData<Result> userPreferencesMutableLiveData;
-    private MutableLiveData<Result> favoriteBooksLiveData;
+    private MutableLiveData<Result> favBooksListLiveData;
+    private MutableLiveData<Result> segnalibroLiveData;
 
     public UserRepository(BaseUserAuthenticationRemoteDataSource userRemoteDataSource,
                           BaseUserDataRemoteDataSource userDataRemoteDataSource) {
         this.userAuthRemoteDataSource = userRemoteDataSource;
         this.userDataRemoteDataSource = userDataRemoteDataSource;
         this.userMutableLiveData = new MutableLiveData<>();
-        this.favoriteBooksLiveData =new MutableLiveData<>();
+        this.favBooksListLiveData =new MutableLiveData<>();
         this.userPreferencesMutableLiveData = new MutableLiveData<>();
         this.userFavoriteNewsMutableLiveData = new MutableLiveData<>();
+        this.segnalibroLiveData = new MutableLiveData<>();
         this.userAuthRemoteDataSource.setUserResponseCallback(this);
         this.userDataRemoteDataSource.setUserResponseCallback(this);
     }
@@ -58,9 +60,15 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
         return userMutableLiveData;
     }
     @Override
-    public MutableLiveData<Result> getUserFavoriteBooks(String idToken){
-        userDataRemoteDataSource.getUserFavoriteBooks(idToken);
-        return favoriteBooksLiveData;
+    public MutableLiveData<Result> getUserFavBooks(String idToken){
+        userDataRemoteDataSource.getUserFavBooks(idToken);
+        return favBooksListLiveData;
+    }
+
+    @Override
+    public MutableLiveData<Result> getSegnalibro(String idBook, String idToken){
+        userDataRemoteDataSource.getSegnalibro(idBook, idToken);
+        return segnalibroLiveData;
     }
 
     @Override
@@ -122,14 +130,16 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     @Override
     public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
-        favoriteBooksLiveData.postValue(result);
+        favBooksListLiveData.postValue(result);
         Log.d("result", String.valueOf(booksList.size()));
     }
 
     @Override
-    public void onSuccessFromGettingUserPreferences() {
-        userPreferencesMutableLiveData.postValue(new Result.UserResponseSuccess(null));
+    public void onSuccessFromRemoteBookReading(HashMap<String, String> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+        segnalibroLiveData.postValue(result);
     }
+
 
     @Override
     public void onFailureFromRemoteDatabase(String message) {

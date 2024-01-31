@@ -11,7 +11,8 @@ public interface UserResponseCallback {
     void onFailureFromAuthentication(String message);
     void onSuccessFromRemoteDatabase(User user);
     void onSuccessFromRemoteDatabase(HashMap<String,String> BooksList);
-    void onSuccessFromGettingUserPreferences();
+
+    void onSuccessFromRemoteBookReading(HashMap<String,String> BooksList);
     void onFailureFromRemoteDatabase(String message);
     void onSuccessLogout();
 }

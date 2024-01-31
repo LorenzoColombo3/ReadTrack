@@ -2,9 +2,11 @@ package com.example.readtrack.ui;
 
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
+import static com.example.readtrack.util.Constants.PAGE;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -49,9 +51,10 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class BookFragment extends Fragment  {
+public class BookFragment extends Fragment implements ModalBottomSheet.BottomSheetListener {
     BottomSheetBehavior bottomSheetBehavior;
     String idToken;
     private UserViewModel userViewModel;
@@ -74,10 +77,13 @@ public class BookFragment extends Fragment  {
     private BooksViewModel booksViewModel;
     private ImageButton favouriteButton;
     private Button aggiungiSegnalibro;
+    private ModalBottomSheet modalBottomSheet;
     private int totalItemCount;
     private int lastVisibleItem;
     private int visibleItemCount;
     private final int threshold = 1;
+    private   Books book;
+    private HashMap<String, String> segnalibro;
     private String query;
     public BookFragment(){}
 
@@ -86,7 +92,7 @@ public class BookFragment extends Fragment  {
         super.onCreate(savedInstanceState);
         BooksRepositoryWithLiveData booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
-
+        segnalibro = new HashMap<>();
         booksViewModel = new ViewModelProvider(
                 requireActivity(),
                 new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
@@ -131,7 +137,6 @@ public class BookFragment extends Fragment  {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         booksViewModel.reset();
-        Books book;
         Bundle args = getArguments();
         if (args != null) {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
@@ -158,7 +163,7 @@ public class BookFragment extends Fragment  {
             } else {
                 book = null;
             }
-            setBook(book);
+            setBook();
         } else {
             book = null;
         }
@@ -265,14 +270,14 @@ public class BookFragment extends Fragment  {
             }
         });
         aggiungiSegnalibro.setOnClickListener(v -> {
-            Log.d("entrah?", "non penso proprioh");
             mostraModalBottomSheet(book);
         });
-
     }
     private void mostraModalBottomSheet(Books book) {
-        ModalBottomSheet modalBottomSheet = new ModalBottomSheet(book);
+        modalBottomSheet = new ModalBottomSheet(book, segnalibro.get(PAGE));
+        modalBottomSheet.setBottomSheetListener(this);
         modalBottomSheet.show(getActivity().getSupportFragmentManager(), ModalBottomSheet.TAG);
+
     }
     private boolean isConnected() {
         ConnectivityManager cm =
@@ -288,7 +293,7 @@ public class BookFragment extends Fragment  {
         booksViewModel.setLoading(false);
     }
 
-    private void setBook(Books book){
+    private void setBook(){
         String titleString=book.getVolumeInfo().getTitle();
         if(titleString.length()>30) {
             this.title.setText(book.getVolumeInfo().getTitle().substring(0, 30) + "...");
@@ -321,6 +326,7 @@ public class BookFragment extends Fragment  {
             }
         }
         this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+        aggiornaSegnalibro();
         this.description.setText(book.getVolumeInfo().getDescription());// Aggiungi un listener per ascoltare i cambiamenti nel layout del TextView
         description.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -352,4 +358,22 @@ public class BookFragment extends Fragment  {
             readMoreButton.setVisibility(View.INVISIBLE);
         }
     }
+
+    public void aggiornaSegnalibro(){
+        userViewModel.getSegnalibro(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
+            if (result.isSuccess()) {
+                segnalibro = ((Result.BooksResponseSuccess) result).getFavData();
+                this.numPages.setText(segnalibro.get(PAGE) + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+            } else {
+                this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+            }
+        });
+    }
+
+    @Override
+    public void onButtonPressed() {
+        aggiornaSegnalibro();
+
+    }
 }
+

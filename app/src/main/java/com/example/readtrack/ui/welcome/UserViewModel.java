@@ -2,17 +2,14 @@ package com.example.readtrack.ui.welcome;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
-import java.util.List;
 import java.util.Set;
 
 public class UserViewModel extends ViewModel {
@@ -21,11 +18,13 @@ public class UserViewModel extends ViewModel {
     private final IUserRepository userRepository;
     private MutableLiveData<Result> userMutableLiveData;
     private MutableLiveData<Result> userPreferencesMutableLiveData;
-    private MutableLiveData<Result> favoriteBooksLiveData;
+    private MutableLiveData<Result> favBooksLiveData;
+    private MutableLiveData<Result> segnalibroLiveData;
     private boolean authenticationError;
 
     public UserViewModel(IUserRepository userRepository) {
-        this.favoriteBooksLiveData= new MutableLiveData<>();
+        this.favBooksLiveData = new MutableLiveData<>();
+        this.segnalibroLiveData = new MutableLiveData<>();
         this.userRepository = userRepository;
         authenticationError = false;
     }
@@ -40,6 +39,11 @@ public class UserViewModel extends ViewModel {
         return userMutableLiveData;
     }
 
+    public MutableLiveData<Result> getSegnalibro(String idBook, String idToken){
+        segnalibroLiveData=userRepository.getSegnalibro(idBook, idToken);
+        return segnalibroLiveData;
+    }
+
     public MutableLiveData<Result> getGoogleUserMutableLiveData(String token) {
         if (userMutableLiveData == null) {
             getUserData(token);
@@ -47,9 +51,9 @@ public class UserViewModel extends ViewModel {
         return userMutableLiveData;
     }
 
-    public MutableLiveData<Result> getUserFavoriteBooksMutableLiveData(String idToken) {
-        favoriteBooksLiveData = userRepository.getUserFavoriteBooks(idToken);
-        return favoriteBooksLiveData;
+    public MutableLiveData<Result> getFavBooksMutableLiveData(String idToken) {
+        favBooksLiveData = userRepository.getUserFavBooks(idToken);
+        return favBooksLiveData;
     }
 
     public void saveUserPreferences(String favoriteCountry, Set<String> favoriteTopics, String idToken) {
