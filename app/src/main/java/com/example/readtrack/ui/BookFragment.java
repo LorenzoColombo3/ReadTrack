@@ -35,6 +35,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
+import com.example.readtrack.databinding.FragmentBookBinding;
+import com.example.readtrack.databinding.FragmentProfileBinding;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
@@ -56,29 +58,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BookFragment extends Fragment implements ModalBottomSheet.BottomSheetListener {
-    BottomSheetBehavior bottomSheetBehavior;
-    String idToken;
-    LinearProgressIndicator progress;
+    private FragmentBookBinding binding;
+    private String idToken;
     private UserViewModel userViewModel;
-    DataEncryptionUtil dataEncryptionUtil;
+    private DataEncryptionUtil dataEncryptionUtil;
     private List<Books> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
-    private RecyclerView recyclerViewOthBooks;
-    private TextView title;
-    private ImageView cover;
-    private TextView author;
-    private TextView year;
-    private TextView genre;
-    private TextView publisher;
-    private TextView isbn;
-    private TextView numPages;
-    private TextView description;
-    private TextView titleOthBooks;
-    private TextView readMoreButton;
-    private TextView readLessButton;
     private BooksViewModel booksViewModel;
-    private ImageButton favouriteButton;
-    private Button aggiungiSegnalibro;
     private ModalBottomSheet modalBottomSheet;
     private int totalItemCount;
     private int lastVisibleItem;
@@ -116,24 +102,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_book, container, false);
-        title=view.findViewById(R.id.title);
-        cover=view.findViewById(R.id.cover);
-        author=view.findViewById(R.id.author);
-        year=view.findViewById(R.id.year);
-        genre=view.findViewById(R.id.genre);
-        publisher=view.findViewById(R.id.publisher);
-        isbn=view.findViewById(R.id.isbn);
-        numPages=view.findViewById(R.id.num_pages);
-        description=view.findViewById(R.id.description);
-        recyclerViewOthBooks=view.findViewById(R.id.recyclerview_other_books);
-        titleOthBooks=view.findViewById(R.id.title_oth_books);
-        readMoreButton=view.findViewById(R.id.read_more_button);
-        readLessButton=view.findViewById(R.id.read_less_button);
-        favouriteButton=view.findViewById(R.id.add_favourite);
-        aggiungiSegnalibro=view.findViewById(R.id.add_reading);
-        progress=view.findViewById(R.id.linearProgressIndicator);
-        return view;
+        binding = FragmentBookBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -148,20 +118,20 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     @Override
                     public void onFavouriteCheckResult(boolean isFavourite) {
                         if (isFavourite) {
-                            favouriteButton.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
+                            binding.addFavourite.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
                                     R.drawable.ic_baseline_favorite_24));
-                            favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
+                            binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
                         } else {
-                            favouriteButton.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
+                            binding.addFavourite.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
                                     R.drawable.ic_baseline_favorite_border_24));
-                            favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
+                            binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
                         }
                     }
                 });
                 if(book.getVolumeInfo().getAuthors()!=null) {
                     query="autor:"+ book.getVolumeInfo().getAuthors().get(0);
                 }else {
-                    this.titleOthBooks.setText("Altri libri di Sconosciuto");
+                    binding.titleOthBooks.setText("Altri libri di Sconosciuto");
                 }
             } else {
                 book = null;
@@ -172,18 +142,18 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         }
 
         String finalIdToken = idToken;
-        favouriteButton.setOnClickListener(v->{
+        binding.addFavourite.setOnClickListener(v->{
             userViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
                 if (isFavourite) {
-                    favouriteButton.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
+                    binding.addFavourite.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_border_24));
-                    favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
+                    binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
                     userViewModel.removeFavouriteBook(book.getId(),finalIdToken);
                 } else {
                     String imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
-                    favouriteButton.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
+                    binding.addFavourite.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_24));
-                    favouriteButton.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
+                    binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
                     userViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
                 }
             });
@@ -208,8 +178,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                         });
                     }
                 });
-        recyclerViewOthBooks.setLayoutManager(layoutManager);
-        recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+        binding.recyclerviewOtherBooks.setLayoutManager(layoutManager);
+        binding.recyclerviewOtherBooks.setAdapter(booksRecyclerViewAdapter);
         booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 BooksApiResponse booksApiResponse=((Result.BooksResponseSuccess) result).getData();
@@ -218,8 +188,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     otherBooks.clear();
                     booksViewModel.setTotalResults(booksApiResponse.getTotalItems());
                     this.otherBooks.addAll(booksSearched);
-                    recyclerViewOthBooks.setLayoutManager(layoutManager);
-                    recyclerViewOthBooks.setAdapter(booksRecyclerViewAdapter);
+                    binding.recyclerviewOtherBooks.setLayoutManager(layoutManager);
+                    binding.recyclerviewOtherBooks.setAdapter(booksRecyclerViewAdapter);
                 } else {
                     booksViewModel.setLoading(false);
                     booksViewModel.setCurrentResults(otherBooks.size());
@@ -235,11 +205,10 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     booksRecyclerViewAdapter.notifyItemRangeInserted(initialSize, otherBooks.size());
                 }
             } else {
-                // Gestisci il caso in cui non ci sono risultati
                 Log.d("search result", "Nessun risultato trovato");
             }
         });
-        recyclerViewOthBooks.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.recyclerviewOtherBooks.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -272,7 +241,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                 }
             }
         });
-        aggiungiSegnalibro.setOnClickListener(v -> {
+        binding.addReading.setOnClickListener(v -> {
             mostraModalBottomSheet(book);
         });
     }
@@ -299,66 +268,66 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     private void setBook(){
         String titleString=book.getVolumeInfo().getTitle();
         if(titleString.length()>30) {
-            this.title.setText(book.getVolumeInfo().getTitle().substring(0, 30) + "...");
+            binding.title.setText(book.getVolumeInfo().getTitle().substring(0, 30) + "...");
         }else{
-            this.title.setText(book.getVolumeInfo().getTitle());
+            binding.title.setText(book.getVolumeInfo().getTitle());
         }
 
         if(book.getVolumeInfo().getImageLinks()!=null) {
             Picasso.get()
                     .load("https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
-                    .into(this.cover);
+                    .into(binding.cover);
         }
         if(book.getVolumeInfo().getAuthors()!=null){
-            this.author.setText(book.getVolumeInfo().getAuthors().get(0));
+            binding.author.setText(book.getVolumeInfo().getAuthors().get(0));
         }else{
-            this.author.setText("Sconosciuto");
+            binding.author.setText("Sconosciuto");
         }
-        this.year.setText(book.getVolumeInfo().getPublishedDate().substring(0,4));
+        binding.year.setText(book.getVolumeInfo().getPublishedDate().substring(0,4));
         if(book.getVolumeInfo().getCategories()!=null) {
-            this.genre.setText(book.getVolumeInfo().getCategories().get(0));
+            binding.genre.setText(book.getVolumeInfo().getCategories().get(0));
         }else{
-            this.genre.setText("Sconosciuto");
+            binding.genre.setText("Sconosciuto");
         }
-        this.publisher.setText(book.getVolumeInfo().getPublisher());
+        binding.publisher.setText(book.getVolumeInfo().getPublisher());
         if(book.getVolumeInfo().getIndustryIdentifiers()!=null) {
             if (book.getVolumeInfo().getIndustryIdentifiers().size() == 2) {
-                this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(1).getIdentifier());
+                binding.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(1).getIdentifier());
             } else {
-                this.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
+                binding.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
             }
         }
-        this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+        binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
         aggiornaSegnalibro();
-        this.description.setText(book.getVolumeInfo().getDescription());// Aggiungi un listener per ascoltare i cambiamenti nel layout del TextView
-        description.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+        binding.description.setText(book.getVolumeInfo().getDescription());// Aggiungi un listener per ascoltare i cambiamenti nel layout del TextView
+        binding.description.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
             public boolean onPreDraw() {
-                description.getViewTreeObserver().removeOnPreDrawListener(this);
-                int lineCount = description.getLineCount();
+                binding.description.getViewTreeObserver().removeOnPreDrawListener(this);
+                int lineCount = binding.description.getLineCount();
                 checkReadMoreButtonVisibility();
                 return true;
             }
         });
-        readMoreButton.setOnClickListener(view -> {
-            description.setMaxLines(Integer.MAX_VALUE);
-            description.setEllipsize(null);
-            readMoreButton.setVisibility(View.INVISIBLE);
-            readLessButton.setVisibility(View.VISIBLE);
+        binding.readMoreButton.setOnClickListener(view -> {
+            binding.description.setMaxLines(Integer.MAX_VALUE);
+            binding.description.setEllipsize(null);
+            binding.readMoreButton.setVisibility(View.INVISIBLE);
+            binding.readLessButton.setVisibility(View.VISIBLE);
         });
-        readLessButton.setOnClickListener(view -> {
-            description.setMaxLines(10);
-            description.setEllipsize(null);
-            readMoreButton.setVisibility(View.VISIBLE);
-            readLessButton.setVisibility(View.INVISIBLE);
+        binding.readLessButton.setOnClickListener(view -> {
+            binding.description.setMaxLines(10);
+            binding.description.setEllipsize(null);
+            binding.readMoreButton.setVisibility(View.VISIBLE);
+            binding.readLessButton.setVisibility(View.INVISIBLE);
         });
     }
     private void checkReadMoreButtonVisibility() {
         // Verifica se il testo è troncato
-        if (description.getLineCount() > description.getMaxLines()) {
-            readMoreButton.setVisibility(View.VISIBLE);
+        if (binding.description.getLineCount() > binding.description.getMaxLines()) {
+            binding.readMoreButton.setVisibility(View.VISIBLE);
         } else {
-            readMoreButton.setVisibility(View.INVISIBLE);
+            binding.readMoreButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -369,10 +338,10 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                 int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
                 int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE).trim()); // Pagina del segnalibro
                 float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
-                progress.setProgress((int) percentualeCompletamento);
-                this.numPages.setText(segnalibro.get(PAGE).trim() + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+                binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
+                binding.numPages.setText(segnalibro.get(PAGE).trim() + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
             } else {
-                this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+                binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
             }
         });
     }

@@ -87,7 +87,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();
-                //dismiss(); crea problemi sull'aggiornamento del segnalibro in BookFragment
+                //dismiss(); //crea problemi sull'aggiornamento del segnalibro in BookFragment
             } else {
                 binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,

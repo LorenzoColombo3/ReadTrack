@@ -78,8 +78,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         IUserRepository userRepository = ServiceLocator.getInstance().
                 getUserRepository(requireActivity().getApplication());
         userViewModel = new ViewModelProvider(
@@ -210,9 +208,9 @@ public class LoginFragment extends Fragment {
                             getViewLifecycleOwner(), result -> {
                                 if (result.isSuccess()) {
                                     User user = ((Result.UserResponseSuccess) result).getData();
-                                    saveLoginData(email, password, user.getIdToken());
                                     userViewModel.setAuthenticationError(false);
                                     Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
+                                    saveLoginData(email, password, user.getIdToken());
                                     requireActivity().finish();
                                     Log.d("prova","b");
                                 } else {
