@@ -3,12 +3,16 @@ package com.example.readtrack.util;
 import android.app.Application;
 
 import com.example.readtrack.database.BookRoomDatabase;
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.repository.user.UserRepository;
 import com.example.readtrack.service.BookApiService;
 import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.source.books.BooksDataSource;
+import com.example.readtrack.source.books.FavoriteBooksSource;
+import com.example.readtrack.source.books.FinishedBooksSource;
+import com.example.readtrack.source.books.ReadingBooksSource;
+import com.example.readtrack.source.books.SavedBooksSource;
 import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
 import com.example.readtrack.source.user.UserAuthenticationRemoteDataSource;
@@ -47,11 +51,19 @@ public class ServiceLocator {
         return BookRoomDatabase.getDatabase(application);
     }
 
-    public BooksResponseRepositoryWithLiveData getBookRepository(Application application) {
+    public BooksRepository getBookRepository(Application application) {
         BaseBooksSource booksDataSource;
+        FavoriteBooksSource favoriteBooksSource;
+        ReadingBooksSource readingBooksSource;
+        FinishedBooksSource finishedBooksSource;
+        SavedBooksSource savedBooksSource;
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
         booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
-        return new BooksResponseRepositoryWithLiveData(booksDataSource);
+        favoriteBooksSource = new FavoriteBooksSource(sharedPreferencesUtil);
+        readingBooksSource = new ReadingBooksSource(sharedPreferencesUtil);
+        finishedBooksSource = null;
+        savedBooksSource = null;
+        return new BooksRepository(booksDataSource, favoriteBooksSource, readingBooksSource, savedBooksSource, finishedBooksSource);
     }
     public IUserRepository getUserRepository(Application application) {
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);

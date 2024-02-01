@@ -3,6 +3,7 @@ package com.example.readtrack.repository.books;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface BooksResponseCallback {
@@ -10,6 +11,6 @@ public interface BooksResponseCallback {
 
     void onSuccessFromRemoteId(BooksApiResponse booksApiResponse);
     void onFailureFromRemote(Exception exception);
-    void onBooksFavoriteStatusChanged(List<Books> books);
-    void onDeleteFavoriteBooksSuccess(List<Books> favoriteBooks);
+    void onSuccessFromRemoteDatabase(HashMap<String,String> BooksList, String path);
+    void onSuccessFromRemoteMarkReading(HashMap<String,String> BooksList);
 }

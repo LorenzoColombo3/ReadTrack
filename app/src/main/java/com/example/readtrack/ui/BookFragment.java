@@ -32,7 +32,7 @@ import com.example.readtrack.databinding.FragmentBookBinding;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -68,7 +68,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         segnalibro = new HashMap<>();
         booksViewModel = new ViewModelProvider(
@@ -104,7 +104,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         if (args != null) {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
                 book = (Books) args.get("bookArgument");
-                userViewModel.isFavouriteBook(book.getId(), idToken, new OnFavouriteCheckListener() {
+                booksViewModel.isFavouriteBook(book.getId(), idToken, new OnFavouriteCheckListener() {
                     @Override
                     public void onFavouriteCheckResult(boolean isFavourite) {
                         if (isFavourite) {
@@ -133,18 +133,18 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
 
         String finalIdToken = idToken;
         binding.addFavourite.setOnClickListener(v->{
-            userViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
+            booksViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
                 if (isFavourite) {
                     binding.addFavourite.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_border_24));
                     binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
-                    userViewModel.removeFavouriteBook(book.getId(),finalIdToken);
+                    booksViewModel.removeFavouriteBook(book.getId(),finalIdToken);
                 } else {
                     String imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
                     binding.addFavourite.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_24));
                     binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
-                    userViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
+                    booksViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
                 }
             });
         });
@@ -322,14 +322,16 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     }
 
     public void aggiornaSegnalibro(){
-        userViewModel.getSegnalibro(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
+        booksViewModel.getMarkerLiveData(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 segnalibro = ((Result.BooksResponseSuccess) result).getBooksData();
-                int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
-                int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE).trim()); // Pagina del segnalibro
-                float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
-                binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
-                binding.numPages.setText(segnalibro.get(PAGE).trim() + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+                if(segnalibro.get(PAGE)!=null) {
+                    int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
+                    int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE)); // Pagina del segnalibro
+                    float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
+                    binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
+                    binding.numPages.setText(segnalibro.get(PAGE).trim() + "/" + String.valueOf(numeroTotalePagine));
+                }
             } else {
                 binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
             }

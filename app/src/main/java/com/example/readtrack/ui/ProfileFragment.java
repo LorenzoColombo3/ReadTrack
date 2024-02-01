@@ -26,7 +26,7 @@ import com.example.readtrack.R;
 import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentProfileBinding;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -52,7 +52,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
 
         booksViewModel = new ViewModelProvider(
@@ -117,7 +117,7 @@ public class ProfileFragment extends Fragment {
         recyclerViewBooks.setAdapter(booksRecyclerViewAdapter);
         switch (path) {
             case FAVOURITES_BOOKS:
-                userViewModel.getFavBooksMutableLiveData(idToken).observe(
+                booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
@@ -131,7 +131,7 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
             case READING_BOOKS:
-                userViewModel.getReadingBooksMutableLiveData(idToken).observe(
+                booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
@@ -146,7 +146,7 @@ public class ProfileFragment extends Fragment {
                 break;
 
             case RED_BOOKS:
-                userViewModel.getFavBooksMutableLiveData(idToken).observe(
+                booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment {
                 break;
 
             case WANT_TO_READ:
-                userViewModel.getFavBooksMutableLiveData(idToken).observe(
+                booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri

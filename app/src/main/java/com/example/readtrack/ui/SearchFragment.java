@@ -27,7 +27,7 @@ import com.example.readtrack.R;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
@@ -63,7 +63,7 @@ public class SearchFragment extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         booksList= new ArrayList<>();
-        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         booksViewModel = new ViewModelProvider(
                 requireActivity(),

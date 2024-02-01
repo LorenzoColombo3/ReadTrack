@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.readtrack.databinding.ModalBottomSheetContentBinding;
 import com.example.readtrack.model.Books;
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -29,7 +29,7 @@ import java.security.GeneralSecurityException;
 
 public class ModalBottomSheet extends BottomSheetDialogFragment {
     private final Books book;
-    private UserViewModel userViewModel;
+    private BooksViewModel booksViewModel;
 
     public static final String TAG = "ModalBottomSheet";
     private ModalBottomSheetContentBinding binding;
@@ -52,13 +52,11 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
-        IUserRepository userRepository = ServiceLocator.getInstance().
-                getUserRepository(getActivity().getApplication());
-        userViewModel = new ViewModelProvider(
-                this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        booksViewModel = new ViewModelProvider(
+                this, new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
         try {
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
@@ -76,7 +74,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>0) {
                 Log.d("null", String.valueOf(getParentFragment()==null));
-                userViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4), idToken);
+                booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4), idToken);
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();

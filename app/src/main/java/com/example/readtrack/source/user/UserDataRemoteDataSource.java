@@ -250,9 +250,6 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                 // Gestisci l'errore
             }
         });
-
-
-
     }
 
     @Override

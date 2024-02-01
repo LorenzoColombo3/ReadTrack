@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksRepository;
 
 public class BooksViewModelFactory implements ViewModelProvider.Factory {
 
-    private final BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData;
+    private final BooksRepository booksRepositoryWithLiveData;
 
-    public BooksViewModelFactory(BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData) {
+    public BooksViewModelFactory(BooksRepository booksRepositoryWithLiveData) {
         this.booksRepositoryWithLiveData = booksRepositoryWithLiveData;
     }
 
