@@ -38,5 +38,7 @@ public class Constants {
     public static final String WANT_TO_READ="wantRead";
     public static final String PAGE="page";
     public static final String IMG="img";
+    public static final String NUMPAGES="npag";
+    public static final String TITLE="title";
     public static final int PICK_PROFILE_IMAGE_REQUEST_CODE=1;
 }

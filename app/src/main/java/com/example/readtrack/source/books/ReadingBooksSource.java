@@ -4,13 +4,16 @@ import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 import static com.example.readtrack.util.Constants.IMG;
+import static com.example.readtrack.util.Constants.NUMPAGES;
 import static com.example.readtrack.util.Constants.PAGE;
 import static com.example.readtrack.util.Constants.READING_BOOKS;
+import static com.example.readtrack.util.Constants.TITLE;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.readtrack.model.Books;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ReadingBooksSource extends BaseReadingBooksSource{
@@ -34,7 +38,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
         this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
     @Override
-    public void getUserReadingBooks(String idToken) {
+    public void getUserReadingBooksTumbnail(String idToken) {
         Log.d("start", "UserData");
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
                 child(READING_BOOKS).get().addOnCompleteListener(task -> {
@@ -63,6 +67,38 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
     }
 
     @Override
+    public void getUserReadingBooks(String idToken) {
+        Log.d("start", "UserData");
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(READING_BOOKS).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        booksResponseCallback.onFailureFromRemote(task.getException());
+                    } else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come ArrayList<BookModel>
+                            ArrayList<Books> booksList = new ArrayList<>();
+                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                String bookId = bookSnapshot.getKey();
+                                String bookCover = bookSnapshot.child(IMG).getValue(String.class);
+                                String bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
+                                int numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
+                                // Creare un oggetto BookModel con ID e immagine e aggiungerlo all'ArrayList
+                                booksList.add(new Books(bookId, bookCover, bookTitle, numPages));
+                            }
+                            // Passa l'ArrayList al callback di successo
+                            booksResponseCallback.onSuccessFromRemoteReadingBooks(booksList);
+                        } else {
+                            // Nessun dato trovato
+                            booksResponseCallback.onSuccessFromRemoteReadingBooks(new ArrayList<>());
+                        }
+                    }
+                });
+
+    }
+
+    @Override
     public void removeReadingBook(String idBook, String idToken) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -83,7 +119,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
     }
 
     @Override
-    public void updateReadingBook(String idBook, int page, String imgLink, String idToken){
+    public void updateReadingBook(String idBook, int page, String imgLink, String title, int numPages,  String idToken){
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -95,6 +131,8 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                 }else{
                     userBooksRef.child(idBook).child(PAGE).setValue(page);
                     userBooksRef.child(idBook).child(IMG).setValue(imgLink);
+                    userBooksRef.child(idBook).child(TITLE).setValue(title);
+                    userBooksRef.child(idBook).child(NUMPAGES).setValue(numPages);
                 }
                 getSegnalibro(idBook, idToken);
             }
@@ -121,6 +159,51 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                             HashMap<String, String> readMap = new HashMap<>();
                             readMap.put(dataSnapshot.getKey(), String.valueOf( dataSnapshot.getValue()));
                             booksResponseCallback.onSuccessFromRemoteMarkReading(readMap);
+                        } else {
+                            booksResponseCallback.onSuccessFromRemoteMarkReading(new HashMap<>());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getNumPages(String idBook, String idToken) {
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(READING_BOOKS).child(idBook).child(NUMPAGES).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        booksResponseCallback.onFailureFromRemote(task.getException());
+                    }
+                    else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            HashMap<String, String> readMap = new HashMap<>();
+                            readMap.put(dataSnapshot.getKey(), String.valueOf( dataSnapshot.getValue()));
+                            booksResponseCallback.onSuccessFromRemoteNumPagesReading(readMap);
+                        } else {
+                            booksResponseCallback.onSuccessFromRemoteMarkReading(new HashMap<>());
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void getTitle(String idBook, String idToken) {
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(READING_BOOKS).child(idBook).child(TITLE).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        booksResponseCallback.onFailureFromRemote(task.getException());
+                    }
+                    else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> readMap = new HashMap<>();
+                            readMap.put(dataSnapshot.getKey(), String.valueOf( dataSnapshot.getValue()));
+                            booksResponseCallback.onSuccessFromRemoteTitleReading(readMap);
+
+                            Log.d("passa3",String.valueOf( dataSnapshot.getValue()));
                         } else {
                             booksResponseCallback.onSuccessFromRemoteMarkReading(new HashMap<>());
                         }

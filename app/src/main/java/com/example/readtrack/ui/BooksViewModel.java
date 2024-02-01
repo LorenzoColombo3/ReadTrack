@@ -9,6 +9,8 @@ import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
+import java.util.MissingFormatArgumentException;
+
 public class BooksViewModel extends ViewModel {
     private static final String TAG = BooksViewModel.class.getSimpleName();
 
@@ -21,12 +23,14 @@ public class BooksViewModel extends ViewModel {
     private MutableLiveData<Result> finishedBooksLiveData;
     private MutableLiveData<Result> savedBooksLiveData;
     private MutableLiveData<Result> markerLiveData;
+    private MutableLiveData<Result> titleLiveData;
+    private MutableLiveData<Result> numPagesLiveData;
 
     private int page;
     private int currentResults;
     private int totalResults;
     private boolean isLoading;
-
+    private MutableLiveData<Result> readingBooksCompleteLiveData;
 
 
     public BooksViewModel(BooksRepository booksRepository) {
@@ -35,12 +39,19 @@ public class BooksViewModel extends ViewModel {
         readingBooksLiveData = new MutableLiveData<>();
         finishedBooksLiveData = new MutableLiveData<>();
         savedBooksLiveData = new MutableLiveData<>();
+        markerLiveData =new MutableLiveData<>();
+        titleLiveData = new MutableLiveData<>();
+        numPagesLiveData =new MutableLiveData<>();
+        readingBooksCompleteLiveData = new MutableLiveData<>();
     }
 
     public void reset(){
         apiBooksLiveData = new MutableLiveData<Result>();
         idBookLiveData = new MutableLiveData<Result>();
         markerLiveData = new MutableLiveData<Result>();
+        titleLiveData = new MutableLiveData<>();
+        numPagesLiveData = new MutableLiveData<>();
+        readingBooksCompleteLiveData =new MutableLiveData<>();
         this.page=0;
         this.totalResults=0;
         booksRepository.reset();
@@ -65,6 +76,16 @@ public class BooksViewModel extends ViewModel {
         return markerLiveData;
     }
 
+    public MutableLiveData<Result> getTitleLiveData(String idBook, String idToken){
+        Log.d("passa1","");
+        titleLiveData= booksRepository.getTitle(idBook, idToken);
+        return titleLiveData;
+    }
+    public MutableLiveData<Result> getNumPagesLiveData(String idBook, String idToken){
+        numPagesLiveData= booksRepository.getTitle(idBook, idToken);
+        return numPagesLiveData;
+    }
+
     public MutableLiveData<Result> getFavBooksMutableLiveData(String idToken) {
         favBooksListLiveData = booksRepository.getUserFavBooks(idToken);
         return favBooksListLiveData;
@@ -73,6 +94,10 @@ public class BooksViewModel extends ViewModel {
     public MutableLiveData<Result> getReadingBooksMutableLiveData(String idToken) {
         readingBooksLiveData = booksRepository.getUserReadingBooks(idToken);
         return readingBooksLiveData;
+    }
+    public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
+        readingBooksCompleteLiveData = booksRepository.getUserReadingBooksComplete(idToken);
+        return readingBooksCompleteLiveData;
     }
 
     /*public MutableLiveData<Result> getStartBooksMutableLiveData(String idToken) {
@@ -96,8 +121,8 @@ public class BooksViewModel extends ViewModel {
         booksRepository.addFavouriteBook(idBook, imageLink, idToken);
     }
 
-    public void updateReadingBooks(String idBook, int page, String linkImg, String idToken){
-        booksRepository.updateReadingBook(idBook,page,linkImg,idToken);
+    public void updateReadingBooks(String idBook, int page, String linkImg,String title,int numPages, String idToken){
+        booksRepository.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
     }
 
     public int getPage() {

@@ -96,9 +96,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="24dp"
+                android:layout_marginBottom="1dp"
                 android:background="@drawable/rounded_background"
                 android:backgroundTint="@color/pink"
                 android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
@@ -140,8 +142,7 @@
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"
-                app:layout_constraintBottom_toTopOf="@id/linearLayout6">
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
                 <TextView
                     android:layout_width="match_parent"

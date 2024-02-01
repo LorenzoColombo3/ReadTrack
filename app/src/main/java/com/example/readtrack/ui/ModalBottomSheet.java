@@ -74,7 +74,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>0) {
                 Log.d("null", String.valueOf(getParentFragment()==null));
-                booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4), idToken);
+                booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4),book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken);
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();

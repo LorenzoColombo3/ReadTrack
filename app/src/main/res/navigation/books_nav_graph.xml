@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/books_nav_graph"
+    app:startDestination="@id/readingBooksFragment">
+    <fragment
+        android:id="@+id/readingBooksFragment"
+        android:name="com.example.readtrack.ui.ReadingBooksFragment"
+        android:label="fragment_reading_books"
+        tools:layout="@layout/fragment_reading_books" >
+        <action
+            android:id="@+id/action_readingBooksFragment_to_savedBooksFragment"
+            app:destination="@id/savedBooksFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedBooksFragment"
+        android:name="com.example.readtrack.ui.SavedBooksFragment"
+        android:label="fragment_saved_books"
+        tools:layout="@layout/fragment_saved_books" >
+        <action
+            android:id="@+id/action_savedBooksFragment_to_readingBooksFragment"
+            app:destination="@id/readingBooksFragment" />
+    </fragment>
+</navigation>

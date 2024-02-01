@@ -32,6 +32,19 @@ public class Books implements Parcelable {
     @ColumnInfo(name = "is_favorite")
     private boolean favorite=false;
 
+    public Books(String id, String thumbnail, String title, int numPages){
+        this.id = id;
+        this.volumeInfo = new VolumeInfo(); // Inizializza volumeInfo
+        this.saleInfo = new SaleInfo();     // Inizializza saleInfo
+        this.accessInfo = new AccessInfo(); // Inizializza accessInfo
+        this.searchInfo = new SearchInfo(); // Inizializza searchInfo
+
+        this.volumeInfo.setImageLinks(new ImageLinks());
+        this.volumeInfo.getImageLinks().setThumbnail(thumbnail);
+        this.volumeInfo.setTitle(title);
+        this.volumeInfo.setPageCount(numPages);
+    }
+
     public Books(){
 
     }

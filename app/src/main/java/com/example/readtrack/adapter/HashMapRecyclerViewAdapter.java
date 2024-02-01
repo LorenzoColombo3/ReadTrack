@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
 import com.example.readtrack.model.Books;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -52,7 +54,11 @@ public class HashMapRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ((BooksViewHolder) holder).bind(bookList.get(chiavi.get(position)));
+        if (holder instanceof HashMapRecyclerViewAdapter.ReadingBooksViewHolder) {
+            //((ReadingBooksViewHolder) holder).bind(bookList.get(chiavi.get(position)), bookList.);
+        } else if (holder instanceof HashMapRecyclerViewAdapter.BooksViewHolder) {
+            ((BooksViewHolder) holder).bind(bookList.get(chiavi.get(position)));
+        }
     }
 
     @Override
@@ -62,6 +68,43 @@ public class HashMapRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         return 0;
     }
+
+    public class ReadingBooksViewHolder extends  RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private final ImageView imageViewThumbnail;
+        private final TextView title;
+        private final TextView percentage;
+        private final LinearProgressIndicator progress;
+
+        public ReadingBooksViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imageViewThumbnail=itemView.findViewById(R.id.image_cover);
+            title=itemView.findViewById(R.id.title);
+            percentage=itemView.findViewById(R.id.reading_percentage);
+            progress=itemView.findViewById(R.id.linearProgressIndicator);
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(String link, String title, int percent) {
+            try {
+                Picasso.get()
+                        .load(link)
+                        .into(imageViewThumbnail);
+            } catch (NullPointerException pointerException) {
+                Log.d("pointer exception", pointerException.toString());
+            }
+            this.title.setText(title);
+            percentage.setText("Percentuale di lettura: "+percent);
+            progress.setProgress(percent);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+
 
     public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView imageViewThumbnail;

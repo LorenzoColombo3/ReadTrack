@@ -9,9 +9,9 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.model.User;
 import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.source.books.BaseFavoriteBooksSource;
 import com.example.readtrack.source.books.BaseFinishedBooksSource;
@@ -19,8 +19,8 @@ import com.example.readtrack.source.books.BaseReadingBooksSource;
 import com.example.readtrack.source.books.BaseSavedBooksSource;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 public class BooksRepository implements BooksResponseCallback {
 
@@ -35,11 +35,15 @@ public class BooksRepository implements BooksResponseCallback {
 
     private MutableLiveData<Result> savedBooksLiveData;
     private MutableLiveData<Result> markerLiveData;
+    private MutableLiveData<Result> numPagesLiveData;
+    private MutableLiveData<Result> titleLiveData;
     private final BaseBooksSource booksDataSource;
     private final BaseFavoriteBooksSource favoriteBooksSource;
     private final BaseReadingBooksSource readingBooksSource;
     private final BaseSavedBooksSource savedBooksSource;
     private final BaseFinishedBooksSource finishedBooksSource;
+    private MutableLiveData<Result> booksLiveData;
+    private MutableLiveData<Result> readingBooksCompleteLiveData;
 
 
     public BooksRepository(BaseBooksSource booksDataSource, BaseFavoriteBooksSource favoriteBooksSource,
@@ -52,6 +56,10 @@ public class BooksRepository implements BooksResponseCallback {
         finishedBooksLiveData = new MutableLiveData<>();
         savedBooksLiveData = new MutableLiveData<>();
         markerLiveData = new MutableLiveData<>();
+        titleLiveData = new MutableLiveData<>();
+        numPagesLiveData = new MutableLiveData<>();
+        booksLiveData =new MutableLiveData<>();
+        readingBooksCompleteLiveData =new MutableLiveData<>();
         this.booksDataSource = booksDataSource;
         this.favoriteBooksSource = favoriteBooksSource;
         this.readingBooksSource = readingBooksSource;
@@ -105,8 +113,13 @@ public class BooksRepository implements BooksResponseCallback {
     }
 
     public MutableLiveData<Result> getUserReadingBooks(String idToken){
-        readingBooksSource.getUserReadingBooks(idToken);
+        readingBooksSource.getUserReadingBooksTumbnail(idToken);
         return readingBooksLiveData;
+    }
+
+    public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
+        readingBooksSource.getUserReadingBooks(idToken);
+        return readingBooksCompleteLiveData;
     }
 
     /*public MutableLiveData<Result> getUserFinishedBooks(String idToken){
@@ -125,6 +138,16 @@ public class BooksRepository implements BooksResponseCallback {
         return markerLiveData;
     }
 
+    public MutableLiveData<Result> getTitle(String idBook, String idToken){
+        Log.d("passa2","");
+        readingBooksSource.getTitle(idBook, idToken);
+        return titleLiveData;
+    }
+
+    public MutableLiveData<Result> getNumPages(String idBook, String idToken){
+        readingBooksSource.getNumPages(idBook, idToken);
+        return numPagesLiveData;
+    }
 
     @Override
     public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList, String path) {
@@ -150,6 +173,22 @@ public class BooksRepository implements BooksResponseCallback {
     public void onSuccessFromRemoteMarkReading(HashMap<String, String> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
         markerLiveData.postValue(result);
+        Log.d("entra","entra");
+    }
+    public void onSuccessFromRemoteTitleReading(HashMap<String, String> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+        titleLiveData.postValue(result);
+        Log.d("entra","entra");
+    }
+    public void onSuccessFromRemoteNumPagesReading(HashMap<String, String> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+        numPagesLiveData.postValue(result);
+        Log.d("entra","entra");
+    }
+    public void onSuccessFromRemoteReadingBooks(ArrayList<Books> readingBooks) {
+        Log.d("daddaaa", String.valueOf(readingBooks.size()));
+        Result.BooksReadingResponseSuccess result = new Result.BooksReadingResponseSuccess(readingBooks);
+        booksLiveData.postValue(result);
     }
 
 
@@ -167,9 +206,10 @@ public class BooksRepository implements BooksResponseCallback {
         favoriteBooksSource.addFavouriteBook(idBook, imageLink, idToken);
     }
 
-    public void updateReadingBook(String idBook, int page, String linkImg, String idToken){
-        readingBooksSource.updateReadingBook(idBook,page,linkImg,idToken);
+    public void updateReadingBook(String idBook, int page, String linkImg, String title, int numPages,  String idToken){
+        readingBooksSource.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
     }
+
 
 
 }
