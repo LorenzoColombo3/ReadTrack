@@ -46,6 +46,7 @@ import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -57,6 +58,7 @@ import java.util.List;
 public class BookFragment extends Fragment implements ModalBottomSheet.BottomSheetListener {
     BottomSheetBehavior bottomSheetBehavior;
     String idToken;
+    LinearProgressIndicator progress;
     private UserViewModel userViewModel;
     DataEncryptionUtil dataEncryptionUtil;
     private List<Books> otherBooks;
@@ -130,6 +132,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         readLessButton=view.findViewById(R.id.read_less_button);
         favouriteButton=view.findViewById(R.id.add_favourite);
         aggiungiSegnalibro=view.findViewById(R.id.add_reading);
+        progress=view.findViewById(R.id.linearProgressIndicator);
         return view;
     }
 
@@ -363,7 +366,11 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         userViewModel.getSegnalibro(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 segnalibro = ((Result.BooksResponseSuccess) result).getFavData();
-                this.numPages.setText(segnalibro.get(PAGE) + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+                int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
+                int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE).trim()); // Pagina del segnalibro
+                float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
+                progress.setProgress((int) percentualeCompletamento);
+                this.numPages.setText(segnalibro.get(PAGE).trim() + "/"+String.valueOf(book.getVolumeInfo().getPageCount()));
             } else {
                 this.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
             }
@@ -373,7 +380,6 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     @Override
     public void onButtonPressed() {
         aggiornaSegnalibro();
-
     }
 }
 

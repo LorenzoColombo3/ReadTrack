@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -83,10 +84,10 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>0) {
                 Log.d("null", String.valueOf(getParentFragment()==null));
                 userViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4), idToken);
-                dismiss();
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();
+                //dismiss(); crea problemi sull'aggiornamento del segnalibro in BookFragment
             } else {
                 binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,
@@ -110,7 +111,6 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     public interface BottomSheetListener {
         void onButtonPressed();
     }
-
 
     @Override
     public void onDestroyView() {

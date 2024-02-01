@@ -158,6 +158,43 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        if (userViewModel.getLoggedUser() != null) {
+
+            String email= null;
+            String password= null;
+            try {
+                email = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME,EMAIL_ADDRESS);
+                password = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, PASSWORD);
+
+            } catch (GeneralSecurityException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (email != null && password!= null) {
+                String finalEmail = email;
+                String finalPassword = password;
+                userViewModel.getUserMutableLiveData(email, password, true).observe(
+                        getViewLifecycleOwner(), result -> {
+                            if (result.isSuccess()) {
+                                User user = ((Result.UserResponseSuccess) result).getData();
+                                saveLoginData(finalEmail, finalPassword, user.getIdToken());
+                                userViewModel.setAuthenticationError(false);
+                                Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
+                                requireActivity().finish();
+                                Log.d("prova","b");
+                            } else {
+                                userViewModel.setAuthenticationError(true);
+                                progressIndicator.setVisibility(View.GONE);
+                                Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                                        getErrorMessage(((Result.Error) result).getMessage()),
+                                        Snackbar.LENGTH_SHORT).show();
+                                Log.d("prova","a");
+                            }
+                        });
+
+            }
+        }
         resetPassword.setOnClickListener(v -> {
             Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_resetPassword);
         });

@@ -21,9 +21,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
+import com.example.readtrack.databinding.FragmentProfileBinding;
+import com.example.readtrack.databinding.FragmentResetPasswordBinding;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
@@ -38,34 +41,16 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private FragmentProfileBinding binding;
     private BooksViewModel booksViewModel;
-    private RecyclerView recyclerViewFavBooks;
-    private RecyclerView recyclerViewReadingBooks;
-    private RecyclerView recyclerViewRedBooks;
-    private RecyclerView recyclerViewStartBooks;
     private UserViewModel userViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
-    private String mParam1;
-    private String mParam2;
     String idToken;
 
     private HashMap<String, String> bookList;
     public ProfileFragment() {
         // Required empty public constructor
     }
-
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,24 +80,26 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState){
         //TODO da rifare dividendo ogni caso, non è possibile farlo selezionando un path differente a causa dei livedata, bisogna creare 4 metodi differenti con 4 live data differenti
-        recyclerViewFavBooks = view.findViewById(R.id.fav_books);
-        recyclerViewReadingBooks = view.findViewById(R.id.reading_books);
-        recyclerViewRedBooks = view.findViewById(R.id.books_read);
-        recyclerViewStartBooks = view.findViewById(R.id.start_books);
-        generateRecyclerView(view, recyclerViewFavBooks, FAVOURITES_BOOKS);
-        generateRecyclerView(view, recyclerViewReadingBooks, READING_BOOKS);
-        generateRecyclerView(view, recyclerViewRedBooks, RED_BOOKS);
-        generateRecyclerView(view, recyclerViewStartBooks, WANT_TO_READ);
+        binding.buttonLogout.setOnClickListener(v -> {
+            userViewModel.logout();
+            Navigation.findNavController(requireView()).navigate(R.id.action_profile_fragment_to_welcomeActivity);
+        });
+        binding.userName.setText(userViewModel.getLoggedUser().getEmail());
+        generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);
+        generateRecyclerView(view, binding.readingBooks, READING_BOOKS);
+        generateRecyclerView(view, binding.booksRead, RED_BOOKS);
+        generateRecyclerView(view, binding.startBooks, WANT_TO_READ);
     }
 
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+
         HashMapRecyclerViewAdapter booksRecyclerViewAdapter = new HashMapRecyclerViewAdapter(bookList,
                 new HashMapRecyclerViewAdapter.OnItemClickListener(){
                     @Override
