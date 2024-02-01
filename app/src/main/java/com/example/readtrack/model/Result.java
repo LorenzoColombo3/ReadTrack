@@ -1,7 +1,6 @@
 package com.example.readtrack.model;
 
 import java.util.HashMap;
-import java.util.List;
 
 public abstract class Result {
     private Result() {}
@@ -18,16 +17,16 @@ public abstract class Result {
 
     public static final class BooksResponseSuccess extends Result {
         private BooksApiResponse booksResponse;
-        private HashMap<String,String> favUserBooks;
+        private HashMap<String,String> userBooks;
 
         public BooksResponseSuccess(BooksApiResponse booksResponse) {
             this.booksResponse = booksResponse;
         }
         public BooksResponseSuccess(HashMap<String,String> favUserBooks){
-            this.favUserBooks=favUserBooks;
+            this.userBooks=favUserBooks;
         }
 
-        public HashMap<String, String> getFavData(){ return favUserBooks; }
+        public HashMap<String, String> getBooksData(){ return userBooks; }
         public BooksApiResponse getData() {
             return booksResponse;
         }

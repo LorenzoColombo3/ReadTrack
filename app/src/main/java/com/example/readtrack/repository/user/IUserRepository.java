@@ -14,6 +14,11 @@ public interface IUserRepository {
     MutableLiveData<Result> getGoogleUser(String idToken);
     MutableLiveData<Result> getUserFavBooks(String idToken);
 
+    MutableLiveData<Result> getUserReadingBooks(String idToken);
+
+    MutableLiveData<Result> getUserFinishedBooks(String idToken);
+
+    MutableLiveData<Result> getUserStartBooks(String idToken);
     MutableLiveData<Result> getSegnalibro(String idBook, String idToken);
     MutableLiveData<Result> getUserPreferences(String idToken);
     MutableLiveData<Result> logout();
@@ -27,9 +32,6 @@ public interface IUserRepository {
     void addFavouriteBook(String idBook, String imageLink, String idToken);
     void resetPassword(String email);
     void updateReadingBook(String idBook, int page, String linkImg, String idToken);
-    void onSuccessFromRemoteDatabase(HashMap<String,String> booksList);
-
-    void onSuccessFromRemoteBookReading(HashMap<String,String> booksList);
 
 
 }

@@ -8,19 +8,18 @@ import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.source.books.BaseBooksSource;
-import com.example.readtrack.source.books.BooksCallback;
 
 import java.util.List;
 
-public class BooksRepositoryWithLiveData implements BooksCallback {
+public class BooksResponseRepositoryWithLiveData implements BooksResponseCallback, IBookRepository{
 
-    private static final String TAG = BooksRepositoryWithLiveData.class.getSimpleName();
+    private static final String TAG = BooksResponseRepositoryWithLiveData.class.getSimpleName();
 
     private  MutableLiveData<Result> booksLiveData;
     private  MutableLiveData<Result> favoriteBooksLiveData;
     private final BaseBooksSource booksDataSource;
 
-    public BooksRepositoryWithLiveData(BaseBooksSource booksDataSource) {
+    public BooksResponseRepositoryWithLiveData(BaseBooksSource booksDataSource) {
 
         booksLiveData = new MutableLiveData<>();
         favoriteBooksLiveData = new MutableLiveData<>();

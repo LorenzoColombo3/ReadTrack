@@ -9,7 +9,6 @@ import android.util.Log;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.service.BookApiService;
-import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.util.ServiceLocator;
 
 import java.util.Arrays;
@@ -37,15 +36,15 @@ public class BooksDataSource extends BaseBooksSource {
             public void onResponse(Call<BooksApiResponse> call, Response<BooksApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("chiamata", "");
-                    booksCallback.onSuccessFromRemote(response.body());
+                    booksResponseCallback.onSuccessFromRemote(response.body());
                 } else {
-                    booksCallback.onFailureFromRemote(new Exception(API_KEY_ERROR));
+                    booksResponseCallback.onFailureFromRemote(new Exception(API_KEY_ERROR));
                 }
             }
 
             @Override
             public void onFailure(Call<BooksApiResponse> call, Throwable t) {
-                booksCallback.onFailureFromRemote(new Exception(RETROFIT_ERROR));
+                booksResponseCallback.onFailureFromRemote(new Exception(RETROFIT_ERROR));
             }
         });
     }
@@ -59,15 +58,15 @@ public class BooksDataSource extends BaseBooksSource {
             public void onResponse(Call<Books> call, Response<Books> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Log.d("chiamata id", response.body().getVolumeInfo().getTitle());
-                    booksCallback.onSuccessFromRemoteId(new BooksApiResponse(1, "", Arrays.asList(response.body())));
+                    booksResponseCallback.onSuccessFromRemoteId(new BooksApiResponse(1, "", Arrays.asList(response.body())));
                 } else {
-                    booksCallback.onFailureFromRemote(new Exception(API_KEY_ERROR));
+                    booksResponseCallback.onFailureFromRemote(new Exception(API_KEY_ERROR));
                 }
             }
 
             @Override
             public void onFailure(Call<Books> call, Throwable t) {
-                booksCallback.onFailureFromRemote(new Exception(RETROFIT_ERROR));
+                booksResponseCallback.onFailureFromRemote(new Exception(RETROFIT_ERROR));
             }
         });
     }

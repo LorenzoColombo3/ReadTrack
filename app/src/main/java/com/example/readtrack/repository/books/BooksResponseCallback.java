@@ -1,11 +1,11 @@
-package com.example.readtrack.source.books;
+package com.example.readtrack.repository.books;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 
 import java.util.List;
 
-public interface BooksCallback {
+public interface BooksResponseCallback {
     void onSuccessFromRemote(BooksApiResponse booksApiResponse);
 
     void onSuccessFromRemoteId(BooksApiResponse booksApiResponse);

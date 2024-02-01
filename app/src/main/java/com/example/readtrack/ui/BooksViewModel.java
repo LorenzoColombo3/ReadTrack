@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
 
 public class BooksViewModel extends ViewModel {
     private static final String TAG = BooksViewModel.class.getSimpleName();
 
-    private final BooksRepositoryWithLiveData booksRepositoryWithLiveData;
+    private final BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData;
 
     private MutableLiveData<Result> booksListLiveData;
     private MutableLiveData<Result> favoriteBookListLiveData;
@@ -23,7 +23,7 @@ public class BooksViewModel extends ViewModel {
 
 
 
-    public BooksViewModel(BooksRepositoryWithLiveData booksRepositoryWithLiveData) {
+    public BooksViewModel(BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData) {
         this.booksRepositoryWithLiveData = booksRepositoryWithLiveData;
     }
 

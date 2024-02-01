@@ -1,32 +1,36 @@
 package com.example.readtrack.repository.user;
 
+import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
+import static com.example.readtrack.util.Constants.READING_BOOKS;
+import static com.example.readtrack.util.Constants.RED_BOOKS;
+import static com.example.readtrack.util.Constants.WANT_TO_READ;
+
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.readtrack.model.Books;
-import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
-import com.example.readtrack.source.books.BooksCallback;
 import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
-public class UserRepository implements IUserRepository, UserResponseCallback, BooksCallback {
+public class UserRepository implements IUserRepository, UserResponseCallback {
 
     private static final String TAG = UserRepository.class.getSimpleName();
 
     private final BaseUserAuthenticationRemoteDataSource userAuthRemoteDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
     private final MutableLiveData<Result> userMutableLiveData;
-    private final MutableLiveData<Result> userFavoriteNewsMutableLiveData;
-    private final MutableLiveData<Result> userPreferencesMutableLiveData;
     private MutableLiveData<Result> favBooksListLiveData;
+    private MutableLiveData<Result> readingBooksLiveData;
+
+    private MutableLiveData<Result> finishedBooksLiveData;
+
+    private MutableLiveData<Result> startBooksLiveData;
     private MutableLiveData<Result> segnalibroLiveData;
 
     public UserRepository(BaseUserAuthenticationRemoteDataSource userRemoteDataSource,
@@ -35,8 +39,9 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
         this.userDataRemoteDataSource = userDataRemoteDataSource;
         this.userMutableLiveData = new MutableLiveData<>();
         this.favBooksListLiveData =new MutableLiveData<>();
-        this.userPreferencesMutableLiveData = new MutableLiveData<>();
-        this.userFavoriteNewsMutableLiveData = new MutableLiveData<>();
+        this.readingBooksLiveData = new MutableLiveData<>();
+        this.finishedBooksLiveData = new MutableLiveData<>();
+        this.startBooksLiveData = new MutableLiveData<>();
         this.segnalibroLiveData = new MutableLiveData<>();
         this.userAuthRemoteDataSource.setUserResponseCallback(this);
         this.userDataRemoteDataSource.setUserResponseCallback(this);
@@ -65,6 +70,23 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
         return favBooksListLiveData;
     }
 
+    @Override
+    public MutableLiveData<Result> getUserReadingBooks(String idToken){
+        userDataRemoteDataSource.getUserReadingBooks(idToken);
+        return readingBooksLiveData;
+    }
+
+    @Override
+    public MutableLiveData<Result> getUserFinishedBooks(String idToken){
+        userDataRemoteDataSource.getUserFinishedBooks(idToken);
+        return finishedBooksLiveData;
+    }
+
+    @Override
+    public MutableLiveData<Result> getUserStartBooks(String idToken){
+        userDataRemoteDataSource.getUserStartBooks(idToken);
+        return startBooksLiveData;
+    }
     @Override
     public MutableLiveData<Result> getSegnalibro(String idBook, String idToken){
         userDataRemoteDataSource.getSegnalibro(idBook, idToken);
@@ -128,10 +150,24 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
     }
 
     @Override
-    public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList) {
+    public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList, String path) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
-        favBooksListLiveData.postValue(result);
-        Log.d("result", String.valueOf(booksList.size()));
+        switch (path) {
+            case FAVOURITES_BOOKS:
+                favBooksListLiveData.postValue(result);
+                break;
+            case READING_BOOKS:
+                readingBooksLiveData.postValue(result);
+                break;
+
+            case RED_BOOKS:
+                finishedBooksLiveData.postValue(result);
+                break;
+
+            case WANT_TO_READ:
+                startBooksLiveData.postValue(result);
+                break;
+        }
     }
 
     @Override
@@ -149,32 +185,9 @@ public class UserRepository implements IUserRepository, UserResponseCallback, Bo
 
     @Override
     public void onSuccessLogout() {
-    }
-
-    @Override
-    public void onSuccessFromRemote(BooksApiResponse booksApiResponse) {
 
     }
 
-    @Override
-    public void onSuccessFromRemoteId(BooksApiResponse booksApiResponse) {
-
-    }
-
-    @Override
-    public void onFailureFromRemote(Exception exception) {
-
-    }
-
-    @Override
-    public void onBooksFavoriteStatusChanged(List<Books> books) {
-
-    }
-
-    @Override
-    public void onDeleteFavoriteBooksSuccess(List<Books> favoriteBooks) {
-
-    }
     @Override
     public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener){
         userDataRemoteDataSource.isFavouriteBook(idBook,idToken,listener);

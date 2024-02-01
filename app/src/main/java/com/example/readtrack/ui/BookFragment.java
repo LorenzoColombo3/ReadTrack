@@ -6,8 +6,6 @@ import static com.example.readtrack.util.Constants.PAGE;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Paint;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,11 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,19 +29,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentBookBinding;
-import com.example.readtrack.databinding.FragmentProfileBinding;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.ServiceLocator;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -78,7 +68,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         segnalibro = new HashMap<>();
         booksViewModel = new ViewModelProvider(
@@ -334,7 +324,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     public void aggiornaSegnalibro(){
         userViewModel.getSegnalibro(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
-                segnalibro = ((Result.BooksResponseSuccess) result).getFavData();
+                segnalibro = ((Result.BooksResponseSuccess) result).getBooksData();
                 int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
                 int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE).trim()); // Pagina del segnalibro
                 float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;

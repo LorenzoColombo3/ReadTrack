@@ -19,11 +19,20 @@ public class UserViewModel extends ViewModel {
     private MutableLiveData<Result> userMutableLiveData;
     private MutableLiveData<Result> userPreferencesMutableLiveData;
     private MutableLiveData<Result> favBooksLiveData;
+
+    private MutableLiveData<Result> readingBooksLiveData;
+
+    private MutableLiveData<Result> finishedBooksLiveData;
+
+    private MutableLiveData<Result> startBooksLiveData;
     private MutableLiveData<Result> segnalibroLiveData;
     private boolean authenticationError;
 
     public UserViewModel(IUserRepository userRepository) {
         this.favBooksLiveData = new MutableLiveData<>();
+        this.readingBooksLiveData = new MutableLiveData<>();
+        this.finishedBooksLiveData = new MutableLiveData<>();
+        this.startBooksLiveData = new MutableLiveData<>();
         this.segnalibroLiveData = new MutableLiveData<>();
         this.userRepository = userRepository;
         authenticationError = false;
@@ -55,6 +64,22 @@ public class UserViewModel extends ViewModel {
         favBooksLiveData = userRepository.getUserFavBooks(idToken);
         return favBooksLiveData;
     }
+
+    public MutableLiveData<Result> getReadingBooksMutableLiveData(String idToken) {
+        readingBooksLiveData = userRepository.getUserReadingBooks(idToken);
+        return readingBooksLiveData;
+    }
+
+    public MutableLiveData<Result> getStartBooksMutableLiveData(String idToken) {
+        startBooksLiveData = userRepository.getUserStartBooks(idToken);
+        return startBooksLiveData;
+    }
+
+    public MutableLiveData<Result> getFinishedBooksMutableLiveData(String idToken) {
+        finishedBooksLiveData = userRepository.getUserFinishedBooks(idToken);
+        return finishedBooksLiveData;
+    }
+
 
     public void saveUserPreferences(String favoriteCountry, Set<String> favoriteTopics, String idToken) {
         if (idToken != null) {

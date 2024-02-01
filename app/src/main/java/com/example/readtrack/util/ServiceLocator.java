@@ -3,7 +3,7 @@ package com.example.readtrack.util;
 import android.app.Application;
 
 import com.example.readtrack.database.BookRoomDatabase;
-import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.repository.user.UserRepository;
 import com.example.readtrack.service.BookApiService;
@@ -47,11 +47,11 @@ public class ServiceLocator {
         return BookRoomDatabase.getDatabase(application);
     }
 
-    public BooksRepositoryWithLiveData getBookRepository(Application application) {
+    public BooksResponseRepositoryWithLiveData getBookRepository(Application application) {
         BaseBooksSource booksDataSource;
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
         booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
-        return new BooksRepositoryWithLiveData(booksDataSource);
+        return new BooksResponseRepositoryWithLiveData(booksDataSource);
     }
     public IUserRepository getUserRepository(Application application) {
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);

@@ -3,25 +3,19 @@ package com.example.readtrack.ui;
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.RoomSQLiteQuery;
 
-import com.example.readtrack.R;
-import com.example.readtrack.databinding.FragmentResetPasswordBinding;
 import com.example.readtrack.databinding.ModalBottomSheetContentBinding;
 import com.example.readtrack.model.Books;
-import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -32,7 +26,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 
 public class ModalBottomSheet extends BottomSheetDialogFragment {
     private final Books book;
@@ -59,7 +52,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
         IUserRepository userRepository = ServiceLocator.getInstance().
@@ -87,7 +80,12 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();
-                //dismiss(); //crea problemi sull'aggiornamento del segnalibro in BookFragment
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                dismiss(); //crea problemi sull'aggiornamento del segnalibro in BookFragment
             } else {
                 binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,

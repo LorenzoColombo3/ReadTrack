@@ -21,14 +21,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentProfileBinding;
-import com.example.readtrack.databinding.FragmentResetPasswordBinding;
 import com.example.readtrack.model.Result;
-import com.example.readtrack.repository.books.BooksRepositoryWithLiveData;
+import com.example.readtrack.repository.books.BooksResponseRepositoryWithLiveData;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
@@ -54,8 +52,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.bookList = new HashMap<String, String>();
-        BooksRepositoryWithLiveData booksRepositoryWithLiveData =
+        BooksResponseRepositoryWithLiveData booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
 
         booksViewModel = new ViewModelProvider(
@@ -85,7 +82,6 @@ public class ProfileFragment extends Fragment {
     }
     @Override
     public void onViewCreated (@NonNull View view, @Nullable Bundle savedInstanceState){
-        //TODO da rifare dividendo ogni caso, non è possibile farlo selezionando un path differente a causa dei livedata, bisogna creare 4 metodi differenti con 4 live data differenti
         binding.buttonLogout.setOnClickListener(v -> {
             userViewModel.logout();
             Navigation.findNavController(requireView()).navigate(R.id.action_profile_fragment_to_welcomeActivity);
@@ -99,7 +95,7 @@ public class ProfileFragment extends Fragment {
 
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-
+        this.bookList = new HashMap<String, String>();
         HashMapRecyclerViewAdapter booksRecyclerViewAdapter = new HashMapRecyclerViewAdapter(bookList,
                 new HashMapRecyclerViewAdapter.OnItemClickListener(){
                     @Override
@@ -125,7 +121,7 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
                                 booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
@@ -135,11 +131,11 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
             case READING_BOOKS:
-                userViewModel.getFavBooksMutableLiveData(idToken).observe(
+                userViewModel.getReadingBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
                                 booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
@@ -154,7 +150,7 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
                                 booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
@@ -169,7 +165,7 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getFavData();
+                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
                                 booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {

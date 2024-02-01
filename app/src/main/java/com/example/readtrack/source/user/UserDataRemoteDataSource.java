@@ -130,16 +130,102 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                                     favoritesMap.put(bookId, bookData);
                                 }
                                 // Passa l'HashMap al callback di successo
-                                userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap);
+                                userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap, FAVOURITES_BOOKS);
                             } else {
                                 // Nessun dato trovato
-                                userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
+                                userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>(),FAVOURITES_BOOKS);
                             }
                         }
                     });
 
         }
 
+    @Override
+    public void getUserStartBooks(String idToken) {
+        Log.d("start", "UserData");
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
+                    } else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> favoritesMap = new HashMap<>();
+                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                String bookId = bookSnapshot.getKey();
+                                String bookData = String.valueOf(bookSnapshot.getValue());
+                                favoritesMap.put(bookId, bookData);
+                            }
+                            // Passa l'HashMap al callback di successo
+                            userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap, FAVOURITES_BOOKS);
+                        } else {
+                            // Nessun dato trovato
+                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>(),FAVOURITES_BOOKS);
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    public void getUserReadingBooks(String idToken) {
+        Log.d("start", "UserData");
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(READING_BOOKS).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
+                    } else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> favoritesMap = new HashMap<>();
+                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                String bookId = bookSnapshot.getKey();
+                                String bookData = bookSnapshot.child(IMG).getValue(String.class);
+                                favoritesMap.put(bookId, bookData);
+                            }
+                            // Passa l'HashMap al callback di successo
+                            userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap, READING_BOOKS);
+                        } else {
+                            // Nessun dato trovato
+                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>(),READING_BOOKS);
+                        }
+                    }
+                });
+
+    }
+
+    @Override
+    public void getUserFinishedBooks(String idToken) {
+        Log.d("start", "UserData");
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
+                child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.d(TAG, "Error getting data", task.getException());
+                        userResponseCallback.onFailureFromRemoteDatabase(task.getException().getLocalizedMessage());
+                    } else {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        if (dataSnapshot.exists()) {
+                            // Ottieni i dati come HashMap<String, String>
+                            HashMap<String, String> favoritesMap = new HashMap<>();
+                            for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
+                                String bookId = bookSnapshot.getKey();
+                                String bookData = String.valueOf(bookSnapshot.getValue());
+                                favoritesMap.put(bookId, bookData);
+                            }
+                            // Passa l'HashMap al callback di successo
+                            userResponseCallback.onSuccessFromRemoteDatabase(favoritesMap, FAVOURITES_BOOKS);
+                        } else {
+                            // Nessun dato trovato
+                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>(),FAVOURITES_BOOKS);
+                        }
+                    }
+                });
+
+    }
 
 
     @Override
@@ -189,7 +275,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
                             readMap.put(dataSnapshot.getKey(), String.valueOf( dataSnapshot.getValue()));
                             userResponseCallback.onSuccessFromRemoteBookReading(readMap);
                         } else {
-                            userResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>());
+                            userResponseCallback.onSuccessFromRemoteBookReading(new HashMap<>());
                         }
                     }
                 });
