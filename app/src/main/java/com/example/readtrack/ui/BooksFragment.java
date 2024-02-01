@@ -53,10 +53,8 @@ public class BooksFragment extends Fragment implements ResponseCallback{
         userViewModel = new ViewModelProvider(
                 this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
         try {
-            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-            Log.d("Token",idToken);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
@@ -113,10 +111,6 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 errorMessage, Snackbar.LENGTH_LONG).show();
     }
 
-    private List<Books> getBooksListWithWithGSon() {
-        JSONparser jsonParserUtil = new JSONparser(requireActivity().getApplication());
-        return jsonParserUtil.parseJSONFileWithGSon("Remote", "https://www.googleapis.com/books/v1/volumes?q=inauthor:Agatha%20Christie&startIndex=0&maxResults=40").getItems();
-    }
 
 
 }

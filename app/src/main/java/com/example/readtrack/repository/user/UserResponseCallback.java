@@ -10,9 +10,6 @@ public interface UserResponseCallback {
     void onSuccessFromAuthentication(User user);
     void onFailureFromAuthentication(String message);
     void onSuccessFromRemoteDatabase(User user);
-    void onSuccessFromRemoteDatabase(HashMap<String,String> BooksList, String path);
-
-    void onSuccessFromRemoteBookReading(HashMap<String,String> BooksList);
     void onFailureFromRemoteDatabase(String message);
     void onSuccessLogout();
 }

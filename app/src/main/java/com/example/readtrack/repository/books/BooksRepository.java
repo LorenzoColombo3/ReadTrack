@@ -117,9 +117,10 @@ public class BooksRepository implements BooksResponseCallback {
         return readingBooksLiveData;
     }
 
+    //TODO sistemare il live data ritornato
     public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
         readingBooksSource.getUserReadingBooks(idToken);
-        return readingBooksCompleteLiveData;
+        return booksLiveData;
     }
 
     /*public MutableLiveData<Result> getUserFinishedBooks(String idToken){

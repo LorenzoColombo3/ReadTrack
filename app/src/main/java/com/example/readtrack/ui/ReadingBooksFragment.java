@@ -53,20 +53,14 @@ public class ReadingBooksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BooksRepository booksRepositoryWithLiveData =
-                ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
-        booksViewModel = new ViewModelProvider(
-                this, new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
+        BooksRepository booksRepositoryWithLiveData = ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
+        booksViewModel = new ViewModelProvider(this, new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
-        IUserRepository userRepository = ServiceLocator.getInstance().
-                getUserRepository(getActivity().getApplication());
-        userViewModel = new ViewModelProvider(
-                this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
+        IUserRepository userRepository = ServiceLocator.getInstance().getUserRepository(getActivity().getApplication());
+        userViewModel = new ViewModelProvider(this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
         try {
-            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-            Log.d("Token",idToken);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +79,7 @@ public class ReadingBooksFragment extends Fragment {
                     if (result.isSuccess()) {
                         // Aggiorna la lista dei libri
                         bookList = ((Result.BooksReadingResponseSuccess) result).getBooksData();
-                        Log.d("title",bookList.get(0).getVolumeInfo().getTitle());
+
                         // Inizializza due ArrayList per le chiavi e i valori
                         // Itera attraverso le chiavi della HashMap e aggiungi le coppie corrispondenti agli ArrayList
 

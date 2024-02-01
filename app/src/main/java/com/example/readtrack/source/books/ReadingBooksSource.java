@@ -84,7 +84,6 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                                 String bookCover = bookSnapshot.child(IMG).getValue(String.class);
                                 String bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
                                 int numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
-                                // Creare un oggetto BookModel con ID e immagine e aggiungerlo all'ArrayList
                                 booksList.add(new Books(bookId, bookCover, bookTitle, numPages));
                             }
                             // Passa l'ArrayList al callback di successo

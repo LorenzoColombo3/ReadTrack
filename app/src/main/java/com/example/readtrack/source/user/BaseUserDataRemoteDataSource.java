@@ -11,16 +11,6 @@ public abstract class BaseUserDataRemoteDataSource {
         this.userResponseCallback = userResponseCallback;
     }
     public abstract void saveUserData(User user);
-    public abstract void getUserFavBooks(String idToken);
-    public abstract void getUserStartBooks(String idToken);
-    public abstract void getUserFinishedBooks(String idToken);
-    public abstract void getUserReadingBooks(String idToken);
-    public abstract void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener);
-    public abstract void removeFavouriteBook(String idBook, String idToken);
-    public abstract void addFavouriteBook(String idBook, String imageLink, String idToken);
-    public abstract void updateReadingBook(String idBook, int page, String imageLink, String idToken);
 
-    public abstract void getReadingBooks(String idToken);
-    public abstract void getSegnalibro(String idBook, String idToken);
 
 }

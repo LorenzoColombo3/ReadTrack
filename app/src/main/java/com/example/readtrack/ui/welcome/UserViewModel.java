@@ -17,23 +17,9 @@ public class UserViewModel extends ViewModel {
 
     private final IUserRepository userRepository;
     private MutableLiveData<Result> userMutableLiveData;
-    private MutableLiveData<Result> userPreferencesMutableLiveData;
-    private MutableLiveData<Result> favBooksLiveData;
-
-    private MutableLiveData<Result> readingBooksLiveData;
-
-    private MutableLiveData<Result> finishedBooksLiveData;
-
-    private MutableLiveData<Result> startBooksLiveData;
-    private MutableLiveData<Result> segnalibroLiveData;
     private boolean authenticationError;
 
     public UserViewModel(IUserRepository userRepository) {
-        this.favBooksLiveData = new MutableLiveData<>();
-        this.readingBooksLiveData = new MutableLiveData<>();
-        this.finishedBooksLiveData = new MutableLiveData<>();
-        this.startBooksLiveData = new MutableLiveData<>();
-        this.segnalibroLiveData = new MutableLiveData<>();
         this.userRepository = userRepository;
         authenticationError = false;
     }
@@ -47,39 +33,12 @@ public class UserViewModel extends ViewModel {
         }
         return userMutableLiveData;
     }
-
-    public MutableLiveData<Result> getSegnalibro(String idBook, String idToken){
-        segnalibroLiveData=userRepository.getSegnalibro(idBook, idToken);
-        return segnalibroLiveData;
-    }
-
     public MutableLiveData<Result> getGoogleUserMutableLiveData(String token) {
         if (userMutableLiveData == null) {
             getUserData(token);
         }
         return userMutableLiveData;
     }
-
-    public MutableLiveData<Result> getFavBooksMutableLiveData(String idToken) {
-        favBooksLiveData = userRepository.getUserFavBooks(idToken);
-        return favBooksLiveData;
-    }
-
-    public MutableLiveData<Result> getReadingBooksMutableLiveData(String idToken) {
-        readingBooksLiveData = userRepository.getUserReadingBooks(idToken);
-        return readingBooksLiveData;
-    }
-
-    public MutableLiveData<Result> getStartBooksMutableLiveData(String idToken) {
-        startBooksLiveData = userRepository.getUserStartBooks(idToken);
-        return startBooksLiveData;
-    }
-
-    public MutableLiveData<Result> getFinishedBooksMutableLiveData(String idToken) {
-        finishedBooksLiveData = userRepository.getUserFinishedBooks(idToken);
-        return finishedBooksLiveData;
-    }
-
 
     public User getLoggedUser() {
         return userRepository.getLoggedUser();
@@ -115,23 +74,9 @@ public class UserViewModel extends ViewModel {
         userMutableLiveData = userRepository.getGoogleUser(token);
     }
 
-    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
-        userRepository.isFavouriteBook(idBook,idToken,listener);
-    }
-
-    public void removeFavouriteBook(String idBook, String idToken){
-        userRepository.removeFavouriteBook(idBook,idToken);
-    }
-    public void addFavouriteBook(String idBook, String imageLink, String idToken){
-        userRepository.addFavouriteBook(idBook, imageLink, idToken);
-    }
-
     public void resetPassword(String email){
         userRepository.resetPassword(email);
     }
 
-    public void updateReadingBooks(String idBook, int page, String linkImg, String idToken){
-        userRepository.updateReadingBook(idBook,page,linkImg,idToken);
-    }
 
 }
