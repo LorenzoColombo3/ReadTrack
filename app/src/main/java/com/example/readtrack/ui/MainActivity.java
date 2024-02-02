@@ -84,8 +84,6 @@ public class MainActivity extends AppCompatActivity {
         return navController.navigateUp() || super.onSupportNavigateUp();
     }
     public void showBottomNavigation() {
-        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in);
-        bottomNav.startAnimation(fadeIn);
         bottomNav.setVisibility(View.VISIBLE);
     }
 

@@ -88,9 +88,18 @@ public class SearchFragment extends Fragment  {
                     @Override
                     public void onBooksItemClick(Books book) {
                         ((MainActivity) requireActivity()).hideBottomNavigation();
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("bookArgument", book);
-                        Navigation.findNavController(view).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
+                        String id=book.getId();
+                        booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                            if (res.isSuccess()) {
+                                ((MainActivity) requireActivity()).hideBottomNavigation();
+                                Log.d("search result", ((Result.BooksResponseSuccess) res).getData().getItems().get(0).getVolumeInfo().getTitle());
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                                Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
+                            } else {
+                            }
+                        });
+
                     }
                 });
         searchView

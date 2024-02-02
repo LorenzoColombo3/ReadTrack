@@ -1,5 +1,7 @@
 package com.example.readtrack.ui;
 
+import android.util.Log;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -59,6 +61,7 @@ public class BooksViewModel extends ViewModel {
     }
 
     public MutableLiveData<Result> getBooksById(String id) {
+        Log.d("Libro",id);
         idBookLiveData= booksRepository.searchBooksById(id);
         return idBookLiveData;
     }

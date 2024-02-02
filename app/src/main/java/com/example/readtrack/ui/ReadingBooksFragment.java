@@ -99,6 +99,7 @@ public class ReadingBooksFragment extends Fragment {
                         });
                     }
                 });
+        booksViewModel.reset();
         binding.readingBooksRecyclerView.setAdapter(booksRecyclerViewAdapter);
         booksViewModel.getUserReadingBooksComplete(idToken).observe(
                 getViewLifecycleOwner(), result -> {
