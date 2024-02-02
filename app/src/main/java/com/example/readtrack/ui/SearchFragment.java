@@ -187,6 +187,7 @@ public class SearchFragment extends Fragment  {
             booksViewModel.reset();
             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), res -> {
                 if (res.isSuccess()) {
+                    Log.d("query", query);
                     String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
                     booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
                         if (book.isSuccess()) {

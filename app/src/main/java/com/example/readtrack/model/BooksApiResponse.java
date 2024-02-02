@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.util.List;
 
-//TODO deve estentedere bookResponse
 public class BooksApiResponse{
     private String kind;
     private int totalItems;

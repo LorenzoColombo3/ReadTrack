@@ -16,12 +16,13 @@ import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final OnItemClickListener onItemClickListener;
-    private ArrayList<Books> bookList;
+    private List<Books> bookList;
 
-    public BooksFragmentRecyclerViewAdapter(ArrayList<Books> bookList, OnItemClickListener onItemClickListener) {
+    public BooksFragmentRecyclerViewAdapter(List<Books> bookList, OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         this.bookList=bookList;
     }
@@ -35,7 +36,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         return new ReadingBooksViewHolder(view);
     }
 
-    public void setBookList(ArrayList<Books> newBookList) {
+    public void setBookList(List<Books> newBookList) {
         this.bookList = new ArrayList<>(newBookList);
         Log.d(String.valueOf(bookList.size()),"www");
     }
@@ -79,7 +80,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         public void bind(String link, String title, int percent) {
             try {
                 Picasso.get()
-                        .load(link)
+                        .load( "https"+link.substring(4))
                         .into(imageViewThumbnail);
             } catch (NullPointerException pointerException) {
                 Log.d("pointer exception", pointerException.toString());

@@ -38,11 +38,12 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ReadingBooksFragment extends Fragment {
     FragmentReadingBooksBinding binding;
-    private ArrayList<Books> bookList;
+    private List<Books> bookList;
     private BooksViewModel booksViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
     private UserViewModel userViewModel;
@@ -102,7 +103,7 @@ public class ReadingBooksFragment extends Fragment {
         booksViewModel.getUserReadingBooksComplete(idToken).observe(
                 getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
-                        bookList = ((Result.BooksReadingResponseSuccess) result).getBooksData();
+                        bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
                         if(bookList!=null) {
                             booksRecyclerViewAdapter.setBookList(bookList);
                             booksRecyclerViewAdapter.notifyDataSetChanged();

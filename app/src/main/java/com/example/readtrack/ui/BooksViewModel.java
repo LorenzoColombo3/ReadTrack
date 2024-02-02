@@ -1,15 +1,11 @@
 package com.example.readtrack.ui;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.util.OnFavouriteCheckListener;
-
-import java.util.MissingFormatArgumentException;
 
 public class BooksViewModel extends ViewModel {
     private static final String TAG = BooksViewModel.class.getSimpleName();
@@ -76,16 +72,6 @@ public class BooksViewModel extends ViewModel {
         return markerLiveData;
     }
 
-    public MutableLiveData<Result> getTitleLiveData(String idBook, String idToken){
-        Log.d("passa1","");
-        titleLiveData= booksRepository.getTitle(idBook, idToken);
-        return titleLiveData;
-    }
-    public MutableLiveData<Result> getNumPagesLiveData(String idBook, String idToken){
-        numPagesLiveData= booksRepository.getTitle(idBook, idToken);
-        return numPagesLiveData;
-    }
-
     public MutableLiveData<Result> getFavBooksMutableLiveData(String idToken) {
         favBooksListLiveData = booksRepository.getUserFavBooks(idToken);
         return favBooksListLiveData;
@@ -96,7 +82,7 @@ public class BooksViewModel extends ViewModel {
         return readingBooksLiveData;
     }
     public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
-        readingBooksCompleteLiveData = booksRepository.getUserReadingBooksComplete(idToken);
+        readingBooksCompleteLiveData = booksRepository.getUserReadingBooks(idToken);
         return readingBooksCompleteLiveData;
     }
 

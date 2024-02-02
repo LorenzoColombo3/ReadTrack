@@ -60,8 +60,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     private int lastVisibleItem;
     private int visibleItemCount;
     private final int threshold = 1;
-    private   Books book;
-    private HashMap<String, String> segnalibro;
+    private  Books book;
     private String query;
     public BookFragment(){}
 
@@ -70,7 +69,6 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         super.onCreate(savedInstanceState);
         BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
-        segnalibro = new HashMap<>();
         booksViewModel = new ViewModelProvider(
                 requireActivity(),
                 new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
@@ -236,7 +234,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         });
     }
     private void mostraModalBottomSheet(Books book) {
-        modalBottomSheet = new ModalBottomSheet(book, segnalibro.get(PAGE));
+        modalBottomSheet = new ModalBottomSheet(book, String.valueOf(book.getBookMarcker()));
         modalBottomSheet.setBottomSheetListener(this);
         modalBottomSheet.show(getActivity().getSupportFragmentManager(), ModalBottomSheet.TAG);
 
@@ -324,13 +322,13 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     public void aggiornaSegnalibro(){
         booksViewModel.getMarkerLiveData(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
-                segnalibro = ((Result.BooksResponseSuccess) result).getBooksData();
-                if(segnalibro.get(PAGE)!=null) {
+                book.setBookMarcker(((Result.BooksResponseSuccess) result).getDataBooks().getItems().get(0).getBookMarcker());
+                if(book.getBookMarcker()!=0) {
                     int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
-                    int paginaDelSegnalibro = Integer.parseInt(segnalibro.get(PAGE)); // Pagina del segnalibro
+                    int paginaDelSegnalibro = book.getBookMarcker(); // Pagina del segnalibro
                     float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
                     binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
-                    binding.numPages.setText(segnalibro.get(PAGE).trim() + "/" + String.valueOf(numeroTotalePagine));
+                    binding.numPages.setText(String.valueOf(book.getBookMarcker()).trim() + "/" + String.valueOf(numeroTotalePagine));
                 }
             } else {
                 binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));

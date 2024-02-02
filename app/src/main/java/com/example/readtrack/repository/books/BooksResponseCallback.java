@@ -15,9 +15,7 @@ public interface BooksResponseCallback {
 
     void onSuccessFromRemoteId(BooksApiResponse booksApiResponse);
     void onFailureFromRemote(Exception exception);
-    void onSuccessFromRemoteDatabase(HashMap<String,String> BooksList, String path);
-    void onSuccessFromRemoteMarkReading(HashMap<String,String> BooksList);
-    void onSuccessFromRemoteTitleReading(HashMap<String, String> booksList);
-    void onSuccessFromRemoteNumPagesReading(HashMap<String, String> booksList);
-    void onSuccessFromRemoteReadingBooks(ArrayList<Books> readingBooks);
+    void onSuccessFromRemoteDatabase(List<Books> booksList, String path);
+    void onSuccessFromRemoteMarkReading(List<Books> booksList);
+
 }

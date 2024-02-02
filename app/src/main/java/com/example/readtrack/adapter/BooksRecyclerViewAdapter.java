@@ -14,6 +14,8 @@ import com.example.readtrack.R;
 import com.example.readtrack.model.Books;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -74,6 +76,11 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         return 0;
     }
 
+    public void setBookList(List<Books> booksList) {
+        this.booksList.clear();
+        this.booksList.addAll(booksList);
+    }
+
     public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView imageViewThumbnail;
 
@@ -86,7 +93,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
         public void bind(Books book) {
             try {
                 Picasso.get()
-                        .load("https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
+                        .load( "https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
                         .into(imageViewThumbnail);
             } catch (NullPointerException pointerException) {
                 Log.d("pointer exception", pointerException.toString());

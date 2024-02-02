@@ -3,11 +3,16 @@ package com.example.readtrack.source.books;
 import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
+import static com.example.readtrack.util.Constants.IMG;
+import static com.example.readtrack.util.Constants.NUMPAGES;
+import static com.example.readtrack.util.Constants.PAGE;
+import static com.example.readtrack.util.Constants.TITLE;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.readtrack.model.Books;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
@@ -17,7 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class FavoriteBooksSource extends BaseFavoriteBooksSource {
 
@@ -33,27 +40,26 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
     }
     @Override
     public void getUserFavBooks(String idToken) {
-        Log.d("start", "UserData");
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
                 child(FAVOURITES_BOOKS).get().addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
-                        Log.d(TAG, "Error getting data", task.getException());
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
                         if (dataSnapshot.exists()) {
-                            // Ottieni i dati come HashMap<String, String>
-                            HashMap<String, String> favoritesMap = new HashMap<>();
+                            List<Books> booksList = new ArrayList<>();
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                                 String bookId = bookSnapshot.getKey();
-                                String bookData = String.valueOf(bookSnapshot.getValue());
-                                favoritesMap.put(bookId, bookData);
+                                String bookCover = bookSnapshot.getValue(String.class).substring(5);
+
+                                booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
                             }
                             // Passa l'HashMap al callback di successo
-                            booksResponseCallback.onSuccessFromRemoteDatabase(favoritesMap, FAVOURITES_BOOKS);
+                            Log.d("copertina", booksList.get(0).getVolumeInfo().getImageLinks().getThumbnail().toString());
+                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FAVOURITES_BOOKS);
                         } else {
                             // Nessun dato trovato
-                            booksResponseCallback.onSuccessFromRemoteDatabase(new HashMap<>(),FAVOURITES_BOOKS);
+                            booksResponseCallback.onFailureFromRemote(new Exception("libri non trovait"));
                         }
                     }
                 });

@@ -9,4 +9,12 @@ public abstract class BaseFinishedBooksSource {
     public void setBooksCallback(BooksResponseCallback booksResponseCallback) {
         this.booksResponseCallback = booksResponseCallback;
     }
+
+    public abstract void removeUserFinishedBook(String idBook, String idToken);
+
+    public abstract void addUserFinishedBook(String idBook,  String imageLink, String idToken);
+
+    public abstract void getUserFinishedBooks(String idToken);
+
+
 }

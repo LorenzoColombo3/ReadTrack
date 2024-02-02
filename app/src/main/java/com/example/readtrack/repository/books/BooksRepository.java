@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
+import com.example.readtrack.model.BooksResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.source.books.BaseFavoriteBooksSource;
@@ -19,8 +20,7 @@ import com.example.readtrack.source.books.BaseReadingBooksSource;
 import com.example.readtrack.source.books.BaseSavedBooksSource;
 import com.example.readtrack.util.OnFavouriteCheckListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class BooksRepository implements BooksResponseCallback {
 
@@ -68,8 +68,8 @@ public class BooksRepository implements BooksResponseCallback {
         this.booksDataSource.setBooksCallback(this);
         this.favoriteBooksSource.setBooksCallback(this);
         this.readingBooksSource.setBooksCallback(this);
-       /* this.savedBooksSource.setBooksCallback(this);
-        this.finishedBooksSource.setBooksCallback(this);*/
+       // this.savedBooksSource.setBooksCallback(this);
+        //this.finishedBooksSource.setBooksCallback(this);
 
     }
 
@@ -113,20 +113,14 @@ public class BooksRepository implements BooksResponseCallback {
     }
 
     public MutableLiveData<Result> getUserReadingBooks(String idToken){
-        readingBooksSource.getUserReadingBooksTumbnail(idToken);
+        readingBooksSource.getUserReadingBooks(idToken);
         return readingBooksLiveData;
     }
 
-    //TODO sistemare il live data ritornato
-    public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
-        readingBooksSource.getUserReadingBooks(idToken);
-        return booksLiveData;
-    }
-
-    /*public MutableLiveData<Result> getUserFinishedBooks(String idToken){
-        savedBooksSource.getUserFinishedBooks(idToken);
+    public MutableLiveData<Result> getUserFinishedBooks(String idToken){
+        finishedBooksSource.getUserFinishedBooks(idToken);
         return finishedBooksLiveData;
-    }*/
+    }
 
 
     /*public MutableLiveData<Result> getUserStartBooks(String idToken){
@@ -139,20 +133,9 @@ public class BooksRepository implements BooksResponseCallback {
         return markerLiveData;
     }
 
-    public MutableLiveData<Result> getTitle(String idBook, String idToken){
-        Log.d("passa2","");
-        readingBooksSource.getTitle(idBook, idToken);
-        return titleLiveData;
-    }
-
-    public MutableLiveData<Result> getNumPages(String idBook, String idToken){
-        readingBooksSource.getNumPages(idBook, idToken);
-        return numPagesLiveData;
-    }
-
     @Override
-    public void onSuccessFromRemoteDatabase(HashMap<String,String> booksList, String path) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+    public void onSuccessFromRemoteDatabase(List<Books> booksList, String path) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
         switch (path) {
             case FAVOURITES_BOOKS:
                 favBooksListLiveData.postValue(result);
@@ -171,25 +154,9 @@ public class BooksRepository implements BooksResponseCallback {
         }
     }
 
-    public void onSuccessFromRemoteMarkReading(HashMap<String, String> booksList) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
+    public void onSuccessFromRemoteMarkReading(List<Books> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
         markerLiveData.postValue(result);
-        Log.d("entra","entra");
-    }
-    public void onSuccessFromRemoteTitleReading(HashMap<String, String> booksList) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
-        titleLiveData.postValue(result);
-        Log.d("entra","entra");
-    }
-    public void onSuccessFromRemoteNumPagesReading(HashMap<String, String> booksList) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksList);
-        numPagesLiveData.postValue(result);
-        Log.d("entra","entra");
-    }
-    public void onSuccessFromRemoteReadingBooks(ArrayList<Books> readingBooks) {
-        Log.d("daddaaa", String.valueOf(readingBooks.size()));
-        Result.BooksReadingResponseSuccess result = new Result.BooksReadingResponseSuccess(readingBooks);
-        booksLiveData.postValue(result);
     }
 
 

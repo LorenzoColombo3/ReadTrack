@@ -23,8 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.readtrack.R;
+import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentProfileBinding;
+import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
@@ -36,16 +38,18 @@ import com.example.readtrack.util.ServiceLocator;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ProfileFragment extends Fragment {
     private FragmentProfileBinding binding;
     private BooksViewModel booksViewModel;
     private UserViewModel userViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
-    String idToken;
+    private String idToken;
+    private List<Books> booksList;
 
-    private HashMap<String, String> bookList;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -95,12 +99,12 @@ public class ProfileFragment extends Fragment {
 
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-        this.bookList = new HashMap<String, String>();
-        HashMapRecyclerViewAdapter booksRecyclerViewAdapter = new HashMapRecyclerViewAdapter(bookList,
-                new HashMapRecyclerViewAdapter.OnItemClickListener(){
+        this.booksList = new ArrayList<>();
+        BooksRecyclerViewAdapter booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(booksList,
+                new BooksRecyclerViewAdapter.OnItemClickListener(){
                     @Override
-                    public void onBooksItemClick(String id) {
-                        booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                    public void onBooksItemClick(Books books) {
+                        booksViewModel.getBooksById(books.getId()).observe(getViewLifecycleOwner(), res -> {
                             if (res.isSuccess()) {
                                 ((MainActivity) requireActivity()).hideBottomNavigation();
                                 Bundle bundle = new Bundle();
@@ -120,9 +124,9 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
-                                booksRecyclerViewAdapter.setBookList(bookList);
+                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                Log.d("immagine",  booksList.get(0).getId());
+                                booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                                 // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
@@ -135,8 +139,8 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
-                                booksRecyclerViewAdapter.setBookList(bookList);
+                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                                 // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
@@ -150,8 +154,8 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
-                                booksRecyclerViewAdapter.setBookList(bookList);
+                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                                 // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
@@ -165,8 +169,8 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
-                                bookList = ((Result.BooksResponseSuccess) result).getBooksData();
-                                booksRecyclerViewAdapter.setBookList(bookList);
+                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                                 // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
