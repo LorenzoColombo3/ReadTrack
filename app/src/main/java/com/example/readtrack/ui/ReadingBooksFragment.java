@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.readtrack.R;
+import com.example.readtrack.adapter.BooksFragmentRecyclerViewAdapter;
 import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentBooksBinding;
 import com.example.readtrack.databinding.FragmentReadingBooksBinding;
@@ -53,6 +55,7 @@ public class ReadingBooksFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        bookList=new ArrayList<>();
         BooksRepository booksRepositoryWithLiveData = ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         booksViewModel = new ViewModelProvider(this, new BooksViewModelFactory(booksRepositoryWithLiveData)).get(BooksViewModel.class);
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
@@ -74,17 +77,33 @@ public class ReadingBooksFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        binding.readingBooksRecyclerView.setLayoutManager(layoutManager);
+        BooksFragmentRecyclerViewAdapter booksRecyclerViewAdapter = new BooksFragmentRecyclerViewAdapter(bookList,
+                new BooksFragmentRecyclerViewAdapter.OnItemClickListener(){
+                    @Override
+                    public void onBooksItemClick(String id) {
+                        booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
+                            if (res.isSuccess()) {
+                                ((MainActivity) requireActivity()).hideBottomNavigation();
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                            } else {
+                                // Gestisci il caso in cui non ci sono risultati
+                                Log.d("search", "Nessun risultato trovato");
+                            }
+                        });
+                    }
+                });
+        binding.readingBooksRecyclerView.setAdapter(booksRecyclerViewAdapter);
+
         booksViewModel.getUserReadingBooksComplete(idToken).observe(
                 getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
-                        // Aggiorna la lista dei libri
                         bookList = ((Result.BooksReadingResponseSuccess) result).getBooksData();
-
-                        // Inizializza due ArrayList per le chiavi e i valori
-                        // Itera attraverso le chiavi della HashMap e aggiungi le coppie corrispondenti agli ArrayList
-
+                        booksRecyclerViewAdapter.setBookList(bookList);
+                        booksRecyclerViewAdapter.notifyDataSetChanged();
                     } else {
-                        // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                     }
                 }
         );

@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/books_fragment"
         android:name="com.example.readtrack.ui.BooksFragment"
-        tools:layout="@layout/fragment_books" />
+        tools:layout="@layout/fragment_books" >
+        <action
+            android:id="@+id/action_books_fragment_to_bookFragment"
+            app:destination="@id/bookFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profile_fragment"
         android:name="com.example.readtrack.ui.ProfileFragment"
@@ -39,4 +43,9 @@
         android:id="@+id/welcomeActivity"
         android:name="com.example.readtrack.ui.welcome.WelcomeActivity"
         android:label="WelcomeActivity" />
+    <fragment
+        android:id="@+id/readingBooksFragment2"
+        android:name="com.example.readtrack.ui.ReadingBooksFragment"
+        android:label="fragment_reading_books"
+        tools:layout="@layout/fragment_reading_books" />
 </navigation>

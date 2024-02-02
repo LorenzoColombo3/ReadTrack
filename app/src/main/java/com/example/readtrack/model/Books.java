@@ -28,12 +28,15 @@ public class Books implements Parcelable {
     private AccessInfo accessInfo;
     @Ignore
     private SearchInfo searchInfo;
+    @Ignore
+    private int bookMarcker;
 
     @ColumnInfo(name = "is_favorite")
     private boolean favorite=false;
 
-    public Books(String id, String thumbnail, String title, int numPages){
+    public Books(String id, String thumbnail, String title, int numPages, int bookMarcker){
         this.id = id;
+        this.bookMarcker=bookMarcker;
         this.volumeInfo = new VolumeInfo(); // Inizializza volumeInfo
         this.saleInfo = new SaleInfo();     // Inizializza saleInfo
         this.accessInfo = new AccessInfo(); // Inizializza accessInfo
@@ -69,6 +72,9 @@ public class Books implements Parcelable {
             return new Books[size];
         }
     };
+
+    public void setBookMarcker(int bookMarcker){this.bookMarcker=bookMarcker;}
+    public int getBookMarcker(){return this.bookMarcker;}
     public void setFavorite(Boolean favorite){
         this.favorite=favorite;
     }

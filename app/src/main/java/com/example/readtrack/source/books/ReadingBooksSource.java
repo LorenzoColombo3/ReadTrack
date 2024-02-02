@@ -84,7 +84,8 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                                 String bookCover = bookSnapshot.child(IMG).getValue(String.class);
                                 String bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
                                 int numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
-                                booksList.add(new Books(bookId, bookCover, bookTitle, numPages));
+                                int bookMarker = bookSnapshot.child(PAGE).getValue(Integer.class);
+                                booksList.add(new Books(bookId, bookCover, bookTitle, numPages, bookMarker));
                             }
                             // Passa l'ArrayList al callback di successo
                             booksResponseCallback.onSuccessFromRemoteReadingBooks(booksList);
