@@ -10,7 +10,6 @@ public abstract class Result {
 
     public boolean isSuccess() {
         if (this instanceof BooksResponseSuccess || this instanceof UserResponseSuccess || this instanceof BooksReadingResponseSuccess) {
-            Log.d("successo","");
             return true;
         } else {
             return false;
@@ -25,13 +24,10 @@ public abstract class Result {
             this.booksResponse = booksResponse;
         }
         public BooksReadingResponseSuccess(ArrayList<Books> favUserBooks){
-            Log.d("daddaaaa", String.valueOf(favUserBooks.size()));
             this.userBooks=favUserBooks;
-            Log.d("daddaaaaa",String.valueOf(userBooks.size()));
         }
 
         public ArrayList<Books> getBooksData(){
-            Log.d("title", userBooks.get(0).getVolumeInfo().getTitle());
             return userBooks; }
         public BooksApiResponse getData() {
             return booksResponse;

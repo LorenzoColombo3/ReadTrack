@@ -77,7 +77,7 @@ public class ReadingBooksFragment extends Fragment {
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
         binding.readingBooksRecyclerView.setLayoutManager(layoutManager);
         BooksFragmentRecyclerViewAdapter booksRecyclerViewAdapter = new BooksFragmentRecyclerViewAdapter(bookList,
                 new BooksFragmentRecyclerViewAdapter.OnItemClickListener(){
@@ -88,6 +88,9 @@ public class ReadingBooksFragment extends Fragment {
                                 ((MainActivity) requireActivity()).hideBottomNavigation();
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
+                                NavController parentNavController = Navigation.findNavController(getParentFragment().getParentFragment().requireView());
+                                parentNavController.setGraph(R.navigation.main_nav_graph);
+                                parentNavController.navigate(R.id.action_books_fragment_to_bookFragment, bundle);
                             } else {
                                 // Gestisci il caso in cui non ci sono risultati
                                 Log.d("search", "Nessun risultato trovato");
@@ -96,13 +99,14 @@ public class ReadingBooksFragment extends Fragment {
                     }
                 });
         binding.readingBooksRecyclerView.setAdapter(booksRecyclerViewAdapter);
-
         booksViewModel.getUserReadingBooksComplete(idToken).observe(
                 getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
                         bookList = ((Result.BooksReadingResponseSuccess) result).getBooksData();
-                        booksRecyclerViewAdapter.setBookList(bookList);
-                        booksRecyclerViewAdapter.notifyDataSetChanged();
+                        if(bookList!=null) {
+                            booksRecyclerViewAdapter.setBookList(bookList);
+                            booksRecyclerViewAdapter.notifyDataSetChanged();
+                        }
                     } else {
                     }
                 }

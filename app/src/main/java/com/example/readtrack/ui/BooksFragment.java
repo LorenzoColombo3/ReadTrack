@@ -89,6 +89,11 @@ public class BooksFragment extends Fragment implements ResponseCallback{
                 .replace(R.id.nav_books_fragment, fragment)
                 .commit();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).showBottomNavigation();
+    }
 
     @Override
     public void onSuccess(List<Books> newsList, long lastUpdate) {

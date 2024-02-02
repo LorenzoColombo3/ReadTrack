@@ -43,9 +43,4 @@
         android:id="@+id/welcomeActivity"
         android:name="com.example.readtrack.ui.welcome.WelcomeActivity"
         android:label="WelcomeActivity" />
-    <fragment
-        android:id="@+id/readingBooksFragment2"
-        android:name="com.example.readtrack.ui.ReadingBooksFragment"
-        android:label="fragment_reading_books"
-        tools:layout="@layout/fragment_reading_books" />
 </navigation>
