@@ -43,7 +43,6 @@ public class ReadingBooksFragment extends Fragment {
     private DataEncryptionUtil dataEncryptionUtil;
     private UserViewModel userViewModel;
     private String idToken;
-    private HashMap<String,String> titolo;
     public ReadingBooksFragment() {
         // Required empty public constructor
     }

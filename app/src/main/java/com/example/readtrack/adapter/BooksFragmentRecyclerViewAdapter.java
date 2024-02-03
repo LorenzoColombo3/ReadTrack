@@ -44,7 +44,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Books book = bookList.get(position);
-        Log.d(String.valueOf(bookList.size()), "posizione");
+        Log.d(bookList.get(0).getVolumeInfo().getTitle(), "posizione");
         float percent = (float) book.getBookMarker() / book.getVolumeInfo().getPageCount() * 100;
         ((ReadingBooksViewHolder) holder).bind(book.getVolumeInfo().getImageLinks().getThumbnail(), book.getVolumeInfo().getTitle(), (int) percent);
     }
