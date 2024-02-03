@@ -68,8 +68,8 @@ public class BooksRepository implements BooksResponseCallback {
         this.booksDataSource.setBooksCallback(this);
         this.favoriteBooksSource.setBooksCallback(this);
         this.readingBooksSource.setBooksCallback(this);
-        this.savedBooksSource.setBooksCallback(this);
-        this.finishedBooksSource.setBooksCallback(this);
+        //this.savedBooksSource.setBooksCallback(this);
+        //this.finishedBooksSource.setBooksCallback(this);
 
     }
 
