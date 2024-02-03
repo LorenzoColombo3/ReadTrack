@@ -15,5 +15,5 @@ public abstract class BaseSavedBooksSource {
     public abstract void isSavedBook(String idBook, String idToken, OnCheckListener listener);
 
     public abstract void removeSavedBook(String idBook, String idToken);
-    public abstract void addSavedBook(String idBook, String imageLink, String idToken);
+    public abstract void addSavedBook(String idBook, String imageLink,String title, String idToken);
 }

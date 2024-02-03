@@ -155,8 +155,8 @@ public class BooksRepository implements BooksResponseCallback {
     public void addFavouriteBook(String idBook, String imageLink, String idToken) {
         favoriteBooksSource.addFavouriteBook(idBook, imageLink, idToken);
     }
-    public void addSavedBook(String idBook, String imageLink, String idToken) {
-        savedBooksSource.addSavedBook(idBook, imageLink, idToken);
+    public void addSavedBook(String idBook, String imageLink, String title, String idToken) {
+        savedBooksSource.addSavedBook(idBook, imageLink, title, idToken);
     }
     public void addFinishedBook(String idBook, String imageLink, String idToken) {
         finishedBooksSource.addUserFinishedBook(idBook, imageLink, idToken);

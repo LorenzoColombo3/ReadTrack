@@ -136,13 +136,14 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     if(book.getVolumeInfo().getImageLinks()!=null)
                         imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
                     binding.wantToRead.setText("Salvato");
-                    booksViewModel.addSavedBook(book.getId(), imageLink, idToken);
+                    booksViewModel.addSavedBook(book.getId(), imageLink, book.getVolumeInfo().getTitle(), idToken);
                     booksViewModel.removeFinishedBook(book.getId(), idToken);
                     book.setBookMarcker(0);
                    aggiornaSegnalibro();
                 }
             });
         });
+
         binding.addFavourite.setOnClickListener(v->{
             booksViewModel.isFavouriteBook(book.getId(), idToken, isFavourite -> {
                 if (isFavourite) {

@@ -109,8 +109,8 @@ public class BooksViewModel extends ViewModel {
     public void removeSavedBook(String idBook, String idToken){
         booksRepository.removeSavedBook(idBook,idToken);
     }
-    public void addSavedBook(String idBook, String imageLink, String idToken){
-        booksRepository.addSavedBook(idBook, imageLink, idToken);
+    public void addSavedBook(String idBook, String imageLink, String title, String idToken){
+        booksRepository.addSavedBook(idBook, imageLink, title, idToken);
     }
     public void removeFinishedBook(String idBook, String idToken){
         booksRepository.removeFinishedBook(idBook,idToken);

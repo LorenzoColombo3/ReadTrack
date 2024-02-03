@@ -2,6 +2,8 @@ package com.example.readtrack.source.books;
 
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
+import static com.example.readtrack.util.Constants.IMG;
+import static com.example.readtrack.util.Constants.TITLE;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import androidx.annotation.NonNull;
@@ -39,15 +41,17 @@ public class SavedBooksSource extends BaseSavedBooksSource{
                         DataSnapshot dataSnapshot = task.getResult();
                         String bookId;
                         String bookCover;
+                        String bookTitle;
                         if (dataSnapshot.exists()) {
                             List<Books> booksList = new ArrayList<>();
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                                 bookId = bookSnapshot.getKey();
-                                if(!bookSnapshot.getValue(String.class).equals(""))
-                                      bookCover = bookSnapshot.getValue(String.class).substring(5);
+                                bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
+                                if(!bookSnapshot.child(IMG).getValue(String.class).equals(""))
+                                      bookCover = bookSnapshot.child(IMG).getValue(String.class).substring(5);
                                 else
-                                    bookCover = bookSnapshot.getValue(String.class);
-                                booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
+                                    bookCover = bookSnapshot.child(IMG).getValue(String.class);
+                                booksList.add(new Books(bookId, "http"+bookCover, bookTitle, 0, 0));
                             }
                             booksResponseCallback.onSuccessFromRemoteDatabase(booksList, WANT_TO_READ);
                         } else {
@@ -96,8 +100,8 @@ public class SavedBooksSource extends BaseSavedBooksSource{
     }
 
     @Override
-    public void addSavedBook(String idBook, String imageLink, String idToken) {
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(WANT_TO_READ).child(idBook).setValue(imageLink);
-
+    public void addSavedBook(String idBook, String imageLink, String title, String idToken) {
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(WANT_TO_READ).child(idBook).child(IMG).setValue(imageLink);
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(WANT_TO_READ).child(idBook).child(TITLE).setValue(title);
     }
 }
