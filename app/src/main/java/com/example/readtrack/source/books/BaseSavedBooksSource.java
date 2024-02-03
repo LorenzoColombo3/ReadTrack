@@ -1,6 +1,7 @@
 package com.example.readtrack.source.books;
 
 import com.example.readtrack.repository.books.BooksResponseCallback;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 
 public abstract class BaseSavedBooksSource {
 
@@ -9,4 +10,10 @@ public abstract class BaseSavedBooksSource {
     public void setBooksCallback(BooksResponseCallback booksResponseCallback) {
         this.booksResponseCallback = booksResponseCallback;
     }
+    public abstract void getUserSavedBooks(String idToken);
+
+    public abstract void isSavedBook(String idBook, String idToken, OnFavouriteCheckListener listener);
+
+    public abstract void removeSavedBook(String idBook, String idToken);
+    public abstract void addSavedBook(String idBook, String imageLink, String idToken);
 }

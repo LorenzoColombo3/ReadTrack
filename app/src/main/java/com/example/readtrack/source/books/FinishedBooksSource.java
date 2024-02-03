@@ -9,12 +9,14 @@ import static com.example.readtrack.util.Constants.PAGE;
 import static com.example.readtrack.util.Constants.READING_BOOKS;
 import static com.example.readtrack.util.Constants.RED_BOOKS;
 import static com.example.readtrack.util.Constants.TITLE;
+import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.Books;
+import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +41,7 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
     }
     @Override
     public void removeUserFinishedBook(String idBook, String idToken) {
-        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -58,13 +60,13 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
 
     @Override
     public void addUserFinishedBook(String idBook, String imgLink, String idToken) {
-        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS).child(idBook).child(imgLink);
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS).child(idBook).child(imgLink);
     }
 
     @Override
     public void getUserFinishedBooks(String idToken) {
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
-                child(READING_BOOKS).get().addOnCompleteListener(task -> {
+                child(RED_BOOKS).get().addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
@@ -83,5 +85,21 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
                         }
                     }
                 });
+    }
+
+    @Override
+    public void isFinishedBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS);
+        userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isFinished = snapshot.exists();
+                listener.onFavouriteCheckResult(isFinished);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 }

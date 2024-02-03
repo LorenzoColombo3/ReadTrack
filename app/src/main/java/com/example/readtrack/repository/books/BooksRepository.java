@@ -68,8 +68,8 @@ public class BooksRepository implements BooksResponseCallback {
         this.booksDataSource.setBooksCallback(this);
         this.favoriteBooksSource.setBooksCallback(this);
         this.readingBooksSource.setBooksCallback(this);
-       // this.savedBooksSource.setBooksCallback(this);
-        //this.finishedBooksSource.setBooksCallback(this);
+        this.savedBooksSource.setBooksCallback(this);
+        this.finishedBooksSource.setBooksCallback(this);
 
     }
 
@@ -83,54 +83,79 @@ public class BooksRepository implements BooksResponseCallback {
         idBooksLiveData = new MutableLiveData<Result>();
         markerLiveData = new MutableLiveData<Result>();
     }
-
     public MutableLiveData<Result> searchBooksById(String id) {
         booksDataSource.searchBooksById(id);
         return idBooksLiveData;
     }
-
     @Override
     public void onSuccessFromRemote(BooksApiResponse booksApiResponse) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksApiResponse);
         apiBooksLiveData.postValue(result);
     }
-
     @Override
     public void onSuccessFromRemoteId(BooksApiResponse booksApiResponse) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksApiResponse);
         idBooksLiveData.setValue(result);
     }
-
-
     @Override
     public void onFailureFromRemote(Exception exception) {
        Log.d("errore",  exception.getMessage() );
     }
 
-    public MutableLiveData<Result> getUserFavBooks(String idToken){
+    public MutableLiveData<Result> getUserFavBooks(String idToken) {
         favoriteBooksSource.getUserFavBooks(idToken);
         return favBooksListLiveData;
     }
-
     public MutableLiveData<Result> getUserReadingBooks(String idToken){
         readingBooksSource.getUserReadingBooks(idToken);
         return readingBooksLiveData;
     }
-
     public MutableLiveData<Result> getUserFinishedBooks(String idToken){
         finishedBooksSource.getUserFinishedBooks(idToken);
         return finishedBooksLiveData;
     }
-
-
-    /*public MutableLiveData<Result> getUserStartBooks(String idToken){
-        savedBooksSource.getUserStartBooks(idToken);
+    public MutableLiveData<Result> getUserSavedBooks(String idToken){
+        savedBooksSource.getUserSavedBooks(idToken);
         return savedBooksLiveData;
-    }*/
-
+    }
     public MutableLiveData<Result> getMarker(String idBook, String idToken){
         readingBooksSource.getSegnalibro(idBook, idToken);
         return markerLiveData;
+    }
+
+    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+        favoriteBooksSource.isFavouriteBook(idBook,idToken,listener);
+    }
+    public void isSavedBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+        savedBooksSource.isSavedBook(idBook,idToken,listener);
+    }
+    public void isFinishedBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+        finishedBooksSource.isFinishedBook(idBook,idToken,listener);
+    }
+
+
+    public void removeFavouriteBook(String idBook, String idToken) {
+        favoriteBooksSource.removeFavouriteBook(idBook,idToken);
+    }
+    public void removeSavedBook(String idBook, String idToken) {
+        savedBooksSource.removeSavedBook(idBook, idToken);
+    }
+    public void removeFinishedBook(String idBook, String idToken) {
+        finishedBooksSource.removeUserFinishedBook(idBook,idToken);
+    }
+
+
+    public void addFavouriteBook(String idBook, String imageLink, String idToken) {
+        favoriteBooksSource.addFavouriteBook(idBook, imageLink, idToken);
+    }
+    public void addSavedBook(String idBook, String imageLink, String idToken) {
+        savedBooksSource.addSavedBook(idBook, imageLink, idToken);
+    }
+    public void addFinishedBook(String idBook, String imageLink, String idToken) {
+        finishedBooksSource.addUserFinishedBook(idBook, imageLink, idToken);
+    }
+    public void updateReadingBook(String idBook, int page, String linkImg, String title, int numPages,  String idToken){
+        readingBooksSource.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
     }
 
     @Override
@@ -153,31 +178,8 @@ public class BooksRepository implements BooksResponseCallback {
                 break;
         }
     }
-
     public void onSuccessFromRemoteMarkReading(List<Books> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
         markerLiveData.postValue(result);
     }
-
-
-    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener){
-        favoriteBooksSource.isFavouriteBook(idBook,idToken,listener);
-    }
-
-
-    public void removeFavouriteBook(String idBook, String idToken) {
-        favoriteBooksSource.removeFavouriteBook(idBook,idToken);
-    }
-
-
-    public void addFavouriteBook(String idBook, String imageLink, String idToken) {
-        favoriteBooksSource.addFavouriteBook(idBook, imageLink, idToken);
-    }
-
-    public void updateReadingBook(String idBook, int page, String linkImg, String title, int numPages,  String idToken){
-        readingBooksSource.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
-    }
-
-
-
 }

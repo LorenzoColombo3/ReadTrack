@@ -41,7 +41,6 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
 
     @Override
     public void getUserReadingBooks(String idToken) {
-        Log.d("start", "UserData");
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
                 child(READING_BOOKS).get().addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
