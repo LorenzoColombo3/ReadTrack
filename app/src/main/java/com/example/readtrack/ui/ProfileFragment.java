@@ -4,7 +4,7 @@ import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_
 import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 import static com.example.readtrack.util.Constants.READING_BOOKS;
-import static com.example.readtrack.util.Constants.RED_BOOKS;
+import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import android.os.Bundle;
@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
-import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentProfileBinding;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
@@ -39,7 +38,6 @@ import com.example.readtrack.util.ServiceLocator;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ProfileFragment extends Fragment {
@@ -93,7 +91,7 @@ public class ProfileFragment extends Fragment {
         binding.userName.setText(userViewModel.getLoggedUser().getEmail());
         generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);
         generateRecyclerView(view, binding.readingBooks, READING_BOOKS);
-        generateRecyclerView(view, binding.booksRead, RED_BOOKS);
+        generateRecyclerView(view, binding.booksRead, FINISHED_BOOKS);
         generateRecyclerView(view, binding.startBooks, WANT_TO_READ);
     }
 
@@ -125,7 +123,6 @@ public class ProfileFragment extends Fragment {
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                Log.d("immagine",  booksList.get(0).getId());
                                 booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
@@ -135,7 +132,7 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
             case READING_BOOKS:
-                booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
+               booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
@@ -149,8 +146,8 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
 
-            case RED_BOOKS:
-                booksViewModel.getFavBooksMutableLiveData(idToken).observe(
+            case FINISHED_BOOKS:
+                booksViewModel.getFinishedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri
@@ -165,7 +162,7 @@ public class ProfileFragment extends Fragment {
                 break;
 
             case WANT_TO_READ:
-                booksViewModel.getFavBooksMutableLiveData(idToken).observe(
+                booksViewModel.getSavedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 // Aggiorna la lista dei libri

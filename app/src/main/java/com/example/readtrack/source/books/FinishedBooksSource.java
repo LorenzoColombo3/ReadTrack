@@ -1,24 +1,16 @@
 package com.example.readtrack.source.books;
 
-import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
-import static com.example.readtrack.util.Constants.IMG;
-import static com.example.readtrack.util.Constants.NUMPAGES;
-import static com.example.readtrack.util.Constants.PAGE;
-import static com.example.readtrack.util.Constants.READING_BOOKS;
-import static com.example.readtrack.util.Constants.RED_BOOKS;
-import static com.example.readtrack.util.Constants.TITLE;
-import static com.example.readtrack.util.Constants.WANT_TO_READ;
+import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.Books;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FinishedBooksSource extends BaseFinishedBooksSource{
@@ -41,7 +32,7 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
     }
     @Override
     public void removeUserFinishedBook(String idBook, String idToken) {
-        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS);
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FINISHED_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -60,41 +51,46 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
 
     @Override
     public void addUserFinishedBook(String idBook, String imgLink, String idToken) {
-        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS).child(idBook).child(imgLink);
+        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FINISHED_BOOKS).child(idBook).setValue(imgLink);
     }
 
     @Override
     public void getUserFinishedBooks(String idToken) {
         databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).
-                child(RED_BOOKS).get().addOnCompleteListener(task -> {
+                child(FINISHED_BOOKS).get().addOnCompleteListener(task -> {
                     if (!task.isSuccessful()) {
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
                         List<Books> booksList = new ArrayList<>();
+                        String bookId;
+                        String bookData;
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
-                                String bookId = bookSnapshot.getKey();
-                                String bookData = String.valueOf(bookSnapshot.getValue());
-                                booksList.add(new Books(bookId, bookData, null, 0, 0));
+                                bookId = bookSnapshot.getKey();
+                                if(!bookSnapshot.getValue().equals(""))
+                                     bookData = bookSnapshot.getValue(String.class).substring(5);
+                                else
+                                    bookData = bookSnapshot.getValue(String.class);
+                                booksList.add(new Books(bookId, "http"+bookData, null, 0, 0));
                             }
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, RED_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FINISHED_BOOKS);
                         } else {
                             // Nessun dato trovato
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, RED_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FINISHED_BOOKS);
                         }
                     }
                 });
     }
 
     @Override
-    public void isFinishedBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
-        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(RED_BOOKS);
+    public void isFinishedBook(String idBook, String idToken, OnCheckListener listener) {
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FINISHED_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFinished = snapshot.exists();
-                listener.onFavouriteCheckResult(isFinished);
+                listener.onCheckResult(isFinished);
             }
 
             @Override

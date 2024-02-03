@@ -61,8 +61,8 @@ public class ServiceLocator {
         booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
         favoriteBooksSource = new FavoriteBooksSource(sharedPreferencesUtil);
         readingBooksSource = new ReadingBooksSource(sharedPreferencesUtil);
-        finishedBooksSource = null;
-        savedBooksSource = null;
+        finishedBooksSource = new FinishedBooksSource(sharedPreferencesUtil);
+        savedBooksSource = new SavedBooksSource(sharedPreferencesUtil);
         return new BooksRepository(booksDataSource, favoriteBooksSource, readingBooksSource, savedBooksSource, finishedBooksSource);
     }
     public IUserRepository getUserRepository(Application application) {

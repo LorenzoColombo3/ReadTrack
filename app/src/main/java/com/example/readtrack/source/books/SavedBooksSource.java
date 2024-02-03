@@ -1,16 +1,13 @@
 package com.example.readtrack.source.books;
 
-import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.Books;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,14 +37,18 @@ public class SavedBooksSource extends BaseSavedBooksSource{
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
+                        String bookId;
+                        String bookCover;
                         if (dataSnapshot.exists()) {
                             List<Books> booksList = new ArrayList<>();
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
-                                String bookId = bookSnapshot.getKey();
-                                String bookCover = bookSnapshot.getValue(String.class).substring(5);
+                                bookId = bookSnapshot.getKey();
+                                if(!bookSnapshot.getValue(String.class).equals(""))
+                                      bookCover = bookSnapshot.getValue(String.class).substring(5);
+                                else
+                                    bookCover = bookSnapshot.getValue(String.class);
                                 booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
                             }
-                            Log.d("copertina", booksList.get(0).getVolumeInfo().getImageLinks().getThumbnail().toString());
                             booksResponseCallback.onSuccessFromRemoteDatabase(booksList, WANT_TO_READ);
                         } else {
                             // Nessun dato trovato
@@ -60,13 +61,13 @@ public class SavedBooksSource extends BaseSavedBooksSource{
     }
 
     @Override
-    public void isSavedBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
+    public void isSavedBook(String idBook, String idToken, OnCheckListener listener) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(WANT_TO_READ);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isSaved = snapshot.exists();
-                listener.onFavouriteCheckResult(isSaved);
+                listener.onCheckResult(isSaved);
             }
 
             @Override

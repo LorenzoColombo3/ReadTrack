@@ -2,9 +2,7 @@ package com.example.readtrack.ui;
 
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
-import static com.example.readtrack.util.Constants.TITLE;
 
-import android.os.Binder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,8 +20,6 @@ import android.view.ViewGroup;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksFragmentRecyclerViewAdapter;
-import com.example.readtrack.adapter.HashMapRecyclerViewAdapter;
-import com.example.readtrack.databinding.FragmentBooksBinding;
 import com.example.readtrack.databinding.FragmentReadingBooksBinding;
 import com.example.readtrack.model.Books;
 import com.example.readtrack.model.Result;
@@ -39,7 +35,6 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ReadingBooksFragment extends Fragment {
     FragmentReadingBooksBinding binding;
@@ -101,7 +96,7 @@ public class ReadingBooksFragment extends Fragment {
                 });
         booksViewModel.reset();
         binding.readingBooksRecyclerView.setAdapter(booksRecyclerViewAdapter);
-        booksViewModel.getUserReadingBooksComplete(idToken).observe(
+        booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
                 getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
                         bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();

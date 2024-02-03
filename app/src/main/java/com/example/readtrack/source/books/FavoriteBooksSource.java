@@ -3,10 +3,6 @@ package com.example.readtrack.source.books;
 import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
-import static com.example.readtrack.util.Constants.IMG;
-import static com.example.readtrack.util.Constants.NUMPAGES;
-import static com.example.readtrack.util.Constants.PAGE;
-import static com.example.readtrack.util.Constants.TITLE;
 
 import android.util.Log;
 
@@ -14,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class FavoriteBooksSource extends BaseFavoriteBooksSource {
@@ -48,14 +43,19 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
                         DataSnapshot dataSnapshot = task.getResult();
                         if (dataSnapshot.exists()) {
                             List<Books> booksList = new ArrayList<>();
+                            String bookId;
+                            String bookCover;
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
-                                String bookId = bookSnapshot.getKey();
-                                String bookCover = bookSnapshot.getValue(String.class).substring(5);
-
+                                 bookId = bookSnapshot.getKey();
+                                if(!bookSnapshot.getValue(String.class).equals(""))
+                                    bookCover = bookSnapshot.getValue(String.class).substring(5);
+                                else
+                                    bookCover = bookSnapshot.getValue(String.class);
+                                Log.d("copertina", bookCover);
                                 booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
                             }
                             // Passa l'HashMap al callback di successo
-                            Log.d("copertina", booksList.get(0).getVolumeInfo().getImageLinks().getThumbnail().toString());
+
                             booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FAVOURITES_BOOKS);
                         } else {
                             // Nessun dato trovato
@@ -67,13 +67,13 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
     }
 
     @Override
-    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
+    public void isFavouriteBook(String idBook, String idToken, OnCheckListener listener) {
         DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS);
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 boolean isFavourite = snapshot.exists();
-                listener.onFavouriteCheckResult(isFavourite);
+                listener.onCheckResult(isFavourite);
             }
 
             @Override
@@ -103,6 +103,6 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
 
     @Override
     public void addFavouriteBook(String idBook, String imageLink, String idToken){
-        databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).child(idBook).setValue(imageLink);
+             databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(FAVOURITES_BOOKS).child(idBook).setValue(imageLink);
     }
 }

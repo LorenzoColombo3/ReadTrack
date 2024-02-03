@@ -1,13 +1,11 @@
 package com.example.readtrack.ui;
 
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 
 public class BooksViewModel extends ViewModel {
     private static final String TAG = BooksViewModel.class.getSimpleName();
@@ -21,14 +19,11 @@ public class BooksViewModel extends ViewModel {
     private MutableLiveData<Result> finishedBooksLiveData;
     private MutableLiveData<Result> savedBooksLiveData;
     private MutableLiveData<Result> markerLiveData;
-    private MutableLiveData<Result> titleLiveData;
-    private MutableLiveData<Result> numPagesLiveData;
 
     private int page;
     private int currentResults;
     private int totalResults;
     private boolean isLoading;
-    private MutableLiveData<Result> readingBooksCompleteLiveData;
 
 
     public BooksViewModel(BooksRepository booksRepository) {
@@ -38,18 +33,12 @@ public class BooksViewModel extends ViewModel {
         finishedBooksLiveData = new MutableLiveData<>();
         savedBooksLiveData = new MutableLiveData<>();
         markerLiveData =new MutableLiveData<>();
-        titleLiveData = new MutableLiveData<>();
-        numPagesLiveData =new MutableLiveData<>();
-        readingBooksCompleteLiveData = new MutableLiveData<>();
     }
 
     public void reset(){
         apiBooksLiveData = new MutableLiveData<Result>();
         idBookLiveData = new MutableLiveData<Result>();
         markerLiveData = new MutableLiveData<Result>();
-        titleLiveData = new MutableLiveData<>();
-        numPagesLiveData = new MutableLiveData<>();
-        readingBooksCompleteLiveData =new MutableLiveData<>();
         this.page=0;
         this.totalResults=0;
         booksRepository.reset();
@@ -60,8 +49,7 @@ public class BooksViewModel extends ViewModel {
         return apiBooksLiveData;
     }
 
-    public MutableLiveData<Result> getBooksById(String id) {
-        Log.d("Libro",id);
+    public MutableLiveData<Result> getBooksById(String id) {;
         idBookLiveData= booksRepository.searchBooksById(id);
         return idBookLiveData;
     }
@@ -84,23 +72,31 @@ public class BooksViewModel extends ViewModel {
         readingBooksLiveData = booksRepository.getUserReadingBooks(idToken);
         return readingBooksLiveData;
     }
-    public MutableLiveData<Result> getUserReadingBooksComplete(String idToken){
-        readingBooksCompleteLiveData = booksRepository.getUserReadingBooks(idToken);
-        return readingBooksCompleteLiveData;
-    }
 
-    /*public MutableLiveData<Result> getStartBooksMutableLiveData(String idToken) {
-        savedBooksLiveData = booksRepository.getUserStartBooks(idToken);
+    public MutableLiveData<Result> getSavedBooksMutableLiveData(String idToken) {
+        savedBooksLiveData = booksRepository.getUserSavedBooks(idToken);
         return savedBooksLiveData;
     }
 
     public MutableLiveData<Result> getFinishedBooksMutableLiveData(String idToken) {
         finishedBooksLiveData = booksRepository.getUserFinishedBooks(idToken);
         return finishedBooksLiveData;
-    }*/
+    }
 
-    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener) {
+    public void isFavouriteBook(String idBook, String idToken, OnCheckListener listener) {
         booksRepository.isFavouriteBook(idBook,idToken,listener);
+    }
+
+    public void isReadingBook(String idBook, String idToken, OnCheckListener listener) {
+        booksRepository.isReadingBook(idBook,idToken,listener);
+    }
+
+    public void isFinishedBook(String idBook, String idToken, OnCheckListener listener) {
+        booksRepository.isFinishedBook(idBook,idToken,listener);
+    }
+
+    public void isSavedBook(String idBook, String idToken, OnCheckListener listener) {
+        booksRepository.isSavedBook(idBook,idToken,listener);
     }
 
     public void removeFavouriteBook(String idBook, String idToken){
@@ -110,8 +106,25 @@ public class BooksViewModel extends ViewModel {
         booksRepository.addFavouriteBook(idBook, imageLink, idToken);
     }
 
+    public void removeSavedBook(String idBook, String idToken){
+        booksRepository.removeSavedBook(idBook,idToken);
+    }
+    public void addSavedBook(String idBook, String imageLink, String idToken){
+        booksRepository.addSavedBook(idBook, imageLink, idToken);
+    }
+    public void removeFinishedBook(String idBook, String idToken){
+        booksRepository.removeFinishedBook(idBook,idToken);
+    }
+    public void addFinishedBook(String idBook, String imageLink, String idToken){
+        booksRepository.addFinishedBook(idBook, imageLink, idToken);
+    }
+
     public void updateReadingBooks(String idBook, int page, String linkImg,String title,int numPages, String idToken){
         booksRepository.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
+    }
+
+    public void removeReadingBook(String idBook, String idToken){
+        booksRepository.removeReadingBook(idBook,idToken);
     }
 
     public int getPage() {

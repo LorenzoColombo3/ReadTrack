@@ -2,7 +2,7 @@ package com.example.readtrack.repository.books;
 
 import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.READING_BOOKS;
-import static com.example.readtrack.util.Constants.RED_BOOKS;
+import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import android.util.Log;
@@ -18,7 +18,7 @@ import com.example.readtrack.source.books.BaseFavoriteBooksSource;
 import com.example.readtrack.source.books.BaseFinishedBooksSource;
 import com.example.readtrack.source.books.BaseReadingBooksSource;
 import com.example.readtrack.source.books.BaseSavedBooksSource;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 
 import java.util.List;
 
@@ -68,8 +68,8 @@ public class BooksRepository implements BooksResponseCallback {
         this.booksDataSource.setBooksCallback(this);
         this.favoriteBooksSource.setBooksCallback(this);
         this.readingBooksSource.setBooksCallback(this);
-        //this.savedBooksSource.setBooksCallback(this);
-        //this.finishedBooksSource.setBooksCallback(this);
+        this.savedBooksSource.setBooksCallback(this);
+        this.finishedBooksSource.setBooksCallback(this);
 
     }
 
@@ -123,14 +123,17 @@ public class BooksRepository implements BooksResponseCallback {
         return markerLiveData;
     }
 
-    public void isFavouriteBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+    public void isFavouriteBook(String idBook, String idToken, OnCheckListener listener){
         favoriteBooksSource.isFavouriteBook(idBook,idToken,listener);
     }
-    public void isSavedBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+    public void isSavedBook(String idBook, String idToken, OnCheckListener listener){
         savedBooksSource.isSavedBook(idBook,idToken,listener);
     }
-    public void isFinishedBook(String idBook, String idToken, OnFavouriteCheckListener listener){
+    public void isFinishedBook(String idBook, String idToken, OnCheckListener listener){
         finishedBooksSource.isFinishedBook(idBook,idToken,listener);
+    }
+    public void isReadingBook(String idBook, String idToken, OnCheckListener listener){
+        readingBooksSource.isReadingBook(idBook,idToken,listener);
     }
 
 
@@ -142,6 +145,10 @@ public class BooksRepository implements BooksResponseCallback {
     }
     public void removeFinishedBook(String idBook, String idToken) {
         finishedBooksSource.removeUserFinishedBook(idBook,idToken);
+    }
+
+    public void removeReadingBook(String idBook, String idToken) {
+        readingBooksSource.removeReadingBook(idBook,idToken);
     }
 
 
@@ -169,7 +176,7 @@ public class BooksRepository implements BooksResponseCallback {
                 readingBooksLiveData.postValue(result);
                 break;
 
-            case RED_BOOKS:
+            case FINISHED_BOOKS:
                 finishedBooksLiveData.postValue(result);
                 break;
 

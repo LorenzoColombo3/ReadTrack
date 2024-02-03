@@ -74,7 +74,7 @@ public class Books implements Parcelable {
     };
 
     public void setBookMarcker(int bookMarcker){this.bookMarcker=bookMarcker;}
-    public int getBookMarcker(){return this.bookMarcker;}
+    public int getBookMarker(){return this.bookMarcker;}
     public void setFavorite(Boolean favorite){
         this.favorite=favorite;
     }

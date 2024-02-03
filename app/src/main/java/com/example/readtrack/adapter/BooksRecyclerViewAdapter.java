@@ -94,6 +94,7 @@ public class BooksRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             try {
                 Picasso.get()
                         .load( "https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
+                        .error(R.drawable.image_not_found)
                         .into(imageViewThumbnail);
             } catch (NullPointerException pointerException) {
                 Log.d("pointer exception", pointerException.toString());

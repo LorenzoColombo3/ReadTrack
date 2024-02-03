@@ -45,7 +45,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Books book = bookList.get(position);
         Log.d(String.valueOf(bookList.size()), "posizione");
-        float percent = (float) book.getBookMarcker() / book.getVolumeInfo().getPageCount() * 100;
+        float percent = (float) book.getBookMarker() / book.getVolumeInfo().getPageCount() * 100;
         ((ReadingBooksViewHolder) holder).bind(book.getVolumeInfo().getImageLinks().getThumbnail(), book.getVolumeInfo().getTitle(), (int) percent);
     }
 
@@ -81,6 +81,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             try {
                 Picasso.get()
                         .load( "https"+link.substring(4))
+                        .error(R.drawable.image_not_found)
                         .into(imageViewThumbnail);
             } catch (NullPointerException pointerException) {
                 Log.d("pointer exception", pointerException.toString());

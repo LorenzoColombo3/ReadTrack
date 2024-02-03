@@ -1,18 +1,13 @@
 package com.example.readtrack.source.user;
 
-import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
-import static com.example.readtrack.util.Constants.IMG;
-import static com.example.readtrack.util.Constants.PAGE;
-import static com.example.readtrack.util.Constants.READING_BOOKS;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.User;
-import com.example.readtrack.util.OnFavouriteCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,8 +16,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 

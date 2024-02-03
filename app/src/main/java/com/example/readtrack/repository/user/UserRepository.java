@@ -1,10 +1,5 @@
 package com.example.readtrack.repository.user;
 
-import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
-import static com.example.readtrack.util.Constants.READING_BOOKS;
-import static com.example.readtrack.util.Constants.RED_BOOKS;
-import static com.example.readtrack.util.Constants.WANT_TO_READ;
-
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -13,10 +8,6 @@ import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
 import com.example.readtrack.source.user.BaseUserAuthenticationRemoteDataSource;
 import com.example.readtrack.source.user.BaseUserDataRemoteDataSource;
-import com.example.readtrack.util.OnFavouriteCheckListener;
-
-import java.util.HashMap;
-import java.util.Set;
 
 public class UserRepository implements IUserRepository, UserResponseCallback {
 

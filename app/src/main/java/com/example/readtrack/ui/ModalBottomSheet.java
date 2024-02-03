@@ -72,18 +72,15 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
             binding.textInputEditText.setText("0");
         binding.update.setOnClickListener(v->{
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
-            if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>0) {
-                Log.d("null", String.valueOf(getParentFragment()==null));
-                booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4),book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken);
+            if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>=0) {
+                book.setBookMarcker(pagina);
+                if(book.getVolumeInfo().getImageLinks()!=null)
+                     booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4),book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken);
+                else
+                    booksViewModel.updateReadingBooks(book.getId(), pagina, "", book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken );
                 Snackbar.make(requireActivity().findViewById(android.R.id.content),
                         "Segnalibro aggiornato",
                         Snackbar.LENGTH_SHORT).show();
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                dismiss(); //crea problemi sull'aggiornamento del segnalibro in BookFragment
             } else {
                 binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,

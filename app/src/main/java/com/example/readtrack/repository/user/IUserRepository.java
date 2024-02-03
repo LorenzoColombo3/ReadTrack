@@ -4,10 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.readtrack.model.Result;
 import com.example.readtrack.model.User;
-import com.example.readtrack.util.OnFavouriteCheckListener;
-
-import java.util.HashMap;
-import java.util.Set;
 
 public interface IUserRepository {
     MutableLiveData<Result> getUser(String email, String password, boolean isUserRegistered);

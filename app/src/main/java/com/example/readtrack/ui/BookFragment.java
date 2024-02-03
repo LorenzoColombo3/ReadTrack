@@ -2,7 +2,6 @@ package com.example.readtrack.ui;
 
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
-import static com.example.readtrack.util.Constants.PAGE;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_VALUE;
 
 import android.content.Context;
@@ -37,14 +36,13 @@ import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
-import com.example.readtrack.util.OnFavouriteCheckListener;
+import com.example.readtrack.util.OnCheckListener;
 import com.example.readtrack.util.ServiceLocator;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class BookFragment extends Fragment implements ModalBottomSheet.BottomSheetListener {
@@ -102,9 +100,9 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         if (args != null) {
             if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
                 book = (Books) args.get("bookArgument");
-                booksViewModel.isFavouriteBook(book.getId(), idToken, new OnFavouriteCheckListener() {
+                booksViewModel.isFavouriteBook(book.getId(), idToken, new OnCheckListener() {
                     @Override
-                    public void onFavouriteCheckResult(boolean isFavourite) {
+                    public void onCheckResult(boolean isFavourite) {
                         if (isFavourite) {
                             binding.addFavourite.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
                                     R.drawable.ic_baseline_favorite_24));
@@ -128,21 +126,38 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         } else {
             book = null;
         }
-
-        String finalIdToken = idToken;
+        binding.wantToRead.setOnClickListener(v->{
+            booksViewModel.isSavedBook(book.getId(), idToken, isSaved -> {
+                if(isSaved){
+                    binding.wantToRead.setText("Salva per dopo");
+                    booksViewModel.removeSavedBook(book.getId(), idToken);
+                }else{
+                    String imageLink="";
+                    if(book.getVolumeInfo().getImageLinks()!=null)
+                        imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
+                    binding.wantToRead.setText("Salvato");
+                    booksViewModel.addSavedBook(book.getId(), imageLink, idToken);
+                    booksViewModel.removeFinishedBook(book.getId(), idToken);
+                    book.setBookMarcker(0);
+                   aggiornaSegnalibro();
+                }
+            });
+        });
         binding.addFavourite.setOnClickListener(v->{
-            booksViewModel.isFavouriteBook(book.getId(), finalIdToken, isFavourite -> {
+            booksViewModel.isFavouriteBook(book.getId(), idToken, isFavourite -> {
                 if (isFavourite) {
                     binding.addFavourite.setImageDrawable( AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_border_24));
                     binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.black));
-                    booksViewModel.removeFavouriteBook(book.getId(),finalIdToken);
+                    booksViewModel.removeFavouriteBook(book.getId(),idToken);
                 } else {
-                    String imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
+                    String imageLink="";
+                    if(book.getVolumeInfo().getImageLinks()!=null)
+                         imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
                     binding.addFavourite.setImageDrawable(AppCompatResources.getDrawable(getActivity(),
                             R.drawable.ic_baseline_favorite_24));
                     binding.addFavourite.setColorFilter(ContextCompat.getColor(getActivity(), R.color.red_500));
-                    booksViewModel.addFavouriteBook(book.getId(), imageLink, finalIdToken);
+                    booksViewModel.addFavouriteBook(book.getId(), imageLink, idToken);
                 }
             });
         });
@@ -234,7 +249,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         });
     }
     private void mostraModalBottomSheet(Books book) {
-        modalBottomSheet = new ModalBottomSheet(book, String.valueOf(book.getBookMarcker()));
+        modalBottomSheet = new ModalBottomSheet(book, String.valueOf(book.getBookMarker()));
         modalBottomSheet.setBottomSheetListener(this);
         modalBottomSheet.show(getActivity().getSupportFragmentManager(), ModalBottomSheet.TAG);
 
@@ -285,8 +300,30 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                 binding.isbn.setText(book.getVolumeInfo().getIndustryIdentifiers().get(0).getIdentifier());
             }
         }
-        binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
-        aggiornaSegnalibro();
+        binding.numPages.setText(0+"/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+        booksViewModel.isFinishedBook(book.getId(), idToken, isFinished ->{
+            if(isFinished){
+                int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
+                float percentualeCompletamento = (float) numeroTotalePagine / numeroTotalePagine * 100;
+                binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
+                binding.numPages.setText(String.valueOf(numeroTotalePagine).trim() + "/" + String.valueOf(numeroTotalePagine));
+            }else{
+                booksViewModel.getMarkerLiveData(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
+                    if (result.isSuccess()) {
+                        book.setBookMarcker(((Result.BooksResponseSuccess) result).getDataBooks().getItems().get(0).getBookMarker());
+                        if(book.getBookMarker()>=0) {
+                            int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
+                            int paginaDelSegnalibro = book.getBookMarker(); // Pagina del segnalibro
+                            float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
+                            binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
+                            binding.numPages.setText(String.valueOf(book.getBookMarker()).trim() + "/" + String.valueOf(numeroTotalePagine));
+                        }
+                    } else {
+                        binding.numPages.setText(0+"/"+String.valueOf(book.getVolumeInfo().getPageCount()));
+                    }
+                });
+            }
+        });
         binding.description.setText(book.getVolumeInfo().getDescription());// Aggiungi un listener per ascoltare i cambiamenti nel layout del TextView
         binding.description.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
             @Override
@@ -320,25 +357,42 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     }
 
     public void aggiornaSegnalibro(){
-        booksViewModel.getMarkerLiveData(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
-            if (result.isSuccess()) {
-                book.setBookMarcker(((Result.BooksResponseSuccess) result).getDataBooks().getItems().get(0).getBookMarcker());
-                if(book.getBookMarcker()!=0) {
-                    int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
-                    int paginaDelSegnalibro = book.getBookMarcker(); // Pagina del segnalibro
-                    float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
-                    binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
-                    binding.numPages.setText(String.valueOf(book.getBookMarcker()).trim() + "/" + String.valueOf(numeroTotalePagine));
-                }
-            } else {
-                binding.numPages.setText("/"+String.valueOf(book.getVolumeInfo().getPageCount()));
-            }
-        });
+        if(book.getBookMarker()>=0) {
+            int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
+            int paginaDelSegnalibro = book.getBookMarker(); // Pagina del segnalibro
+            float percentualeCompletamento = (float) paginaDelSegnalibro / numeroTotalePagine * 100;
+            binding.linearProgressIndicator.setProgress((int) percentualeCompletamento);
+            binding.numPages.setText(String.valueOf(book.getBookMarker()).trim() + "/" + String.valueOf(numeroTotalePagine));
+        }
+    }
+
+    public void aggiornaBottoneSalvato(){
+        if(book.getBookMarker()>0){
+            booksViewModel.removeSavedBook(book.getId(), idToken);
+            binding.wantToRead.setText("Stai leggendo");
+            binding.wantToRead.setClickable(false);
+            if(book.getBookMarker()==book.getVolumeInfo().getPageCount()){
+                String imageLink="";
+                if(book.getVolumeInfo().getImageLinks()!=null)
+                    imageLink= "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
+                booksViewModel.addFinishedBook(book.getId(), imageLink, idToken);
+                booksViewModel.removeReadingBook(book.getId(), idToken);
+                binding.wantToRead.setText("Salva per dopo");
+                binding.wantToRead.setClickable(true);
+            }else
+                booksViewModel.removeFinishedBook(book.getId(), idToken);
+        }else{
+            booksViewModel.removeReadingBook(book.getId(), idToken);
+            binding.wantToRead.setText("Salva per dopo");
+            binding.wantToRead.setClickable(true);
+        }
     }
 
     @Override
     public void onButtonPressed() {
+        Log.d("pagina1", String.valueOf(book.getBookMarker()) );
         aggiornaSegnalibro();
+        aggiornaBottoneSalvato();
     }
 }
 

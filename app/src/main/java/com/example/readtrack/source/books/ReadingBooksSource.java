@@ -1,6 +1,5 @@
 package com.example.readtrack.source.books;
 
-import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 import static com.example.readtrack.util.Constants.IMG;
@@ -15,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.Books;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
+import com.example.readtrack.util.OnCheckListener;
 import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ReadingBooksSource extends BaseReadingBooksSource{
@@ -50,13 +49,19 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                         DataSnapshot dataSnapshot = task.getResult();
                         List<Books> booksList = new ArrayList<>();
                         if (dataSnapshot.exists()) {
-                            // Ottieni i dati come ArrayList<BookModel>
+                            String bookCover;
+                            String bookTitle;
+                            int numPages;
+                            int bookMarker;
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                                 String bookId = bookSnapshot.getKey();
-                                String bookCover = bookSnapshot.child(IMG).getValue(String.class).substring(5);
-                                String bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
-                                int numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
-                                int bookMarker = bookSnapshot.child(PAGE).getValue(Integer.class);
+                                if(!bookSnapshot.child(IMG).getValue(String.class).equals(""))
+                                     bookCover = bookSnapshot.child(IMG).getValue(String.class).substring(5);
+                                else
+                                     bookCover = bookSnapshot.child(IMG).getValue(String.class);
+                                 bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
+                                 numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
+                                 bookMarker= bookSnapshot.child(PAGE).getValue(Integer.class);
                                 booksList.add(new Books(bookId, "http"+bookCover, bookTitle, numPages, bookMarker));
                             }
                             // Passa l'ArrayList al callback di successo
@@ -136,6 +141,22 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                         }
                     }
                 });
+    }
+
+    @Override
+    public void isReadingBook(String idBook, String idToken, OnCheckListener listener) {
+        DatabaseReference userBooksRef = databaseReference.child(FIREBASE_USERS_COLLECTION).child(idToken).child(READING_BOOKS);
+        userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isReading = snapshot.exists();
+                listener.onCheckResult(isReading);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
 }
