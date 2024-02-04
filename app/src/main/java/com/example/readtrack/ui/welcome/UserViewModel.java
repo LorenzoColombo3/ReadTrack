@@ -1,5 +1,6 @@
 package com.example.readtrack.ui.welcome;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -14,6 +15,7 @@ public class UserViewModel extends ViewModel {
 
     private final IUserRepository userRepository;
     private MutableLiveData<Result> userMutableLiveData;
+    private MutableLiveData<Result> imageMutableLiveData;
     private boolean authenticationError;
 
     public UserViewModel(IUserRepository userRepository) {
@@ -21,6 +23,14 @@ public class UserViewModel extends ViewModel {
         authenticationError = false;
     }
 
+    public MutableLiveData<Result> getUserImage(String idToken) {
+        imageMutableLiveData = userRepository.getUserImage(idToken);
+        return imageMutableLiveData;
+    }
+
+    public void saveUserProfileImg(String idToken, Bitmap imgProfile){
+        userRepository.saveUserProfileImg(idToken,imgProfile);
+    }
 
     public MutableLiveData<Result> getUserMutableLiveData(
             String email, String password, boolean isUserRegistered) {

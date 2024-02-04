@@ -51,7 +51,6 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
                                     bookCover = bookSnapshot.getValue(String.class).substring(5);
                                 else
                                     bookCover = bookSnapshot.getValue(String.class);
-                                Log.d("copertina", bookCover);
                                 booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
                             }
                             // Passa l'HashMap al callback di successo

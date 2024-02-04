@@ -20,8 +20,8 @@
             android:id="@+id/action_profile_fragment_to_bookFragment"
             app:destination="@id/bookFragment" />
         <action
-            android:id="@+id/action_profile_fragment_to_welcomeActivity"
-            app:destination="@id/welcomeActivity" />
+            android:id="@+id/action_profile_fragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/search_fragment"
@@ -43,4 +43,13 @@
         android:id="@+id/welcomeActivity"
         android:name="com.example.readtrack.ui.welcome.WelcomeActivity"
         android:label="WelcomeActivity" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.readtrack.ui.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_welcomeActivity"
+            app:destination="@id/welcomeActivity" />
+    </fragment>
 </navigation>

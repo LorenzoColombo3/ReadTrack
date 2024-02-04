@@ -57,7 +57,8 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="update">Aggiorna segnalibro</string>
-    <string name="Logout">logout</string>
+    <string name="Logout">Logout</string>
     <string name="percentage">percentuale</string>
     <string name="reading_percentage">percentuale</string>
+    <string name="modifica_immagine_profilo">Modifica immagine profilo</string>
 </resources>

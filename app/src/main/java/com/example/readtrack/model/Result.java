@@ -1,5 +1,7 @@
 package com.example.readtrack.model;
 
+import com.example.readtrack.repository.user.UserRepository;
+
 import java.util.HashMap;
 
 public abstract class Result {

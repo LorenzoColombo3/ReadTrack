@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
-        //TODO sistemare la animazione o rimuoverla
         Animation slideOut = AnimationUtils.loadAnimation(this, R.anim.slide_out);
         navHostFragment.getView().startAnimation(slideOut);
         if(navHostFragment.getChildFragmentManager().getBackStackEntryCount()==2)

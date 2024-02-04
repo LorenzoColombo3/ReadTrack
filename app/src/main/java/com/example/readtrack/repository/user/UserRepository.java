@@ -1,5 +1,6 @@
 package com.example.readtrack.repository.user;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
@@ -16,16 +17,23 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     private final BaseUserAuthenticationRemoteDataSource userAuthRemoteDataSource;
     private final BaseUserDataRemoteDataSource userDataRemoteDataSource;
     private final MutableLiveData<Result> userMutableLiveData;
+    private final MutableLiveData<Result> imageLiveData;
 
     public UserRepository(BaseUserAuthenticationRemoteDataSource userRemoteDataSource,
                           BaseUserDataRemoteDataSource userDataRemoteDataSource) {
         this.userAuthRemoteDataSource = userRemoteDataSource;
         this.userDataRemoteDataSource = userDataRemoteDataSource;
         this.userMutableLiveData = new MutableLiveData<>();
+        this.imageLiveData = new MutableLiveData<>();
         this.userAuthRemoteDataSource.setUserResponseCallback(this);
         this.userDataRemoteDataSource.setUserResponseCallback(this);
     }
 
+    @Override
+    public MutableLiveData<Result> getUserImage(String idToken) {
+        userDataRemoteDataSource.getUserProfileImg(idToken);
+        return userMutableLiveData;
+    }
 
     @Override
     public MutableLiveData<Result> getUser(String email, String password, boolean isUserRegistered) {
@@ -52,6 +60,10 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
     public MutableLiveData<Result> logout() {
         userAuthRemoteDataSource.logout();
         return userMutableLiveData;
+    }
+    @Override
+    public void saveUserProfileImg(String idToken, Bitmap imgProfile){
+        userDataRemoteDataSource.saveUserProfileImg(idToken,imgProfile);
     }
 
     @Override

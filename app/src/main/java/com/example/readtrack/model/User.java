@@ -1,5 +1,6 @@
 package com.example.readtrack.model;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,11 +11,23 @@ public class User implements Parcelable {
     private String name;
     private String email;
     private String idToken;
+    private String imageLink;
 
     public User(String name, String email, String idToken) {
         this.name = name;
         this.email = email;
         this.idToken = idToken;
+        this.imageLink = null;
+    }
+    public User(String imageLink) {
+        this.imageLink = imageLink;
+    }
+    public String getImageLink() {
+        return imageLink;
+    }
+
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
     public String getName() {

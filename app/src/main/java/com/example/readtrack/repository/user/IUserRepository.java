@@ -1,5 +1,7 @@
 package com.example.readtrack.repository.user;
 
+import android.graphics.Bitmap;
+
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.readtrack.model.Result;
@@ -14,6 +16,7 @@ public interface IUserRepository {
     void signIn(String email, String password);
     void signInWithGoogle(String token);
     void resetPassword(String email);
-
+    void saveUserProfileImg(String idToken, Bitmap imgProfile);
+    MutableLiveData<Result> getUserImage(String idToken);
 
 }
