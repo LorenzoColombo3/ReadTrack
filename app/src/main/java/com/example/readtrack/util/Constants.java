@@ -29,6 +29,9 @@ public class Constants {
 
     public static final int MINIMUM_PASSWORD_LENGTH = 6;
 
+    //Constants for Firebase Storage
+    public static final String FIREBASE_STORAGE = "gs://readtracj.appspot.com";
+
     // Constants for Firebase Realtime Database
     public static final String FIREBASE_REALTIME_DATABASE = "https://readtracj-default-rtdb.europe-west1.firebasedatabase.app/";
     public static final String FIREBASE_USERS_COLLECTION = "users";

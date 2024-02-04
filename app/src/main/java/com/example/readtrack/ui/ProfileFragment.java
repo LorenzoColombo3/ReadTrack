@@ -7,6 +7,12 @@ import static com.example.readtrack.util.Constants.READING_BOOKS;
 import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +23,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +95,9 @@ public class ProfileFragment extends Fragment {
             userViewModel.logout();
             Navigation.findNavController(requireView()).navigate(R.id.action_profile_fragment_to_welcomeActivity);
             requireActivity().finish();
+        });
+        binding.profileImageView.setOnClickListener(v->{
+            openGallery();
         });
         binding.userName.setText(userViewModel.getLoggedUser().getEmail());
         generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);
@@ -183,5 +193,81 @@ public class ProfileFragment extends Fragment {
         super.onResume();
         ((MainActivity) requireActivity()).showBottomNavigation();
     }
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, 1);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap img=setProfileImage(requestCode,resultCode,data);
+        Log.d("img", img.toString());
+        binding.profileImageView.setImageBitmap(img);
+    }
 
+    private Bitmap setProfileImage(int requestCode, int resultCode, @Nullable Intent data){
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK && data != null) {
+            Uri selectedImageUri = data.getData();
+            Bitmap resizedBitmap=null;
+            try {
+                Bitmap originalBitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImageUri);
+
+                int rotation = getRotationFromImage(selectedImageUri);
+                Bitmap rotatedBitmap = rotateBitmap(originalBitmap, rotation);
+
+                Bitmap squareBitmap = cropToSquare(rotatedBitmap);
+
+                int desiredWidth = binding.profileImageView.getWidth();
+                int desiredHeight = binding.profileImageView.getHeight();
+
+                float widthScale = (float) desiredWidth / squareBitmap.getWidth();
+                float heightScale = (float) desiredHeight / squareBitmap.getHeight();
+
+                float scale = Math.min(widthScale, heightScale);
+
+                Matrix matrix = new Matrix();
+                matrix.postScale(scale, scale);
+
+                resizedBitmap = Bitmap.createBitmap(squareBitmap, 0, 0, squareBitmap.getWidth(), squareBitmap.getHeight(), matrix, true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return resizedBitmap;
+        }else {
+            return null;
+        }
+    }
+
+    private Bitmap cropToSquare(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        int size = Math.min(width, height);
+
+        int left = (width - size) / 2;
+        int top = (height - size) / 2;
+
+        Bitmap squareBitmap = Bitmap.createBitmap(bitmap, left, top, size, size);
+        return squareBitmap;
+    }
+
+
+    private int getRotationFromImage(Uri imageUri) {
+        String[] projection = {MediaStore.Images.ImageColumns.ORIENTATION};
+        Cursor cursor = requireActivity().getContentResolver().query(imageUri, projection, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int rotation = cursor.getInt(0);
+            cursor.close();
+            return rotation;
+        }
+
+        return 0;
+    }
+
+    private Bitmap rotateBitmap(Bitmap source, int rotation) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotation);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 }

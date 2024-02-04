@@ -1,8 +1,10 @@
 package com.example.readtrack.source.user;
 
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
+import static com.example.readtrack.util.Constants.FIREBASE_STORAGE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
@@ -26,6 +29,7 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
     public UserDataRemoteDataSource(SharedPreferencesUtil sharedPreferencesUtil) {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
+        //storageReference = FirebaseStorage.getInstance(FIREBASE_STORAGE);
         databaseReference = firebaseDatabase.getReference().getRef();
         this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
