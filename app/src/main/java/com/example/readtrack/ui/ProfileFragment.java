@@ -87,6 +87,7 @@ public class ProfileFragment extends Fragment {
         binding.buttonLogout.setOnClickListener(v -> {
             userViewModel.logout();
             Navigation.findNavController(requireView()).navigate(R.id.action_profile_fragment_to_welcomeActivity);
+            requireActivity().finish();
         });
         binding.userName.setText(userViewModel.getLoggedUser().getEmail());
         generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);

@@ -126,6 +126,15 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         } else {
             book = null;
         }
+
+        booksViewModel.isSavedBook(book.getId(), idToken, isSaved -> {
+            if(!isSaved){
+                binding.wantToRead.setText("Salva per dopo");
+            }else{
+                binding.wantToRead.setText("Salvato");
+            }
+        });
+
         binding.wantToRead.setOnClickListener(v->{
             booksViewModel.isSavedBook(book.getId(), idToken, isSaved -> {
                 if(isSaved){
