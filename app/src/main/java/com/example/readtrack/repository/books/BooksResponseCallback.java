@@ -18,4 +18,7 @@ public interface BooksResponseCallback {
     void onSuccessFromRemoteDatabase(List<Books> booksList, String path);
     void onSuccessFromRemoteMarkReading(List<Books> booksList);
 
+    void onSuccessFromRemoteWriting(List<Books> booksList);
+
+
 }

@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +22,6 @@ import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
-import com.example.readtrack.util.JSONparser;
-import com.example.readtrack.util.ResponseCallback;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -34,7 +31,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BooksFragment extends Fragment implements ResponseCallback{
+public class BooksFragment extends Fragment {
     FragmentBooksBinding binding;
     private UserViewModel userViewModel;
     DataEncryptionUtil dataEncryptionUtil;
@@ -94,28 +91,5 @@ public class BooksFragment extends Fragment implements ResponseCallback{
         super.onResume();
         ((MainActivity) requireActivity()).showBottomNavigation();
     }
-
-    @Override
-    public void onSuccess(List<Books> newsList, long lastUpdate) {
-        if (booksList != null) {
-            this.booksList.clear();
-            this.booksList.addAll(booksList);
-        }
-
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                booksRecyclerViewAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-    @Override
-    public void onFailure(String errorMessage) {
-        Snackbar.make(requireActivity().findViewById(android.R.id.content),
-                errorMessage, Snackbar.LENGTH_LONG).show();
-    }
-
-
 
 }

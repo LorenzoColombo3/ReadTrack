@@ -35,15 +35,14 @@ public class BooksRepository implements BooksResponseCallback {
 
     private MutableLiveData<Result> savedBooksLiveData;
     private MutableLiveData<Result> markerLiveData;
-    private MutableLiveData<Result> numPagesLiveData;
-    private MutableLiveData<Result> titleLiveData;
+    private MutableLiveData<Result> successWriting;
+
     private final BaseBooksSource booksDataSource;
     private final BaseFavoriteBooksSource favoriteBooksSource;
     private final BaseReadingBooksSource readingBooksSource;
     private final BaseSavedBooksSource savedBooksSource;
     private final BaseFinishedBooksSource finishedBooksSource;
-    private MutableLiveData<Result> booksLiveData;
-    private MutableLiveData<Result> readingBooksCompleteLiveData;
+
 
 
     public BooksRepository(BaseBooksSource booksDataSource, BaseFavoriteBooksSource favoriteBooksSource,
@@ -56,10 +55,7 @@ public class BooksRepository implements BooksResponseCallback {
         finishedBooksLiveData = new MutableLiveData<>();
         savedBooksLiveData = new MutableLiveData<>();
         markerLiveData = new MutableLiveData<>();
-        titleLiveData = new MutableLiveData<>();
-        numPagesLiveData = new MutableLiveData<>();
-        booksLiveData =new MutableLiveData<>();
-        readingBooksCompleteLiveData =new MutableLiveData<>();
+        successWriting = new MutableLiveData<>();
         this.booksDataSource = booksDataSource;
         this.favoriteBooksSource = favoriteBooksSource;
         this.readingBooksSource = readingBooksSource;
@@ -132,9 +128,6 @@ public class BooksRepository implements BooksResponseCallback {
     public void isFinishedBook(String idBook, String idToken, OnCheckListener listener){
         finishedBooksSource.isFinishedBook(idBook,idToken,listener);
     }
-    public void isReadingBook(String idBook, String idToken, OnCheckListener listener){
-        readingBooksSource.isReadingBook(idBook,idToken,listener);
-    }
 
 
     public void removeFavouriteBook(String idBook, String idToken) {
@@ -161,8 +154,9 @@ public class BooksRepository implements BooksResponseCallback {
     public void addFinishedBook(String idBook, String imageLink, String idToken) {
         finishedBooksSource.addUserFinishedBook(idBook, imageLink, idToken);
     }
-    public void updateReadingBook(String idBook, int page, String linkImg, String title, int numPages,  String idToken){
+    public MutableLiveData<Result> updateReadingBook(String idBook, int page, String linkImg, String title, int numPages,  String idToken){
         readingBooksSource.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
+        return successWriting;
     }
 
     @Override
@@ -189,5 +183,11 @@ public class BooksRepository implements BooksResponseCallback {
     public void onSuccessFromRemoteMarkReading(List<Books> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
         markerLiveData.postValue(result);
+    }
+
+    @Override
+    public void onSuccessFromRemoteWriting(List<Books> booksList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
+        successWriting.postValue(result);
     }
 }

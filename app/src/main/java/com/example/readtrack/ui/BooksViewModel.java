@@ -19,6 +19,7 @@ public class BooksViewModel extends ViewModel {
     private MutableLiveData<Result> finishedBooksLiveData;
     private MutableLiveData<Result> savedBooksLiveData;
     private MutableLiveData<Result> markerLiveData;
+    private MutableLiveData<Result> successWriting;
 
     private int page;
     private int currentResults;
@@ -33,6 +34,7 @@ public class BooksViewModel extends ViewModel {
         finishedBooksLiveData = new MutableLiveData<>();
         savedBooksLiveData = new MutableLiveData<>();
         markerLiveData =new MutableLiveData<>();
+        successWriting = new MutableLiveData<>();
     }
 
     public void reset(){
@@ -87,9 +89,6 @@ public class BooksViewModel extends ViewModel {
         booksRepository.isFavouriteBook(idBook,idToken,listener);
     }
 
-    public void isReadingBook(String idBook, String idToken, OnCheckListener listener) {
-        booksRepository.isReadingBook(idBook,idToken,listener);
-    }
 
     public void isFinishedBook(String idBook, String idToken, OnCheckListener listener) {
         booksRepository.isFinishedBook(idBook,idToken,listener);
@@ -119,8 +118,9 @@ public class BooksViewModel extends ViewModel {
         booksRepository.addFinishedBook(idBook, imageLink, idToken);
     }
 
-    public void updateReadingBooks(String idBook, int page, String linkImg,String title,int numPages, String idToken){
-        booksRepository.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
+    public MutableLiveData<Result> updateReadingBooks(String idBook, int page, String linkImg,String title,int numPages, String idToken){
+        successWriting = booksRepository.updateReadingBook(idBook,page,linkImg,title,numPages,idToken);
+        return successWriting;
     }
 
     public void removeReadingBook(String idBook, String idToken){

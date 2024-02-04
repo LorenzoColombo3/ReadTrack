@@ -4,6 +4,7 @@ import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.example.readtrack.R;
 import com.example.readtrack.databinding.ModalBottomSheetContentBinding;
 import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
@@ -26,6 +30,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class ModalBottomSheet extends BottomSheetDialogFragment {
     private final Books book;
@@ -74,19 +80,29 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>=0) {
                 book.setBookMarcker(pagina);
+                String imgLink="";
                 if(book.getVolumeInfo().getImageLinks()!=null)
-                     booksViewModel.updateReadingBooks(book.getId(), pagina, "https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4),book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken);
-                else
-                    booksViewModel.updateReadingBooks(book.getId(), pagina, "", book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken );
-                Snackbar.make(requireActivity().findViewById(android.R.id.content),
-                        "Segnalibro aggiornato",
-                        Snackbar.LENGTH_SHORT).show();
+                    imgLink="https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
+                booksViewModel.updateReadingBooks(book.getId(), pagina, imgLink,book.getVolumeInfo().getTitle(),book.getVolumeInfo().getPageCount(), idToken).observe(getViewLifecycleOwner(), res -> {
+                    if (res.isSuccess()) {
+                        dismiss();
+                        Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                                "Segnalibro aggiornato",
+                                Snackbar.LENGTH_SHORT).show();
+                    }
+                });
             } else {
                 binding.textInputEditText.setText(segnalibro);
                 Snackbar.make(binding.standardBottomSheet,
                         "Inserisci un numero di pagine corretto",
                         Snackbar.LENGTH_SHORT).show();
             }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dismiss();
+                }
+            }, 200);
         });
 
         binding.btnPlus.setOnClickListener(v->{

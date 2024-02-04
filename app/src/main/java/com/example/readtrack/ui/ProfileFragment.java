@@ -102,8 +102,8 @@ public class ProfileFragment extends Fragment {
         binding.userName.setText(userViewModel.getLoggedUser().getEmail());
         generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);
         generateRecyclerView(view, binding.readingBooks, READING_BOOKS);
-        generateRecyclerView(view, binding.booksRead, FINISHED_BOOKS);
         generateRecyclerView(view, binding.startBooks, WANT_TO_READ);
+        generateRecyclerView(view, binding.booksRead, FINISHED_BOOKS);
     }
 
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
@@ -155,6 +155,20 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
 
+            case WANT_TO_READ:
+            booksViewModel.getSavedBooksMutableLiveData(idToken).observe(
+                    getViewLifecycleOwner(), result -> {
+                        if (result.isSuccess()) {
+                            booksList.clear();
+                            booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                            booksRecyclerViewAdapter.setBookList(booksList);
+                            booksRecyclerViewAdapter.notifyDataSetChanged();
+                        } else {
+                        }
+                    }
+            );
+            break;
+
             case FINISHED_BOOKS:
                 booksViewModel.getFinishedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
@@ -169,19 +183,7 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
 
-            case WANT_TO_READ:
-                booksViewModel.getSavedBooksMutableLiveData(idToken).observe(
-                        getViewLifecycleOwner(), result -> {
-                            if (result.isSuccess()) {
-                                booksList.clear();
-                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                booksRecyclerViewAdapter.setBookList(booksList);
-                                booksRecyclerViewAdapter.notifyDataSetChanged();
-                            } else {
-                            }
-                        }
-                );
-                break;
+
 
             default:
                 Log.d("errore", "path non valido");

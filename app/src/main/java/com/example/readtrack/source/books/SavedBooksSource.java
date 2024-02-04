@@ -55,7 +55,7 @@ public class SavedBooksSource extends BaseSavedBooksSource{
                             }
                             booksResponseCallback.onSuccessFromRemoteDatabase(booksList, WANT_TO_READ);
                         } else {
-                            // Nessun dato trovato
+
                             booksResponseCallback.onFailureFromRemote(new Exception("libri non trovait"));
                         }
                     }

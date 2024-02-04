@@ -148,7 +148,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     booksViewModel.addSavedBook(book.getId(), imageLink, book.getVolumeInfo().getTitle(), idToken);
                     booksViewModel.removeFinishedBook(book.getId(), idToken);
                     book.setBookMarcker(0);
-                   aggiornaSegnalibro();
+                    aggiornaSegnalibro();
                 }
             });
         });

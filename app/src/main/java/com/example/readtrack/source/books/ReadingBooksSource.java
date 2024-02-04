@@ -100,6 +100,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Books> booksList = new ArrayList<>();
                 if (snapshot.exists()) {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         childSnapshot.getRef().child(PAGE).setValue(page);
@@ -111,6 +112,8 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                     userBooksRef.child(idBook).child(NUMPAGES).setValue(numPages);
                 }
                 getSegnalibro(idBook, idToken);
+                booksList.add(new Books(idBook, imgLink, title, numPages, page));
+                booksResponseCallback.onSuccessFromRemoteWriting(booksList);
             }
 
             @Override
