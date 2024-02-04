@@ -7,25 +7,35 @@
     android:background="?android:selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/image_cover"
-        android:padding="10dp"
-        android:layout_width="105dp"
-        android:layout_height="150dp"
-        android:contentDescription="@string/image_cover"
-        android:focusable="true"
-        android:src="@drawable/image_not_found"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/image_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_cover"
+            android:layout_width="105dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/image_cover"
+            android:focusable="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/image_not_found"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_cover"
+        app:layout_constraintStart_toEndOf="@+id/image_container"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView

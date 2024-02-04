@@ -7,18 +7,28 @@
     android:background="?android:selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/image_cover"
-        android:padding="10dp"
-        android:layout_width="105dp"
-        android:layout_height="150dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/image_cover"
-        android:focusable="true"
-        android:src="@drawable/image_not_found"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:scaleType="centerCrop"
+            android:id="@+id/image_cover"
+            android:layout_width="105dp"
+            android:layout_height="150dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/image_cover"
+            android:focusable="true"
+            android:src="@drawable/image_not_found"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

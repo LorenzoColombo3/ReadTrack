@@ -2,7 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="pink">#ffcc99</color>
+    <color name="pink">#80AAFF</color><!--C0F9F7-->
+    <color name="light_grey">#ECE5E5</color>
     <color name="google_login_button">#eceff1</color>
     <color name="google_login_text">#616161</color>
     <color name="lilla">#99CCFF</color>

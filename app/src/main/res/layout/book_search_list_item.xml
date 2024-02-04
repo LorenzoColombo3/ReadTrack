@@ -7,18 +7,27 @@
     android:background="?android:selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
-        android:scaleType="centerCrop"
-        android:id="@+id/image_cover"
-        android:padding="10dp"
-        android:layout_width="105dp"
-        android:layout_height="150dp"
-        android:contentDescription="@string/image_cover"
-        android:focusable="true"
-        android:src="@drawable/image_not_found"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/image_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:scaleType="centerCrop"
+            android:id="@+id/image_cover"
+            android:layout_width="105dp"
+            android:layout_height="150dp"
+            android:contentDescription="@string/image_cover"
+            android:focusable="true"
+            android:src="@drawable/image_not_found"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.cardview.widget.CardView>
     <TextView
         android:id="@+id/book_title"
         android:layout_width="0dp"
@@ -26,7 +35,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:textAppearance="?attr/textAppearanceTitleMedium"
-        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintStart_toEndOf="@id/image_container"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/book_title" />
 
@@ -37,7 +46,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="45dp"
         android:textAppearance="?attr/textAppearanceTitleSmall"
-        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintStart_toEndOf="@id/image_container"
         app:layout_constraintTop_toTopOf="@id/book_title"
         tools:text="@string/book_author" />
 
@@ -48,7 +57,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:textAppearance="?attr/textAppearanceTitleSmall"
-        app:layout_constraintStart_toEndOf="@id/image_cover"
+        app:layout_constraintStart_toEndOf="@id/image_container"
         app:layout_constraintTop_toTopOf="@id/book_author"
         tools:text="@string/publisher" />
 
