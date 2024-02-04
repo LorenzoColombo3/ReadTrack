@@ -59,7 +59,7 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
             return new BooksViewHolder(view);
         } else {
             view = LayoutInflater.from(parent.getContext()).
-                    inflate(R.layout.book_add_item, parent, false);
+                    inflate(R.layout.book_item_add, parent, false);
             return new AddBooksViewHolder(view);
         }
     }

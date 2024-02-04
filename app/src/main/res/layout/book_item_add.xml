@@ -7,7 +7,7 @@
     android:background="?android:selectableItemBackground"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
+    <ImageButton
         android:scaleType="centerCrop"
         android:id="@+id/image_button"
         android:padding="10dp"
