@@ -172,6 +172,7 @@ public class BooksRepository implements BooksResponseCallback {
             case FAVOURITES_BOOKS:
                 favBooksListLiveData.postValue(result);
                 break;
+
             case READING_BOOKS:
                 readingBooksLiveData.postValue(result);
                 break;

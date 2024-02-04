@@ -180,6 +180,7 @@ public class SearchFragment extends Fragment  {
         });
         return view;
     }
+
     private void scanCode() {
         ScanOptions options= new ScanOptions();
         options.setPrompt("scannerizza codice");
@@ -240,8 +241,9 @@ public class SearchFragment extends Fragment  {
         super.onPause();
     }
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
+        ((MainActivity) requireActivity()).showBottomNavigation();
     }
     @Override
     public void onDestroyView() {

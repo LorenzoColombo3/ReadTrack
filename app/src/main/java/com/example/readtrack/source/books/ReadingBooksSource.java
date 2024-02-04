@@ -62,7 +62,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                                  bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
                                  numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
                                  bookMarker= bookSnapshot.child(PAGE).getValue(Integer.class);
-                                booksList.add(new Books(bookId, "http"+bookCover, bookTitle, numPages, bookMarker));
+                                 booksList.add(new Books(bookId, "http"+bookCover, bookTitle, numPages, bookMarker));
                             }
                             // Passa l'ArrayList al callback di successo
                             booksResponseCallback.onSuccessFromRemoteDatabase(booksList, READING_BOOKS);

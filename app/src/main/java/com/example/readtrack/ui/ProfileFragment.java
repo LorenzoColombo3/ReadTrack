@@ -109,7 +109,6 @@ public class ProfileFragment extends Fragment {
                                 bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
                                 Navigation.findNavController(view).navigate(R.id.action_profile_fragment_to_bookFragment, bundle);
                             } else {
-                                // Gestisci il caso in cui non ci sono risultati
                                 Log.d("search", "Nessun risultato trovato");
                             }
                         });
@@ -122,11 +121,11 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
+                                booksList.clear();
                                 booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
                                 booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
-                                // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                             }
                         }
                 );
@@ -135,12 +134,11 @@ public class ProfileFragment extends Fragment {
                booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                // Aggiorna la lista dei libri
+                                booksList.clear();
                                 booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
                                 booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
-                                // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                             }
                         }
                 );
@@ -150,12 +148,11 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getFinishedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                // Aggiorna la lista dei libri
+                                booksList.clear();
                                 booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
                                 booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
-                                // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                             }
                         }
                 );
@@ -165,12 +162,11 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getSavedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                // Aggiorna la lista dei libri
+                                booksList.clear();
                                 booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
                                 booksRecyclerViewAdapter.setBookList(booksList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
-                                // Gestire il caso in cui la richiesta dei preferiti dell'utente non ha successo
                             }
                         }
                 );
@@ -180,6 +176,11 @@ public class ProfileFragment extends Fragment {
                 Log.d("errore", "path non valido");
         }
 
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).showBottomNavigation();
     }
 
 }
