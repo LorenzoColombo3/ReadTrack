@@ -79,7 +79,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
         binding.update.setOnClickListener(v->{
             int pagina = Integer.parseInt(binding.textInputEditText.getText().toString());
             if (pagina <= book.getVolumeInfo().getPageCount()&&pagina>=0) {
-                book.setBookMarcker(pagina);
+                book.setBookMarker(pagina);
                 String imgLink="";
                 if(book.getVolumeInfo().getImageLinks()!=null)
                     imgLink="https" + book.getVolumeInfo().getImageLinks().getThumbnail().substring(4);
@@ -97,12 +97,6 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
                         "Inserisci un numero di pagine corretto",
                         Snackbar.LENGTH_SHORT).show();
             }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    dismiss();
-                }
-            }, 200);
         });
 
         binding.btnPlus.setOnClickListener(v->{

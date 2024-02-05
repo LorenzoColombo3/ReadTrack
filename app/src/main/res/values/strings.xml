@@ -52,8 +52,8 @@
     <string name="date">date</string>
     <string name="readtrack">ReadTrack</string>
     <string name="reset_password">Reset password</string>
-    <string name="aggiungi_segnalibro">Aggiungi segnalibro</string>
-    <string name="salva_per_dopo">Salva per dopo</string>
+    <string name="aggiungi_segnalibro">Aggiorna segnalibro</string>
+    <string name="salva_per_dopo">Salvati per dopo</string>
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="update">Aggiorna segnalibro</string>

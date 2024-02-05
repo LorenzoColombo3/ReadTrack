@@ -9,6 +9,7 @@ import com.example.readtrack.repository.user.UserRepository;
 import com.example.readtrack.service.BookApiService;
 import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.source.books.BooksDataSource;
+import com.example.readtrack.source.books.BooksLocalDataSource;
 import com.example.readtrack.source.books.FavoriteBooksSource;
 import com.example.readtrack.source.books.FinishedBooksSource;
 import com.example.readtrack.source.books.ReadingBooksSource;
@@ -47,7 +48,7 @@ public class ServiceLocator {
     }
 
 
-    public BookRoomDatabase getNewsDao(Application application) {
+    public BookRoomDatabase getBooksDao(Application application) {
         return BookRoomDatabase.getDatabase(application);
     }
 
@@ -57,13 +58,17 @@ public class ServiceLocator {
         ReadingBooksSource readingBooksSource;
         FinishedBooksSource finishedBooksSource;
         SavedBooksSource savedBooksSource;
+        BooksLocalDataSource booksLocalDataSource;
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
         booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
+        DataEncryptionUtil dataEncryptionUtil = new DataEncryptionUtil(application);
         favoriteBooksSource = new FavoriteBooksSource(sharedPreferencesUtil);
         readingBooksSource = new ReadingBooksSource(sharedPreferencesUtil);
         finishedBooksSource = new FinishedBooksSource(sharedPreferencesUtil);
         savedBooksSource = new SavedBooksSource(sharedPreferencesUtil);
-        return new BooksRepository(booksDataSource, favoriteBooksSource, readingBooksSource, savedBooksSource, finishedBooksSource);
+        booksLocalDataSource = new BooksLocalDataSource(getBooksDao(application),
+                sharedPreferencesUtil, dataEncryptionUtil);
+        return new BooksRepository(booksDataSource, favoriteBooksSource, readingBooksSource, savedBooksSource, finishedBooksSource, booksLocalDataSource);
     }
     public IUserRepository getUserRepository(Application application) {
         SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
@@ -73,8 +78,6 @@ public class ServiceLocator {
 
         BaseUserDataRemoteDataSource userDataRemoteDataSource =
                 new UserDataRemoteDataSource(sharedPreferencesUtil);
-
-        DataEncryptionUtil dataEncryptionUtil = new DataEncryptionUtil(application);
 
 
         return (IUserRepository) new UserRepository(userRemoteAuthenticationDataSource,

@@ -3,6 +3,9 @@ package com.example.readtrack.ui;
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -95,7 +98,7 @@ public class ReadingBooksFragment extends Fragment {
                 });
         booksViewModel.reset();
         binding.readingBooksRecyclerView.setAdapter(booksRecyclerViewAdapter);
-        booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
+        booksViewModel.getReadingBooksMutableLiveData(idToken, isConnected()).observe(
                 getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
                         bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
@@ -107,5 +110,13 @@ public class ReadingBooksFragment extends Fragment {
                     }
                 }
         );
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

@@ -8,10 +8,13 @@ import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -112,7 +115,7 @@ public class ProfileFragment extends Fragment {
         generateRecyclerView(view, binding.favBooks, FAVOURITES_BOOKS);
         generateRecyclerView(view, binding.readingBooks, READING_BOOKS);
         generateRecyclerView(view, binding.startBooks, WANT_TO_READ);
-        generateRecyclerView(view, binding.booksRead, FINISHED_BOOKS);
+        generateRecyclerView(view, binding.booksFinished, FINISHED_BOOKS);
     }
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -156,7 +159,7 @@ public class ProfileFragment extends Fragment {
                 );
                 break;
             case READING_BOOKS:
-                booksViewModel.getReadingBooksMutableLiveData(idToken).observe(
+                booksViewModel.getReadingBooksMutableLiveData(idToken, isConnected()).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
                                 booksList.clear();
@@ -208,5 +211,13 @@ public class ProfileFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ((MainActivity) requireActivity()).showBottomNavigation();
+    }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager)requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
     }
 }

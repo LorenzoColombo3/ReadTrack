@@ -8,9 +8,11 @@ public abstract class BaseReadingBooksSource {
     public void setBooksCallback(BooksResponseCallback booksResponseCallback) {
         this.booksResponseCallback = booksResponseCallback;
     }
+
+    public abstract void isReadingBook(String idBook, String idToken, OnCheckListener listener);
     public abstract void removeReadingBook(String idBook, String idToken);
     public abstract void updateReadingBook(String idBook, int page, String imageLink, String title, int numPages, String idToken);
     public abstract void getSegnalibro(String idBook, String idToken);
     public abstract void getUserReadingBooks(String idToken);
-    public abstract void isReadingBook(String idBook, String idToken, OnCheckListener listener);
+
 }

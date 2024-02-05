@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
@@ -32,19 +33,16 @@ public class MainActivity extends AppCompatActivity {
     private NavHostFragment navHostFragment;
     private FragmentManager fragmentManager;
     private BottomNavigationView bottomNav;
+
+    private TextView title;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }*/
 
         Toolbar toolbar = findViewById(R.id.top_appbar);
         setSupportActionBar(toolbar);
-
+        title=findViewById(R.id.toolbar_title);
         navHostFragment = (NavHostFragment) getSupportFragmentManager().
                 findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
@@ -55,11 +53,17 @@ public class MainActivity extends AppCompatActivity {
 
         // For the Toolbar
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(navController.getCurrentDestination().getId()!=R.id.books_fragment){
+                     navController.popBackStack(R.id.books_fragment, false);
+                }
+            }
+        });
         // For the BottomNavigationView
         NavigationUI.setupWithNavController(bottomNav, navController);
         fragmentManager = getSupportFragmentManager();
-
       OnBackPressedDispatcher onBackPressedDispatcher = getOnBackPressedDispatcher();
         onBackPressedDispatcher.addCallback(this, new OnBackPressedCallback(true) {
 

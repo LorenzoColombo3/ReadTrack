@@ -13,12 +13,16 @@ import java.util.List;
 
 @Entity
 public class Books implements Parcelable {
+
+    @Ignore
     private String kind;
 
     @PrimaryKey(autoGenerate = false)
     @NonNull
     private String id;
+    @Ignore
     private String etag;
+    @Ignore
     private String selfLink;
     @Ignore
     private VolumeInfo volumeInfo;
@@ -28,20 +32,23 @@ public class Books implements Parcelable {
     private AccessInfo accessInfo;
     @Ignore
     private SearchInfo searchInfo;
-    @Ignore
-    private int bookMarcker;
 
-    @ColumnInfo(name = "is_favorite")
+    @ColumnInfo(name = "TITLE")
+    private String titleBookDB; //variabile d'appoggio per database dato che non accetta VolumeInfo
+    @ColumnInfo(name = "bookMarker")
+    private int bookMarker;
+
+    @Ignore
     private boolean favorite=false;
 
     public Books(String id, String thumbnail, String title, int numPages, int bookMarcker){
         this.id = id;
-        this.bookMarcker=bookMarcker;
+        this.bookMarker=bookMarcker;
         this.volumeInfo = new VolumeInfo(); // Inizializza volumeInfo
         this.saleInfo = new SaleInfo();     // Inizializza saleInfo
         this.accessInfo = new AccessInfo(); // Inizializza accessInfo
         this.searchInfo = new SearchInfo(); // Inizializza searchInfo
-
+        this.titleBookDB=title;
         this.volumeInfo.setImageLinks(new ImageLinks());
         this.volumeInfo.getImageLinks().setThumbnail(thumbnail);
         this.volumeInfo.setTitle(title);
@@ -73,8 +80,11 @@ public class Books implements Parcelable {
         }
     };
 
-    public void setBookMarcker(int bookMarcker){this.bookMarcker=bookMarcker;}
-    public int getBookMarker(){return this.bookMarcker;}
+    public void setBookMarker(int bookMarker){this.bookMarker=bookMarker;}
+    public int getBookMarker(){return this.bookMarker;}
+
+    public void setTitleBookDB(String titleBookDB){this.titleBookDB=titleBookDB;}
+    public String getTitleBookDB(){return this.titleBookDB;}
     public void setFavorite(Boolean favorite){
         this.favorite=favorite;
     }

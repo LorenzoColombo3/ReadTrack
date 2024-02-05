@@ -32,6 +32,7 @@ import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.search.SearchBar;
 import com.google.android.material.search.SearchView;
 import com.example.readtrack.adapter.BooksSearchRecyclerAdapter;
+import com.google.android.material.snackbar.Snackbar;
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -198,17 +199,23 @@ public class SearchFragment extends Fragment  {
             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), res -> {
                 if (res.isSuccess()) {
                     Log.d("query", query);
-                    String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
-                    booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
-                        if (book.isSuccess()) {
-                            ((MainActivity) requireActivity()).hideBottomNavigation();
-                            Log.d("search result", ((Result.BooksResponseSuccess) book).getData().getItems().get(0).getVolumeInfo().getTitle());
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
-                            Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
-                        } else {
-                        }
-                    });
+                    if(((Result.BooksResponseSuccess) res).getData().getItems()!=null){
+                        String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
+                        booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {
+                            if (book.isSuccess()) {
+                                ((MainActivity) requireActivity()).hideBottomNavigation();
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) book).getData().getItems().get(0));
+                                Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
+                            } else {
+                            }
+                        });
+                    }else{
+                        Snackbar.make(requireActivity().findViewById(android.R.id.content),
+                                "Libro non presente in catalogo",
+                                Snackbar.LENGTH_SHORT).show();
+                    }
+
                 } else {
 
                 }

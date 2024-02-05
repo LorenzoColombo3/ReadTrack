@@ -70,8 +70,8 @@ public class BooksViewModel extends ViewModel {
         return favBooksListLiveData;
     }
 
-    public MutableLiveData<Result> getReadingBooksMutableLiveData(String idToken) {
-        readingBooksLiveData = booksRepository.getUserReadingBooks(idToken);
+    public MutableLiveData<Result> getReadingBooksMutableLiveData(String idToken, boolean isConnected) {
+        readingBooksLiveData = booksRepository.getUserReadingBooks(idToken, isConnected);
         return readingBooksLiveData;
     }
 
@@ -96,6 +96,10 @@ public class BooksViewModel extends ViewModel {
 
     public void isSavedBook(String idBook, String idToken, OnCheckListener listener) {
         booksRepository.isSavedBook(idBook,idToken,listener);
+    }
+
+    public void isReadingBook(String idBook, String idToken, OnCheckListener listener) {
+        booksRepository.isReadingBook(idBook,idToken,listener);
     }
 
     public void removeFavouriteBook(String idBook, String idToken){

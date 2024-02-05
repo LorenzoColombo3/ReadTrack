@@ -126,15 +126,18 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         } else {
             book = null;
         }
-
+        booksViewModel.isReadingBook(book.getId(), idToken, isReading ->{
+            if(isReading){
+                booksViewModel.removeSavedBook(book.getId(), idToken);
+                binding.wantToRead.setText("Stai leggendo");
+                binding.wantToRead.setClickable(false);
+            }
+        });
         booksViewModel.isSavedBook(book.getId(), idToken, isSaved -> {
-            if(!isSaved){
-                binding.wantToRead.setText("Salva per dopo");
-            }else{
+            if(isSaved){
                 binding.wantToRead.setText("Salvato");
             }
         });
-
         binding.wantToRead.setOnClickListener(v->{
             booksViewModel.isSavedBook(book.getId(), idToken, isSaved -> {
                 if(isSaved){
@@ -147,12 +150,11 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     binding.wantToRead.setText("Salvato");
                     booksViewModel.addSavedBook(book.getId(), imageLink, book.getVolumeInfo().getTitle(), idToken);
                     booksViewModel.removeFinishedBook(book.getId(), idToken);
-                    book.setBookMarcker(0);
+                    book.setBookMarker(0);
                     aggiornaSegnalibro();
                 }
             });
         });
-
         binding.addFavourite.setOnClickListener(v->{
             booksViewModel.isFavouriteBook(book.getId(), idToken, isFavourite -> {
                 if (isFavourite) {
@@ -320,7 +322,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
             }else{
                 booksViewModel.getMarkerLiveData(book.getId(), idToken).observe(getViewLifecycleOwner(), result -> {
                     if (result.isSuccess()) {
-                        book.setBookMarcker(((Result.BooksResponseSuccess) result).getDataBooks().getItems().get(0).getBookMarker());
+                        book.setBookMarker(((Result.BooksResponseSuccess) result).getDataBooks().getItems().get(0).getBookMarker());
                         if(book.getBookMarker()>=0) {
                             int numeroTotalePagine = book.getVolumeInfo().getPageCount(); // Numero totale di pagine del libro
                             int paginaDelSegnalibro = book.getBookMarker(); // Pagina del segnalibro
@@ -389,8 +391,9 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                 booksViewModel.removeReadingBook(book.getId(), idToken);
                 binding.wantToRead.setText("Salva per dopo");
                 binding.wantToRead.setClickable(true);
-            }else
+            }else {
                 booksViewModel.removeFinishedBook(book.getId(), idToken);
+            }
         }else{
             booksViewModel.removeReadingBook(book.getId(), idToken);
             binding.wantToRead.setText("Salva per dopo");

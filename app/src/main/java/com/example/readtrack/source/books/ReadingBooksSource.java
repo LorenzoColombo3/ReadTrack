@@ -84,6 +84,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         childSnapshot.getRef().removeValue();
                     }
+                    booksResponseCallback.onSuccessFromDeletion(new Books(idBook, null, null, 0, 0));
                 }
             }
 

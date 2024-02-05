@@ -30,7 +30,7 @@ public abstract class BookRoomDatabase extends RoomDatabase {
             synchronized (BookRoomDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            BookRoomDatabase.class, BOOK_DATABASE_NAME).build();
+                            BookRoomDatabase.class, BOOK_DATABASE_NAME).fallbackToDestructiveMigration().build();
                 }
             }
         }

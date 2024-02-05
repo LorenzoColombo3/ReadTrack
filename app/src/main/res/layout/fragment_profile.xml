@@ -77,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Stai leggendo:" />
+                    android:text="Preferiti:" />
 
                 <View
                     android:layout_width="match_parent"
@@ -87,7 +87,7 @@
                     android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/reading_books"
+                    android:id="@+id/fav_books"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Preferiti:" />
+                    android:text="Stai leggendo:" />
 
                 <View
                     android:layout_width="match_parent"
@@ -125,7 +125,7 @@
                     android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/fav_books"
+                    android:id="@+id/reading_books"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
@@ -153,7 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Libri letti:" />
+                    android:text="Inizia a leggere:" />
 
                 <View
                     android:layout_width="match_parent"
@@ -163,7 +163,7 @@
                     android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/books_read"
+                    android:id="@+id/start_books"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
@@ -189,7 +189,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Inizia a leggere:" />
+                    android:text="Libri letti:" />
 
                 <View
                     android:layout_width="match_parent"
@@ -199,7 +199,7 @@
                     android:background="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/start_books"
+                    android:id="@+id/books_finished"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"

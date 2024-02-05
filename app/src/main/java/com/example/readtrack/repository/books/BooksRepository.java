@@ -13,6 +13,7 @@ import com.example.readtrack.model.Books;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.BooksResponse;
 import com.example.readtrack.model.Result;
+import com.example.readtrack.source.books.BaseBooksLocalDataSource;
 import com.example.readtrack.source.books.BaseBooksSource;
 import com.example.readtrack.source.books.BaseFavoriteBooksSource;
 import com.example.readtrack.source.books.BaseFinishedBooksSource;
@@ -39,6 +40,8 @@ public class BooksRepository implements BooksResponseCallback {
 
     private final BaseBooksSource booksDataSource;
     private final BaseFavoriteBooksSource favoriteBooksSource;
+
+    private final BaseBooksLocalDataSource booksLocalDataSource;
     private final BaseReadingBooksSource readingBooksSource;
     private final BaseSavedBooksSource savedBooksSource;
     private final BaseFinishedBooksSource finishedBooksSource;
@@ -46,7 +49,8 @@ public class BooksRepository implements BooksResponseCallback {
 
 
     public BooksRepository(BaseBooksSource booksDataSource, BaseFavoriteBooksSource favoriteBooksSource,
-                           BaseReadingBooksSource readingBooksSource, BaseSavedBooksSource savedBooksSource, BaseFinishedBooksSource finishedBooksSource) {
+                           BaseReadingBooksSource readingBooksSource, BaseSavedBooksSource savedBooksSource,
+                           BaseFinishedBooksSource finishedBooksSource,  BaseBooksLocalDataSource booksLocalDataSource) {
 
         apiBooksLiveData = new MutableLiveData<>();
         idBooksLiveData = new MutableLiveData<>();
@@ -61,14 +65,14 @@ public class BooksRepository implements BooksResponseCallback {
         this.readingBooksSource = readingBooksSource;
         this.savedBooksSource = savedBooksSource;
         this.finishedBooksSource = finishedBooksSource;
+        this.booksLocalDataSource = booksLocalDataSource;
         this.booksDataSource.setBooksCallback(this);
         this.favoriteBooksSource.setBooksCallback(this);
         this.readingBooksSource.setBooksCallback(this);
         this.savedBooksSource.setBooksCallback(this);
         this.finishedBooksSource.setBooksCallback(this);
-
+        this.booksLocalDataSource.setBooksCallback(this);
     }
-
 
     public MutableLiveData<Result> searchBooks(String query, int page) {
         booksDataSource.searchBooks(query, page);
@@ -102,8 +106,11 @@ public class BooksRepository implements BooksResponseCallback {
         favoriteBooksSource.getUserFavBooks(idToken);
         return favBooksListLiveData;
     }
-    public MutableLiveData<Result> getUserReadingBooks(String idToken){
-        readingBooksSource.getUserReadingBooks(idToken);
+    public MutableLiveData<Result> getUserReadingBooks(String idToken, boolean isConnected){
+        if(isConnected)
+            readingBooksSource.getUserReadingBooks(idToken);
+        else
+            booksLocalDataSource.getBooks();
         return readingBooksLiveData;
     }
     public MutableLiveData<Result> getUserFinishedBooks(String idToken){
@@ -129,6 +136,9 @@ public class BooksRepository implements BooksResponseCallback {
         finishedBooksSource.isFinishedBook(idBook,idToken,listener);
     }
 
+    public void isReadingBook(String idBook, String idToken, OnCheckListener listener){
+        readingBooksSource.isReadingBook(idBook,idToken,listener);
+    }
 
     public void removeFavouriteBook(String idBook, String idToken) {
         favoriteBooksSource.removeFavouriteBook(idBook,idToken);
@@ -186,8 +196,31 @@ public class BooksRepository implements BooksResponseCallback {
     }
 
     @Override
+    public void onSuccessFromLocal(BooksResponse booksResponse) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(booksResponse);
+        readingBooksLiveData.postValue(result);
+    }
+
+    @Override
+    public void onSuccessFromDeletion(Books books) {
+        booksLocalDataSource.delete(books);
+    }
+
+    @Override
+    public void onBookUpdated() {
+
+    }
+
+    @Override
+    public void onFailureFromLocal(Exception exception) {
+        Log.d("errore", exception.getMessage());
+    }
+
+    @Override
     public void onSuccessFromRemoteWriting(List<Books> booksList) {
         Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
         successWriting.postValue(result);
+        booksLocalDataSource.insertBook(new BooksResponse(booksList));
     }
+
 }

@@ -15,6 +15,8 @@ public class BooksApiResponse{
         this.totalItems=totalItems;
         this.items=items;
     }
+
+    public BooksApiResponse(){}
     public String getKind() {
         return kind;
     }

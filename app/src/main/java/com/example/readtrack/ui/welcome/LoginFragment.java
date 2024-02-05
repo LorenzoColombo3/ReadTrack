@@ -152,8 +152,16 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
-
-
+    private static final boolean USE_NAVIGATION_COMPONENT = true;
+    private void startActivityBasedOnCondition(Class<?> destinationActivity, int destination) {
+        if (USE_NAVIGATION_COMPONENT) {
+            Navigation.findNavController(requireView()).navigate(destination);
+        } else {
+            Intent intent = new Intent(requireContext(), destinationActivity);
+            startActivity(intent);
+        }
+        requireActivity().finish();
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         if (userViewModel.getLoggedUser() != null) {
@@ -172,25 +180,8 @@ public class LoginFragment extends Fragment {
             if (email != null && password!= null) {
                 String finalEmail = email;
                 String finalPassword = password;
-                userViewModel.getUserMutableLiveData(email, password, true).observe(
-                        getViewLifecycleOwner(), result -> {
-                            if (result.isSuccess()) {
-                                User user = ((Result.UserResponseSuccess) result).getData();
-                                saveLoginData(finalEmail, finalPassword, user.getIdToken());
-                                userViewModel.setAuthenticationError(false);
-                                Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
-                                requireActivity().finish();
-                                Log.d("prova","b");
-                            } else {
-                                userViewModel.setAuthenticationError(true);
-                                progressIndicator.setVisibility(View.GONE);
-                                Snackbar.make(requireActivity().findViewById(android.R.id.content),
-                                        getErrorMessage(((Result.Error) result).getMessage()),
-                                        Snackbar.LENGTH_SHORT).show();
-                                Log.d("prova","a");
-                            }
-                        });
-
+                startActivityBasedOnCondition(MainActivity.class,
+                        R.id.action_loginFragment_to_mainActivity);
             }
         }
         resetPassword.setOnClickListener(v -> {
@@ -243,8 +234,6 @@ public class LoginFragment extends Fragment {
             .addOnFailureListener(requireActivity(), new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    // No saved credentials found. Launch the One Tap sign-up flow, or
-                    // do nothing and continue presenting the signed-out UI.
                     Log.d(TAG, e.getLocalizedMessage());
                     Snackbar.make(requireActivity().findViewById(android.R.id.content),
                             requireActivity().getString(R.string.error_no_google_account_found_message),

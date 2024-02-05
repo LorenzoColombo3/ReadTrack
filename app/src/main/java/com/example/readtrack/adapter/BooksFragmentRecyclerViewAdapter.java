@@ -1,5 +1,8 @@
 package com.example.readtrack.adapter;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,15 +41,17 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     public void setBookList(List<Books> newBookList) {
         this.bookList = new ArrayList<>(newBookList);
-        Log.d(String.valueOf(bookList.size()),"www");
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Books book = bookList.get(position);
-        Log.d(bookList.get(0).getVolumeInfo().getTitle(), "posizione");
-        float percent = (float) book.getBookMarker() / book.getVolumeInfo().getPageCount() * 100;
-        ((ReadingBooksViewHolder) holder).bind(book.getVolumeInfo().getImageLinks().getThumbnail(), book.getVolumeInfo().getTitle(), (int) percent);
+        if(book.getVolumeInfo() == null) {
+            ((ReadingBooksViewHolder) holder).bind(null, book.getTitleBookDB(), book.getBookMarker(), 0);
+        }else{
+            float percent = (float) book.getBookMarker() / book.getVolumeInfo().getPageCount() * 100;
+            ((ReadingBooksViewHolder) holder).bind(book.getVolumeInfo().getImageLinks().getThumbnail(), book.getVolumeInfo().getTitle(), book.getBookMarker() , (int) percent);
+        }
     }
 
     @Override
@@ -77,7 +82,7 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             itemView.setOnClickListener(this);
         }
 
-        public void bind(String link, String title, int percent) {
+        public void bind(String link, String title, int pagina, int percent) {
             try {
                 Picasso.get()
                         .load( "https"+link.substring(4))
@@ -86,9 +91,8 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             } catch (NullPointerException pointerException) {
                 Log.d("pointer exception", pointerException.toString());
             }
-            Log.d(title, "titolazzo");
             this.titolo.setText(title);
-            percentage.setText("Percentuale di lettura: "+String.valueOf(percent)+"%");
+            percentage.setText("Segnalibro: pagina "+String.valueOf(pagina));
             progress.setProgress(percent);
         }
 
@@ -97,6 +101,5 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             onItemClickListener.onBooksItemClick(bookList.get(getAdapterPosition()).getId());
         }
     }
-
 
 }

@@ -1,8 +1,12 @@
 package com.example.readtrack.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+
+import androidx.room.Update;
 
 import com.example.readtrack.model.Books;
 
@@ -15,4 +19,13 @@ public interface BookDao {
 
     @Insert
     void insertBook(Books book);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    List<Long>  insertAll(List<Books> newsList);
+
+    @Update
+    int updateSingleBook(Books book);
+
+    @Delete
+    void delete(Books book);
 }
