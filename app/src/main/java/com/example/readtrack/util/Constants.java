@@ -9,7 +9,7 @@ public class Constants {
     // Constants for encrypted files
     public static final String ENCRYPTED_DATA_FILE_NAME = "com.example.readtrack.encrypted_file.txt";
     public static final String BOOKS_API_BASE_URL = "https://www.googleapis.com/books/";
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     public static final String RETROFIT_ERROR = "retrofit_error";
     public static final String API_KEY_ERROR = "api_key_error";
