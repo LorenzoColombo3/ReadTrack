@@ -20,9 +20,8 @@ import android.view.ViewGroup;
 
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksFragmentRecyclerViewAdapter;
-import com.example.readtrack.databinding.FragmentReadingBooksBinding;
 import com.example.readtrack.databinding.FragmentSavedBooksBinding;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
@@ -39,7 +38,7 @@ import java.util.List;
 public class SavedBooksFragment extends Fragment {
 
     private FragmentSavedBooksBinding binding;
-    private List<Books> bookList;
+    private List<Book> bookList;
     private BooksViewModel booksViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
     private UserViewModel userViewModel;

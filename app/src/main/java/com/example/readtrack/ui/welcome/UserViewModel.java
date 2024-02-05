@@ -35,7 +35,6 @@ public class UserViewModel extends ViewModel {
     public MutableLiveData<Result> getUserMutableLiveData(
             String email, String password, boolean isUserRegistered) {
         if (userMutableLiveData == null) {
-            Log.d("mutableNull","");
             getUserData(email, password, isUserRegistered);
         }
         return userMutableLiveData;

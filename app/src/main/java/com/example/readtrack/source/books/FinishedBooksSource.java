@@ -4,13 +4,10 @@ import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.util.OnCheckListener;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,12 +20,10 @@ import java.util.List;
 public class FinishedBooksSource extends BaseFinishedBooksSource{
 
     private final DatabaseReference databaseReference;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
 
-    public FinishedBooksSource(SharedPreferencesUtil sharedPreferencesUtil) {
+    public FinishedBooksSource() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
         databaseReference = firebaseDatabase.getReference().getRef();
-        this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
     @Override
     public void removeUserFinishedBook(String idBook, String idToken) {
@@ -44,7 +39,6 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Gestisci l'errore
             }
         });
     }
@@ -62,7 +56,7 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
-                        List<Books> booksList = new ArrayList<>();
+                        List<Book> bookList = new ArrayList<>();
                         String bookId;
                         String bookData;
                         if (dataSnapshot.exists()) {
@@ -72,12 +66,11 @@ public class FinishedBooksSource extends BaseFinishedBooksSource{
                                      bookData = bookSnapshot.getValue(String.class).substring(5);
                                 else
                                     bookData = bookSnapshot.getValue(String.class);
-                                booksList.add(new Books(bookId, "http"+bookData, null, 0, 0));
+                                bookList.add(new Book(bookId, "http"+bookData, null, 0, 0));
                             }
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FINISHED_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, FINISHED_BOOKS);
                         } else {
-                            // Nessun dato trovato
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FINISHED_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, FINISHED_BOOKS);
                         }
                     }
                 });

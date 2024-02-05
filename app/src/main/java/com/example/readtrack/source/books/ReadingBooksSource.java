@@ -12,10 +12,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
 import com.example.readtrack.util.OnCheckListener;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,12 +29,10 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
     private static final String TAG = UserDataRemoteDataSource.class.getSimpleName();
 
     private final DatabaseReference databaseReference;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
 
-    public ReadingBooksSource(SharedPreferencesUtil sharedPreferencesUtil) {
+    public ReadingBooksSource() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
         databaseReference = firebaseDatabase.getReference().getRef();
-        this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
 
     @Override
@@ -47,7 +44,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                         booksResponseCallback.onFailureFromRemote(task.getException());
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
-                        List<Books> booksList = new ArrayList<>();
+                        List<Book> bookList = new ArrayList<>();
                         if (dataSnapshot.exists()) {
                             String bookCover;
                             String bookTitle;
@@ -62,13 +59,11 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                                  bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
                                  numPages = bookSnapshot.child(NUMPAGES).getValue(Integer.class);
                                  bookMarker= bookSnapshot.child(PAGE).getValue(Integer.class);
-                                 booksList.add(new Books(bookId, "http"+bookCover, bookTitle, numPages, bookMarker));
+                                 bookList.add(new Book(bookId, "http"+bookCover, bookTitle, numPages, bookMarker));
                             }
-                            // Passa l'ArrayList al callback di successo
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, READING_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, READING_BOOKS);
                         } else {
-                            // Nessun dato trovato
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, READING_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, READING_BOOKS);
                         }
                     }
                 });
@@ -84,13 +79,12 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         childSnapshot.getRef().removeValue();
                     }
-                    booksResponseCallback.onSuccessFromDeletion(new Books(idBook, null, null, 0, 0));
+                    booksResponseCallback.onSuccessFromDeletion(new Book(idBook, null, null, 0, 0));
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Gestisci l'errore
             }
         });
     }
@@ -101,7 +95,7 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
         userBooksRef.orderByKey().equalTo(idBook).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Books> booksList = new ArrayList<>();
+                List<Book> bookList = new ArrayList<>();
                 if (snapshot.exists()) {
                     for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                         childSnapshot.getRef().child(PAGE).setValue(page);
@@ -113,13 +107,12 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                     userBooksRef.child(idBook).child(NUMPAGES).setValue(numPages);
                 }
                 getSegnalibro(idBook, idToken);
-                booksList.add(new Books(idBook, imgLink, title, numPages, page));
-                booksResponseCallback.onSuccessFromRemoteWriting(booksList);
+                bookList.add(new Book(idBook, imgLink, title, numPages, page));
+                booksResponseCallback.onSuccessFromRemoteWriting(bookList);
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Gestisci l'errore
             }
         });
     }
@@ -134,12 +127,12 @@ public class ReadingBooksSource extends BaseReadingBooksSource{
                     }
                     else {
                         DataSnapshot dataSnapshot = task.getResult();
-                        List<Books> booksList = new ArrayList<>();
+                        List<Book> bookList = new ArrayList<>();
                         if (dataSnapshot.exists()) {
                             String bookId = dataSnapshot.getKey();
                             int bookMarker = dataSnapshot.child(PAGE).getValue(Integer.class);
-                            booksList.add(new Books(bookId, null, null, 0, bookMarker));
-                            booksResponseCallback.onSuccessFromRemoteMarkReading(booksList);
+                            bookList.add(new Book(bookId, null, null, 0, bookMarker));
+                            booksResponseCallback.onSuccessFromRemoteMarkReading(bookList);
                         } else {
                             booksResponseCallback.onFailureFromRemote(new Exception("Libro non esistente"));
                         }

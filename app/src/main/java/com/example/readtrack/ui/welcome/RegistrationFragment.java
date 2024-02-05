@@ -59,7 +59,6 @@ public class RegistrationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         binding = FragmentRegistrationBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -126,14 +125,7 @@ public class RegistrationFragment extends Fragment {
         }
     }
 
-    /**
-     * Checks if the email address has a correct format.
-     * @param email The email address to be validated
-     * @return true if the email address is valid, false otherwise
-     */
     private boolean isEmailOk(String email) {
-        // Check if the email is valid through the use of this library:
-        // https://commons.apache.org/proper/commons-validator/
         if (!EmailValidator.getInstance().isValid((email))) {
             binding.textInputLayoutEmail.setError(getString(R.string.error_email));
             return false;
@@ -143,13 +135,7 @@ public class RegistrationFragment extends Fragment {
         }
     }
 
-    /**
-     * Checks if the password is not empty.
-     * @param password The password to be checked
-     * @return True if the password has at least 6 characters, false otherwise
-     */
     private boolean isPasswordOk(String password) {
-        // Check if the password length is correct
         if (password.isEmpty() || password.length() < MINIMUM_PASSWORD_LENGTH) {
             binding.textInputLayoutPassword.setError(getString(R.string.error_password));
             return false;

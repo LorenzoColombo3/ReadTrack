@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,23 +23,23 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     private static final int BOOKS_VIEW_TYPE = 0;
     private static final int LOADING_VIEW_TYPE = 1;
     public interface OnItemClickListener {
-        void onBooksItemClick(Books book);
+        void onBooksItemClick(Book book);
     }
 
-    private final List<Books> booksList;
+    private final List<Book> bookList;
 
     private final Application application;
     private final OnItemClickListener onItemClickListener;
 
-    public BooksSearchRecyclerAdapter(List<Books> booksList, Application application, OnItemClickListener onItemClickListener) {
+    public BooksSearchRecyclerAdapter(List<Book> bookList, Application application, OnItemClickListener onItemClickListener) {
         this.application=application;
-        this.booksList = booksList;
+        this.bookList = bookList;
         this.onItemClickListener = onItemClickListener;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (booksList.get(position) == null) {
+        if (bookList.get(position) == null) {
             return LOADING_VIEW_TYPE;
         } else {
             return BOOKS_VIEW_TYPE;
@@ -49,7 +49,6 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view = null;
 
         if (viewType == BOOKS_VIEW_TYPE) {
@@ -67,7 +66,7 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BooksSearchRecyclerAdapter.BooksSearchViewHolder) {
-            ((BooksSearchRecyclerAdapter.BooksSearchViewHolder) holder).bind(booksList.get(position));
+            ((BooksSearchRecyclerAdapter.BooksSearchViewHolder) holder).bind(bookList.get(position));
         } else if (holder instanceof BooksSearchRecyclerAdapter.LoadingBooksViewHolder) {
             ((BooksSearchRecyclerAdapter.LoadingBooksViewHolder) holder).activate();
         }
@@ -75,15 +74,15 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public int getItemCount() {
-        if (booksList != null) {
-            return booksList.size();
+        if (bookList != null) {
+            return bookList.size();
         }
         return 0;
     }
 
     public void clear(){
 
-        this.booksList.clear();
+        this.bookList.clear();
 
     }
     public class BooksSearchViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -104,7 +103,7 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
             date = itemView.findViewById(R.id.book_date);
             itemView.setOnClickListener(this);
         }
-        public void bind(Books book) {
+        public void bind(Book book) {
             try{
                 Picasso.get()
                         .load("https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
@@ -129,7 +128,7 @@ public class BooksSearchRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
         @Override
         public void onClick(View v) {
-            onItemClickListener.onBooksItemClick(booksList.get(getAdapterPosition()));
+            onItemClickListener.onBooksItemClick(bookList.get(getAdapterPosition()));
         }
     }
 

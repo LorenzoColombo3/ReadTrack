@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                app:indicatorColor="@color/pink"
+                app:indicatorColor="@color/light_blue"
                 app:layout_constraintBottom_toBottomOf="@+id/view"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -247,7 +247,7 @@
                 android:layout_margin="24dp"
                 android:layout_marginTop="50dp"
                 android:background="@drawable/rounded_background"
-                android:backgroundTint="@color/pink"
+                android:backgroundTint="@color/light_blue"
                 android:orientation="vertical"
                 app:layout_constraintTop_toBottomOf="@id/description"
                 tools:layout_editor_absoluteX="34dp">

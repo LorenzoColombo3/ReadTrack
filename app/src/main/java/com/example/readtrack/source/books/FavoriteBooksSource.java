@@ -4,14 +4,11 @@ import static com.example.readtrack.util.Constants.FAVOURITES_BOOKS;
 import static com.example.readtrack.util.Constants.FIREBASE_REALTIME_DATABASE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.source.user.UserDataRemoteDataSource;
 import com.example.readtrack.util.OnCheckListener;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,12 +23,10 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
     private static final String TAG = UserDataRemoteDataSource.class.getSimpleName();
 
     private final DatabaseReference databaseReference;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
 
-    public FavoriteBooksSource(SharedPreferencesUtil sharedPreferencesUtil) {
+    public FavoriteBooksSource() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
         databaseReference = firebaseDatabase.getReference().getRef();
-        this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
     @Override
     public void getUserFavBooks(String idToken) {
@@ -42,7 +37,7 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
                     } else {
                         DataSnapshot dataSnapshot = task.getResult();
                         if (dataSnapshot.exists()) {
-                            List<Books> booksList = new ArrayList<>();
+                            List<Book> bookList = new ArrayList<>();
                             String bookId;
                             String bookCover;
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
@@ -51,13 +46,10 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
                                     bookCover = bookSnapshot.getValue(String.class).substring(5);
                                 else
                                     bookCover = bookSnapshot.getValue(String.class);
-                                booksList.add(new Books(bookId, "http"+bookCover, null, 0, 0));
+                                bookList.add(new Book(bookId, "http"+bookCover, null, 0, 0));
                             }
-                            // Passa l'HashMap al callback di successo
-
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, FAVOURITES_BOOKS);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, FAVOURITES_BOOKS);
                         } else {
-                            // Nessun dato trovato
                             booksResponseCallback.onFailureFromRemote(new Exception("libri non trovait"));
                         }
                     }
@@ -95,7 +87,7 @@ public class FavoriteBooksSource extends BaseFavoriteBooksSource {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Gestisci l'errore
+
             }
         });
     }

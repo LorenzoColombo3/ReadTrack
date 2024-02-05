@@ -5,7 +5,7 @@
         android:id="@+id/books_fragment"
         android:enabled="true"
         android:icon="@drawable/baseline_book_24"
-        android:title="@string/books"/>
+        android:title="@string/book"/>
     <item
         android:id="@+id/search_fragment"
         android:enabled="true"

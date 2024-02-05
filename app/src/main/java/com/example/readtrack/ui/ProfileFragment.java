@@ -7,15 +7,9 @@ import static com.example.readtrack.util.Constants.READING_BOOKS;
 import static com.example.readtrack.util.Constants.FINISHED_BOOKS;
 import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,17 +20,15 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.readtrack.R;
-import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.adapter.BooksRecyclerViewProfile;
 import com.example.readtrack.databinding.FragmentProfileBinding;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
@@ -58,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private UserViewModel userViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
     private String idToken;
-    private List<Books> booksList;
+    private List<Book> bookList;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -79,10 +71,8 @@ public class ProfileFragment extends Fragment {
         userViewModel = new ViewModelProvider(
                 this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
         try {
-            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-            Log.d("Token",idToken);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
@@ -119,11 +109,11 @@ public class ProfileFragment extends Fragment {
     }
     private void generateRecyclerView(View view, RecyclerView recyclerViewBooks, String path){
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-        this.booksList = new ArrayList<>();
-        BooksRecyclerViewProfile booksRecyclerViewAdapter = new BooksRecyclerViewProfile(booksList,
+        this.bookList = new ArrayList<>();
+        BooksRecyclerViewProfile booksRecyclerViewAdapter = new BooksRecyclerViewProfile(bookList,
                 new BooksRecyclerViewProfile.OnItemClickListener(){
                     @Override
-                    public void onBooksItemClick(Books books) {
+                    public void onBooksItemClick(Book books) {
                         booksViewModel.getBooksById(books.getId()).observe(getViewLifecycleOwner(), res -> {
                             if (res.isSuccess()) {
                                 ((MainActivity) requireActivity()).hideBottomNavigation();
@@ -149,9 +139,9 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getFavBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                booksList.clear();
-                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                booksRecyclerViewAdapter.setBookList(booksList);
+                                bookList.clear();
+                                bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                             }
@@ -162,9 +152,9 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getReadingBooksMutableLiveData(idToken, isConnected()).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                booksList.clear();
-                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                booksRecyclerViewAdapter.setBookList(booksList);
+                                bookList.clear();
+                                bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                             }
@@ -176,9 +166,9 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getSavedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                booksList.clear();
-                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                booksRecyclerViewAdapter.setBookList(booksList);
+                                bookList.clear();
+                                bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                             }
@@ -190,17 +180,15 @@ public class ProfileFragment extends Fragment {
                 booksViewModel.getFinishedBooksMutableLiveData(idToken).observe(
                         getViewLifecycleOwner(), result -> {
                             if (result.isSuccess()) {
-                                booksList.clear();
-                                booksList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
-                                booksRecyclerViewAdapter.setBookList(booksList);
+                                bookList.clear();
+                                bookList = ((Result.BooksResponseSuccess) result).getDataBooks().getItems();
+                                booksRecyclerViewAdapter.setBookList(bookList);
                                 booksRecyclerViewAdapter.notifyDataSetChanged();
                             } else {
                             }
                         }
                 );
                 break;
-
-
 
             default:
                 Log.d("errore", "path non valido");

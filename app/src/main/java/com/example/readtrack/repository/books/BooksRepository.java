@@ -9,7 +9,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.BooksResponse;
 import com.example.readtrack.model.Result;
@@ -170,8 +170,8 @@ public class BooksRepository implements BooksResponseCallback {
     }
 
     @Override
-    public void onSuccessFromRemoteDatabase(List<Books> booksList, String path) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
+    public void onSuccessFromRemoteDatabase(List<Book> bookList, String path) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(bookList));
         switch (path) {
             case FAVOURITES_BOOKS:
                 favBooksListLiveData.postValue(result);
@@ -190,8 +190,8 @@ public class BooksRepository implements BooksResponseCallback {
                 break;
         }
     }
-    public void onSuccessFromRemoteMarkReading(List<Books> booksList) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
+    public void onSuccessFromRemoteMarkReading(List<Book> bookList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(bookList));
         markerLiveData.postValue(result);
     }
 
@@ -202,25 +202,15 @@ public class BooksRepository implements BooksResponseCallback {
     }
 
     @Override
-    public void onSuccessFromDeletion(Books books) {
-        booksLocalDataSource.delete(books);
+    public void onSuccessFromDeletion(Book book) {
+        booksLocalDataSource.delete(book);
     }
 
     @Override
-    public void onBookUpdated() {
-
-    }
-
-    @Override
-    public void onFailureFromLocal(Exception exception) {
-        Log.d("errore", exception.getMessage());
-    }
-
-    @Override
-    public void onSuccessFromRemoteWriting(List<Books> booksList) {
-        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(booksList));
+    public void onSuccessFromRemoteWriting(List<Book> bookList) {
+        Result.BooksResponseSuccess result = new Result.BooksResponseSuccess(new BooksResponse(bookList));
         successWriting.postValue(result);
-        booksLocalDataSource.insertBook(new BooksResponse(booksList));
+        booksLocalDataSource.insertBook(new BooksResponse(bookList));
     }
 
 }

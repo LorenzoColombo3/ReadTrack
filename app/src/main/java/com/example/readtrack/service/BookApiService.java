@@ -4,7 +4,7 @@ import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_PARAMETER;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_PAGE_SIZE_PARAMETER;
 import static com.example.readtrack.util.Constants.TOP_HEADLINES_QUERY_PARAMETER;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.BooksApiResponse;
 
 import retrofit2.Call;
@@ -20,7 +20,7 @@ public interface BookApiService {
             @Query(TOP_HEADLINES_PAGE_PARAMETER) int page
     );
     @GET("v1/volumes/{id}")
-    Call<Books> searchBooksById(
+    Call<Book> searchBooksById(
             @Path("id") String id
     );
 }

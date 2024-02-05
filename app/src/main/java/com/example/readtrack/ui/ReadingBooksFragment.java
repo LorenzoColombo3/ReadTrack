@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksFragmentRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentReadingBooksBinding;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
 import com.example.readtrack.repository.user.IUserRepository;
@@ -36,12 +36,11 @@ import com.example.readtrack.util.ServiceLocator;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class ReadingBooksFragment extends Fragment {
     FragmentReadingBooksBinding binding;
-    private List<Books> bookList;
+    private List<Book> bookList;
     private BooksViewModel booksViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
     private UserViewModel userViewModel;

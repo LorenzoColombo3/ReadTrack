@@ -59,25 +59,21 @@ public class ServiceLocator {
         FinishedBooksSource finishedBooksSource;
         SavedBooksSource savedBooksSource;
         BooksLocalDataSource booksLocalDataSource;
-        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
         booksDataSource = new BooksDataSource(Constants.BOOKS_API_BASE_URL);
         DataEncryptionUtil dataEncryptionUtil = new DataEncryptionUtil(application);
-        favoriteBooksSource = new FavoriteBooksSource(sharedPreferencesUtil);
-        readingBooksSource = new ReadingBooksSource(sharedPreferencesUtil);
-        finishedBooksSource = new FinishedBooksSource(sharedPreferencesUtil);
-        savedBooksSource = new SavedBooksSource(sharedPreferencesUtil);
-        booksLocalDataSource = new BooksLocalDataSource(getBooksDao(application),
-                sharedPreferencesUtil, dataEncryptionUtil);
+        favoriteBooksSource = new FavoriteBooksSource();
+        readingBooksSource = new ReadingBooksSource();
+        finishedBooksSource = new FinishedBooksSource();
+        savedBooksSource = new SavedBooksSource();
+        booksLocalDataSource = new BooksLocalDataSource(getBooksDao(application),dataEncryptionUtil);
         return new BooksRepository(booksDataSource, favoriteBooksSource, readingBooksSource, savedBooksSource, finishedBooksSource, booksLocalDataSource);
     }
     public IUserRepository getUserRepository(Application application) {
-        SharedPreferencesUtil sharedPreferencesUtil = new SharedPreferencesUtil(application);
-
         BaseUserAuthenticationRemoteDataSource userRemoteAuthenticationDataSource =
                 new UserAuthenticationRemoteDataSource();
 
         BaseUserDataRemoteDataSource userDataRemoteDataSource =
-                new UserDataRemoteDataSource(sharedPreferencesUtil);
+                new UserDataRemoteDataSource();
 
 
         return (IUserRepository) new UserRepository(userRemoteAuthenticationDataSource,

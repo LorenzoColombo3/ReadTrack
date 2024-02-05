@@ -2,35 +2,33 @@ package com.example.readtrack.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BooksResponse implements Parcelable{
     @SerializedName("articles")
-    private List<Books> booksList;
+    private List<Book> bookList;
 
     public BooksResponse() {}
 
-    public BooksResponse(List<Books> booksList) {
-       this.booksList = booksList;
+    public BooksResponse(List<Book> bookList) {
+       this.bookList = bookList;
     }
 
-    public List<Books> getItems() {
-        return booksList;
+    public List<Book> getItems() {
+        return bookList;
     }
 
-    public void setItems(List<Books> booksList) {
-         this.booksList = booksList;
+    public void setItems(List<Book> bookList) {
+         this.bookList = bookList;
     }
 
     @Override
     public String toString() {
         return "BooksResponse{" +
-                "booksResponse=" + booksList +
+                "booksResponse=" + bookList +
                 '}';
     }
 
@@ -53,14 +51,14 @@ public class BooksResponse implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeTypedList(this.booksList);
+        dest.writeTypedList(this.bookList);
     }
 
     public void readFromParcel(Parcel source) {
-        this.booksList = source.createTypedArrayList(Books.CREATOR);
+        this.bookList = source.createTypedArrayList(Book.CREATOR);
     }
 
     protected BooksResponse(Parcel in) {
-         this.booksList = in.createTypedArrayList(Books.CREATOR);
+         this.bookList = in.createTypedArrayList(Book.CREATOR);
     }
 }

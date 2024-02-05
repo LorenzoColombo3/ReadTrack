@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey;
 import java.util.List;
 
 @Entity
-public class Books implements Parcelable {
+public class Book implements Parcelable {
 
     @Ignore
     private String kind;
@@ -41,7 +41,7 @@ public class Books implements Parcelable {
     @Ignore
     private boolean favorite=false;
 
-    public Books(String id, String thumbnail, String title, int numPages, int bookMarcker){
+    public Book(String id, String thumbnail, String title, int numPages, int bookMarcker){
         this.id = id;
         this.bookMarker=bookMarcker;
         this.volumeInfo = new VolumeInfo(); // Inizializza volumeInfo
@@ -55,10 +55,10 @@ public class Books implements Parcelable {
         this.volumeInfo.setPageCount(numPages);
     }
 
-    public Books(){
+    public Book(){
 
     }
-    protected Books(Parcel in) {
+    protected Book(Parcel in) {
         kind = in.readString();
         id = in.readString();
         etag = in.readString();
@@ -68,15 +68,15 @@ public class Books implements Parcelable {
 
     public boolean isFavorite(){return favorite;}
 
-    public static final Creator<Books> CREATOR = new Creator<Books>() {
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
         @Override
-        public Books createFromParcel(Parcel in) {
-            return new Books(in);
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
         }
 
         @Override
-        public Books[] newArray(int size) {
-            return new Books[size];
+        public Book[] newArray(int size) {
+            return new Book[size];
         }
     };
 

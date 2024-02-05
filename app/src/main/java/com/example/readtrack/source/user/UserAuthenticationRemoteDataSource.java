@@ -62,10 +62,8 @@ public class UserAuthenticationRemoteDataSource extends BaseUserAuthenticationRe
     public void signUp(String email, String password) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Log.d("primoIf","DataSource");
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    Log.d("secondoIf","DataSource");
                     userResponseCallback.onSuccessFromAuthentication(new User(
                             firebaseUser.getDisplayName(), email, firebaseUser.getUid()));
                 } else {
@@ -76,7 +74,6 @@ public class UserAuthenticationRemoteDataSource extends BaseUserAuthenticationRe
             }
         });
     }
-//accedi
     @Override
     public void signIn(String email, String password) {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
@@ -137,8 +134,6 @@ public class UserAuthenticationRemoteDataSource extends BaseUserAuthenticationRe
 
     @Override
     public void resetPassword(String email){
-        Log.d("email", "reset prima");
         firebaseAuth.sendPasswordResetEmail(email);
-        Log.d("email", "reset dopo");
     }
 }

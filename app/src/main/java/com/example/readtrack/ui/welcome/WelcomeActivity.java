@@ -33,10 +33,6 @@ import java.security.GeneralSecurityException;
 
 public class WelcomeActivity extends AppCompatActivity {
     private static final String TAG = WelcomeActivity.class.getSimpleName();
-    private TextInputLayout textInputLayoutEmail;
-    private TextInputLayout textInputLayoutPassword;
-    private FragmentManager fragmentManager;
-    private DataEncryptionUtil dataEncryptionUtil;
     private NavController navController;
     private NavHostFragment navHostFragment;
 
@@ -53,11 +49,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController);
 
-       /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }*/
     }
 
     @Override

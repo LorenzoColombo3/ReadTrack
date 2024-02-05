@@ -8,7 +8,6 @@ public class Constants {
     public static final String ID_TOKEN = "google_token";
     // Constants for encrypted files
     public static final String ENCRYPTED_DATA_FILE_NAME = "com.example.readtrack.encrypted_file.txt";
-    public static final String BOOKS_API_TEST_JSON_FILE = "testBooks.json";
     public static final String BOOKS_API_BASE_URL = "https://www.googleapis.com/books/";
     public static final int DATABASE_VERSION = 3;
 
@@ -43,5 +42,4 @@ public class Constants {
     public static final String IMG="img";
     public static final String NUMPAGES="npag";
     public static final String TITLE="title";
-    public static final int PICK_PROFILE_IMAGE_REQUEST_CODE=1;
 }

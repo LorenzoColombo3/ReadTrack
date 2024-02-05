@@ -6,26 +6,18 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import androidx.room.Update;
-
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 
 import java.util.List;
 
 @Dao
 public interface BookDao {
-    @Query("SELECT * FROM BOOKS ORDER BY id ")
-    List<Books> getAll();
-
-    @Insert
-    void insertBook(Books book);
+    @Query("SELECT * FROM Book ORDER BY id ")
+    List<Book> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long>  insertAll(List<Books> newsList);
-
-    @Update
-    int updateSingleBook(Books book);
+    List<Long>  insertAll(List<Book> newsList);
 
     @Delete
-    void delete(Books book);
+    void delete(Book book);
 }

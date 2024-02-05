@@ -1,16 +1,13 @@
 package com.example.readtrack.model;
 
-import android.util.Log;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class BooksApiResponse{
     private String kind;
     private int totalItems;
-    private List<Books> items;
+    private List<Book> items;
 
-    public BooksApiResponse(int totalItems, String kind, List<Books> items){
+    public BooksApiResponse(int totalItems, String kind, List<Book> items){
         this.kind=kind;
         this.totalItems=totalItems;
         this.items=items;
@@ -33,11 +30,11 @@ public class BooksApiResponse{
         this.totalItems = totalItems;
     }
 
-    public List<Books> getItems() {
+    public List<Book> getItems() {
         return items;
     }
 
-    public void setItems(List<Books> items) {
+    public void setItems(List<Book> items) {
         this.items = items;
     }
 

@@ -5,14 +5,11 @@ import static com.example.readtrack.util.Constants.FIREBASE_STORAGE;
 import static com.example.readtrack.util.Constants.FIREBASE_USERS_COLLECTION;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.readtrack.model.User;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,14 +29,12 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
     private final DatabaseReference databaseReference;
     public final StorageReference storageReference;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
 
-    public UserDataRemoteDataSource(SharedPreferencesUtil sharedPreferencesUtil) {
+    public UserDataRemoteDataSource() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
         FirebaseStorage firebaseStorage = FirebaseStorage.getInstance(FIREBASE_STORAGE);
         storageReference = firebaseStorage.getReference();
         databaseReference = firebaseDatabase.getReference().getRef();
-        this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
     @Override
     public void saveUserProfileImg(String idToken, Bitmap imgProfile){
@@ -110,7 +105,6 @@ public class UserDataRemoteDataSource extends BaseUserDataRemoteDataSource {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("On cancelled","");
                 userResponseCallback.onFailureFromRemoteDatabase(error.getMessage());
             }
         });

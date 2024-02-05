@@ -97,7 +97,6 @@ public class UserRepository implements IUserRepository, UserResponseCallback {
 
     @Override
     public void onSuccessFromRemoteDatabase(User user) {
-        Log.d("qui non dovrebbe entrare","user rep");
         Result.UserResponseSuccess result = new Result.UserResponseSuccess(user);
         userMutableLiveData.postValue(result);
     }

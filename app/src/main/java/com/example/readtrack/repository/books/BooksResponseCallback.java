@@ -1,14 +1,9 @@
 package com.example.readtrack.repository.books;
 
-import android.util.Log;
-
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.BooksResponse;
-import com.example.readtrack.model.Result;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public interface BooksResponseCallback {
@@ -16,16 +11,13 @@ public interface BooksResponseCallback {
 
     void onSuccessFromRemoteId(BooksApiResponse booksApiResponse);
     void onFailureFromRemote(Exception exception);
-    void onSuccessFromRemoteDatabase(List<Books> booksList, String path);
-    void onSuccessFromRemoteMarkReading(List<Books> booksList);
+    void onSuccessFromRemoteDatabase(List<Book> bookList, String path);
+    void onSuccessFromRemoteMarkReading(List<Book> bookList);
 
     void onSuccessFromLocal(BooksResponse booksResponse);
 
-    void onBookUpdated();
 
-    void onFailureFromLocal(Exception exception);
+    void onSuccessFromRemoteWriting(List<Book> bookList);
 
-    void onSuccessFromRemoteWriting(List<Books> booksList);
-
-    void onSuccessFromDeletion(Books books);
+    void onSuccessFromDeletion(Book book);
 }

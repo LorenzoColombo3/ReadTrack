@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
@@ -47,7 +47,7 @@ public class SearchFragment extends Fragment  {
     private SearchBar searchBar;
     private BooksSearchRecyclerAdapter booksSearchRecyclerViewAdapter;
     private String query;
-    private List<Books> booksList;
+    private List<Book> bookList;
     private BooksViewModel booksViewModel;
     private ImageButton isbnSearch;
 
@@ -63,7 +63,7 @@ public class SearchFragment extends Fragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        booksList= new ArrayList<>();
+        bookList = new ArrayList<>();
         BooksRepository booksRepositoryWithLiveData =
                 ServiceLocator.getInstance().getBookRepository(requireActivity().getApplication());
         booksViewModel = new ViewModelProvider(
@@ -84,16 +84,15 @@ public class SearchFragment extends Fragment  {
         });
         RecyclerView recyclerViewFavBooks = view.findViewById(R.id.search_results);
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false);
-        booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(booksList, requireActivity().getApplication(),
+        booksSearchRecyclerViewAdapter = new BooksSearchRecyclerAdapter(bookList, requireActivity().getApplication(),
                 new BooksSearchRecyclerAdapter.OnItemClickListener() {
                     @Override
-                    public void onBooksItemClick(Books book) {
+                    public void onBooksItemClick(Book book) {
                         ((MainActivity) requireActivity()).hideBottomNavigation();
                         String id=book.getId();
                         booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
                             if (res.isSuccess()) {
                                 ((MainActivity) requireActivity()).hideBottomNavigation();
-                                Log.d("search result", ((Result.BooksResponseSuccess) res).getData().getItems().get(0).getVolumeInfo().getTitle());
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelable("bookArgument", ((Result.BooksResponseSuccess) res).getData().getItems().get(0));
                                 Navigation.findNavController(getView()).navigate(R.id.action_search_fragment_to_bookFragment, bundle);
@@ -116,26 +115,26 @@ public class SearchFragment extends Fragment  {
                             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
                                 if (result.isSuccess()) {
                                     BooksApiResponse booksApiResponse=((Result.BooksResponseSuccess) result).getData();
-                                    List<Books> booksSearched = booksApiResponse.getItems();
+                                    List<Book> bookSearched = booksApiResponse.getItems();
                                     if (!booksViewModel.isLoading()) {
-                                        booksList.clear();
+                                        bookList.clear();
                                         booksViewModel.setTotalResults(booksApiResponse.getTotalItems());
-                                        this.booksList.addAll(booksSearched);
+                                        this.bookList.addAll(bookSearched);
                                         recyclerViewFavBooks.setLayoutManager(layoutManager);
                                         recyclerViewFavBooks.setAdapter(booksSearchRecyclerViewAdapter);
                                     } else {
                                         booksViewModel.setLoading(false);
-                                        booksViewModel.setCurrentResults(booksList.size());
-                                        int initialSize = booksList.size();
-                                        for (int i = 0; i < booksList.size(); i++) {
-                                            if (booksList.get(i) == null) {
-                                                booksList.remove(booksList.get(i));
+                                        booksViewModel.setCurrentResults(bookList.size());
+                                        int initialSize = bookList.size();
+                                        for (int i = 0; i < bookList.size(); i++) {
+                                            if (bookList.get(i) == null) {
+                                                bookList.remove(bookList.get(i));
                                             }
                                         }
-                                        for (int i = 0; i < booksSearched.size(); i++) {
-                                            booksList.add(booksSearched.get(i));
+                                        for (int i = 0; i < bookSearched.size(); i++) {
+                                            bookList.add(bookSearched.get(i));
                                         }
-                                        booksSearchRecyclerViewAdapter.notifyItemRangeInserted(initialSize, booksList.size());
+                                        booksSearchRecyclerViewAdapter.notifyItemRangeInserted(initialSize, bookList.size());
                                     }
                                 } else {
                                     Log.d("search result", "Nessun risultato trovato");
@@ -154,8 +153,6 @@ public class SearchFragment extends Fragment  {
                     totalItemCount = layoutManager.getItemCount();
                     lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                     visibleItemCount = layoutManager.getChildCount();
-
-                    // Condition to enable the loading of other news while the user is scrolling the list
                     if (totalItemCount == visibleItemCount ||
                             (totalItemCount <= (lastVisibleItem + threshold) &&
                                     dy > 0 &&
@@ -169,8 +166,8 @@ public class SearchFragment extends Fragment  {
                                 booksListMutableLiveData.getValue().isSuccess()) {
 
                             booksViewModel.setLoading(true);
-                            booksList.add(null);
-                            booksSearchRecyclerViewAdapter.notifyItemRangeInserted(booksList.size(), booksList.size() + 1);
+                            bookList.add(null);
+                            booksSearchRecyclerViewAdapter.notifyItemRangeInserted(bookList.size(), bookList.size() + 1);
                             int page = booksViewModel.getPage() + TOP_HEADLINES_PAGE_SIZE_VALUE;
                             booksViewModel.setPage(page);
                             booksViewModel.getBooks(query);
@@ -198,7 +195,6 @@ public class SearchFragment extends Fragment  {
             booksViewModel.reset();
             booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), res -> {
                 if (res.isSuccess()) {
-                    Log.d("query", query);
                     if(((Result.BooksResponseSuccess) res).getData().getItems()!=null){
                         String id=((Result.BooksResponseSuccess) res).getData().getItems().get(0).getId();
                         booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), book -> {

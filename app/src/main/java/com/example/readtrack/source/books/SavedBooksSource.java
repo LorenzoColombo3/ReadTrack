@@ -8,9 +8,8 @@ import static com.example.readtrack.util.Constants.WANT_TO_READ;
 
 import androidx.annotation.NonNull;
 
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.util.OnCheckListener;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,12 +22,10 @@ import java.util.List;
 public class SavedBooksSource extends BaseSavedBooksSource{
 
     private final DatabaseReference databaseReference;
-    private final SharedPreferencesUtil sharedPreferencesUtil;
 
-    public SavedBooksSource(SharedPreferencesUtil sharedPreferencesUtil){
+    public SavedBooksSource(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(FIREBASE_REALTIME_DATABASE);
         databaseReference = firebaseDatabase.getReference().getRef();
-        this.sharedPreferencesUtil = sharedPreferencesUtil;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class SavedBooksSource extends BaseSavedBooksSource{
                         String bookCover;
                         String bookTitle;
                         if (dataSnapshot.exists()) {
-                            List<Books> booksList = new ArrayList<>();
+                            List<Book> bookList = new ArrayList<>();
                             for (DataSnapshot bookSnapshot : dataSnapshot.getChildren()) {
                                 bookId = bookSnapshot.getKey();
                                 bookTitle = bookSnapshot.child(TITLE).getValue(String.class);
@@ -51,9 +48,9 @@ public class SavedBooksSource extends BaseSavedBooksSource{
                                       bookCover = bookSnapshot.child(IMG).getValue(String.class).substring(5);
                                 else
                                     bookCover = bookSnapshot.child(IMG).getValue(String.class);
-                                booksList.add(new Books(bookId, "http"+bookCover, bookTitle, 0, 0));
+                                bookList.add(new Book(bookId, "http"+bookCover, bookTitle, 0, 0));
                             }
-                            booksResponseCallback.onSuccessFromRemoteDatabase(booksList, WANT_TO_READ);
+                            booksResponseCallback.onSuccessFromRemoteDatabase(bookList, WANT_TO_READ);
                         } else {
 
                             booksResponseCallback.onFailureFromRemote(new Exception("libri non trovait"));
@@ -94,7 +91,6 @@ public class SavedBooksSource extends BaseSavedBooksSource{
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Gestisci l'errore
             }
         });
     }

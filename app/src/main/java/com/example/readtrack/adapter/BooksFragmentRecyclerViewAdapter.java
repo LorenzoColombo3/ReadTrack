@@ -1,8 +1,5 @@
 package com.example.readtrack.adapter;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.squareup.picasso.Picasso;
 
@@ -23,9 +20,9 @@ import java.util.List;
 
 public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final OnItemClickListener onItemClickListener;
-    private List<Books> bookList;
+    private List<Book> bookList;
 
-    public BooksFragmentRecyclerViewAdapter(List<Books> bookList, OnItemClickListener onItemClickListener) {
+    public BooksFragmentRecyclerViewAdapter(List<Book> bookList, OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
         this.bookList=bookList;
     }
@@ -39,13 +36,13 @@ public class BooksFragmentRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         return new ReadingBooksViewHolder(view);
     }
 
-    public void setBookList(List<Books> newBookList) {
+    public void setBookList(List<Book> newBookList) {
         this.bookList = new ArrayList<>(newBookList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Books book = bookList.get(position);
+        Book book = bookList.get(position);
         if(book.getVolumeInfo() == null) {
             ((ReadingBooksViewHolder) holder).bind(null, book.getTitleBookDB(), book.getBookMarker(), 0);
         }else{

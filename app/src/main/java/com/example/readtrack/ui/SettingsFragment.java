@@ -39,7 +39,6 @@ import java.security.GeneralSecurityException;
 
 public class SettingsFragment extends Fragment {
     private FragmentSettingsBinding binding;
-    private BooksViewModel booksViewModel;
     private UserViewModel userViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
     private String idToken;
@@ -57,10 +56,8 @@ public class SettingsFragment extends Fragment {
         userViewModel = new ViewModelProvider(
                 this, new UserViewModelFactory(userRepository)).get(UserViewModel.class);
         try {
-            Log.d("idToken encrypted", dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN));
             idToken = dataEncryptionUtil.readSecretDataWithEncryptedSharedPreferences(
                     ENCRYPTED_SHARED_PREFERENCES_FILE_NAME, ID_TOKEN);
-            Log.d("Token",idToken);
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }

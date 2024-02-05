@@ -4,9 +4,6 @@ import com.example.readtrack.R;
 import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_FILE_NAME;
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,16 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentBooksBinding;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.welcome.UserViewModel;
 import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -38,8 +33,7 @@ public class BooksFragment extends Fragment {
     FragmentBooksBinding binding;
     private UserViewModel userViewModel;
     DataEncryptionUtil dataEncryptionUtil;
-    private List<Books> booksList;
-    private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
+    private List<Book> bookList;
     private String idToken;
 
     public BooksFragment() {}
@@ -47,7 +41,7 @@ public class BooksFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dataEncryptionUtil = new DataEncryptionUtil(requireActivity().getApplication());
-        booksList=new ArrayList<>();
+        bookList =new ArrayList<>();
         IUserRepository userRepository = ServiceLocator.getInstance().
                 getUserRepository(getActivity().getApplication());
         userViewModel = new ViewModelProvider(

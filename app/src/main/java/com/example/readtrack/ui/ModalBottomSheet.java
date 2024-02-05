@@ -4,8 +4,6 @@ import static com.example.readtrack.util.Constants.ENCRYPTED_SHARED_PREFERENCES_
 import static com.example.readtrack.util.Constants.ID_TOKEN;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +11,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
-import com.example.readtrack.R;
 import com.example.readtrack.databinding.ModalBottomSheetContentBinding;
-import com.example.readtrack.model.Books;
-import com.example.readtrack.model.Result;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.repository.books.BooksRepository;
-import com.example.readtrack.repository.user.IUserRepository;
-import com.example.readtrack.ui.welcome.UserViewModel;
-import com.example.readtrack.ui.welcome.UserViewModelFactory;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.ServiceLocator;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -30,11 +22,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public class ModalBottomSheet extends BottomSheetDialogFragment {
-    private final Books book;
+    private final Book book;
     private BooksViewModel booksViewModel;
 
     public static final String TAG = "ModalBottomSheet";
@@ -45,7 +35,7 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
     private String segnalibro;
     private String idToken;
 
-    public ModalBottomSheet(Books book, String segnalibro ){
+    public ModalBottomSheet(Book book, String segnalibro ){
         this.segnalibro=segnalibro;
         this.book=book;
     }

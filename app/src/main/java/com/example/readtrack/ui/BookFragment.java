@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.readtrack.R;
 import com.example.readtrack.adapter.BooksRecyclerViewAdapter;
 import com.example.readtrack.databinding.FragmentBookBinding;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.example.readtrack.model.BooksApiResponse;
 import com.example.readtrack.model.Result;
 import com.example.readtrack.repository.books.BooksRepository;
@@ -50,7 +50,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     private String idToken;
     private UserViewModel userViewModel;
     private DataEncryptionUtil dataEncryptionUtil;
-    private List<Books> otherBooks;
+    private List<Book> otherBooks;
     private BooksRecyclerViewAdapter booksRecyclerViewAdapter;
     private BooksViewModel booksViewModel;
     private ModalBottomSheet modalBottomSheet;
@@ -58,7 +58,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
     private int lastVisibleItem;
     private int visibleItemCount;
     private final int threshold = 1;
-    private  Books book;
+    private Book book;
     private String query;
     public BookFragment(){}
 
@@ -98,8 +98,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         booksViewModel.reset();
         Bundle args = getArguments();
         if (args != null) {
-            if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Books) {
-                book = (Books) args.get("bookArgument");
+            if (args.containsKey("bookArgument") && args.get("bookArgument") instanceof Book) {
+                book = (Book) args.get("bookArgument");
                 booksViewModel.isFavouriteBook(book.getId(), idToken, new OnCheckListener() {
                     @Override
                     public void onCheckResult(boolean isFavourite) {
@@ -179,8 +179,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         booksRecyclerViewAdapter = new BooksRecyclerViewAdapter(otherBooks,
                 new BooksRecyclerViewAdapter.OnItemClickListener() {
                     @Override
-                    public void onBooksItemClick(Books books) {
-                        String id=books.getId();
+                    public void onBooksItemClick(Book book) {
+                        String id= book.getId();
                         booksViewModel.getBooksById(id).observe(getViewLifecycleOwner(), res -> {
                             if (res.isSuccess()) {
                                 Bundle bundle = new Bundle();
@@ -198,11 +198,11 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
         booksViewModel.getBooks(query).observe(getViewLifecycleOwner(), result -> {
             if (result.isSuccess()) {
                 BooksApiResponse booksApiResponse=((Result.BooksResponseSuccess) result).getData();
-                List<Books> booksSearched = booksApiResponse.getItems();
+                List<Book> bookSearched = booksApiResponse.getItems();
                 if (!booksViewModel.isLoading()) {
                     otherBooks.clear();
                     booksViewModel.setTotalResults(booksApiResponse.getTotalItems());
-                    this.otherBooks.addAll(booksSearched);
+                    this.otherBooks.addAll(bookSearched);
                     binding.recyclerviewOtherBooks.setLayoutManager(layoutManager);
                     binding.recyclerviewOtherBooks.setAdapter(booksRecyclerViewAdapter);
                 } else {
@@ -214,8 +214,8 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                             otherBooks.remove(otherBooks.get(i));
                         }
                     }
-                    for (int i = 0; i < booksSearched.size(); i++) {
-                        otherBooks.add(booksSearched.get(i));
+                    for (int i = 0; i < bookSearched.size(); i++) {
+                        otherBooks.add(bookSearched.get(i));
                     }
                     booksRecyclerViewAdapter.notifyItemRangeInserted(initialSize, otherBooks.size());
                 }
@@ -233,7 +233,6 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
                     totalItemCount = layoutManager.getItemCount();
                     lastVisibleItem = layoutManager.findLastVisibleItemPosition();
                     visibleItemCount = layoutManager.getChildCount();
-                    // Condition to enable the loading of other news while the user is scrolling the list
                     if (totalItemCount == visibleItemCount ||
                             (totalItemCount <= (lastVisibleItem + threshold) &&
                                     dx > 0 &&
@@ -260,7 +259,7 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
             mostraModalBottomSheet(book);
         });
     }
-    private void mostraModalBottomSheet(Books book) {
+    private void mostraModalBottomSheet(Book book) {
         modalBottomSheet = new ModalBottomSheet(book, String.valueOf(book.getBookMarker()));
         modalBottomSheet.setBottomSheetListener(this);
         modalBottomSheet.show(getActivity().getSupportFragmentManager(), ModalBottomSheet.TAG);
@@ -403,7 +402,6 @@ public class BookFragment extends Fragment implements ModalBottomSheet.BottomShe
 
     @Override
     public void onButtonPressed() {
-        Log.d("pagina1", String.valueOf(book.getBookMarker()) );
         aggiornaSegnalibro();
         aggiornaBottoneSalvato();
     }

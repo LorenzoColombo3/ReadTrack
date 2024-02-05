@@ -6,17 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.readtrack.R;
-import com.example.readtrack.model.Books;
+import com.example.readtrack.model.Book;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,16 +21,16 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
     private static final int BOOKS_VIEW_TYPE = 0;
     private static final int BUTTON_VIEW_TYPE = 1;
     public interface OnItemClickListener {
-        void onBooksItemClick(Books book);
+        void onBooksItemClick(Book book);
 
         void onButtonItemClick();
     }
 
-    private final List<Books> booksList;
+    private final List<Book> bookList;
     private final OnItemClickListener onItemClickListener;
 
-    public BooksRecyclerViewProfile(List<Books> booksList, OnItemClickListener onItemClickListener) {
-        this.booksList = booksList;
+    public BooksRecyclerViewProfile(List<Book> bookList, OnItemClickListener onItemClickListener) {
+        this.bookList = bookList;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -67,7 +62,7 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof BooksViewHolder) {
-            ((BooksViewHolder) holder).bind(booksList.get(position));
+            ((BooksViewHolder) holder).bind(bookList.get(position));
         } else if (holder instanceof AddBooksViewHolder) {
             ((AddBooksViewHolder) holder).setOnItemClickListener(onItemClickListener);;
         }
@@ -75,15 +70,15 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public int getItemCount() {
-        if (booksList != null) {
-            return booksList.size()+1;
+        if (bookList != null) {
+            return bookList.size()+1;
         }
         return 0;
     }
 
-    public void setBookList(List<Books> booksList) {
-        this.booksList.clear();
-        this.booksList.addAll(booksList);
+    public void setBookList(List<Book> bookList) {
+        this.bookList.clear();
+        this.bookList.addAll(bookList);
     }
 
     public class BooksViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -95,7 +90,7 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Books book) {
+        public void bind(Book book) {
             try {
                 Picasso.get()
                         .load( "https"+book.getVolumeInfo().getImageLinks().getThumbnail().substring(4))
@@ -108,7 +103,7 @@ public class BooksRecyclerViewProfile extends RecyclerView.Adapter<RecyclerView.
 
         @Override
         public void onClick(View v) {
-            onItemClickListener.onBooksItemClick(booksList.get(getAdapterPosition()));
+            onItemClickListener.onBooksItemClick(bookList.get(getAdapterPosition()));
         }
     }
 

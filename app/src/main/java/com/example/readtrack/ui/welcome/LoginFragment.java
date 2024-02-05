@@ -34,7 +34,6 @@ import com.example.readtrack.repository.user.IUserRepository;
 import com.example.readtrack.ui.MainActivity;
 import com.example.readtrack.util.DataEncryptionUtil;
 import com.example.readtrack.util.ServiceLocator;
-import com.example.readtrack.util.SharedPreferencesUtil;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -44,7 +43,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -203,14 +201,12 @@ public class LoginFragment extends Fragment {
                                     Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_mainActivity);
                                     saveLoginData(email, password, user.getIdToken());
                                     requireActivity().finish();
-                                    Log.d("prova","b");
                                 } else {
                                     userViewModel.setAuthenticationError(true);
                                     progressIndicator.setVisibility(View.GONE);
                                     Snackbar.make(requireActivity().findViewById(android.R.id.content),
                                             getErrorMessage(((Result.Error) result).getMessage()),
                                             Snackbar.LENGTH_SHORT).show();
-                                    Log.d("prova","a");
                                 }
                             });
                 } else {
